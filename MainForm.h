@@ -35,7 +35,10 @@ __published:	// IDE-managed Components
 	void __fastcall N8Click(TObject *Sender);
 
 private:	// User declarations
+	int getCriteriaCount();
+	int getObjectsCount();
 	TGridCoord activeCell;
+	int fixedCols, fixedRows;
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
 };

@@ -20,9 +20,9 @@ object Form1: TForm1
     Top = 0
     Width = 737
     Height = 329
-    ColCount = 7
+    BevelWidth = 5
     DefaultColWidth = 24
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing, goTabs]
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing, goTabs, goFixedColClick, goFixedRowClick]
     TabOrder = 0
     OnKeyDown = InputDataStringGridKeyDown
     OnSelectCell = InputDataStringGridSelectCell
