@@ -1,41 +1,35 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\ustring.h',0,1,52,25,28,0,0,,
-File_1=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Clipbrd.hpp',0,1,1,1,34,0,0,,
-File_2=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.Classes.hpp',0,1,29,1,51,0,0,,
-File_3=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysset.h',0,1,169,1,190,0,0,,
-File_4=TSourceModule,'F:\ВУЗ\диплом\diplom.tmp\MainForm.cpp',0,1,1,1,1,0,0,,
-File_5=TSourceModule,'F:\ВУЗ\диплом\diplom\Unit1.cpp',0,1,1,1,1,0,0,,
-File_6=TSourceModule,'F:\diplom\eigensolver.cpp',0,1,14,1,66,0,0,,
+File_0=TSourceModule,'F:\diplom\eigensolver.cpp',0,1,43,94,65,0,0,,
+File_1=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.Classes.hpp',0,1,1213,1,1184,0,0,,
+File_2=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\ustring.h',0,1,52,25,28,0,0,,
+File_3=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Clipbrd.hpp',0,1,1,1,34,0,0,,
+File_4=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysset.h',0,1,169,1,190,0,0,,
+File_5=TSourceModule,'F:\ВУЗ\диплом\diplom.tmp\MainForm.cpp',0,1,1,1,1,0,0,,
+File_6=TSourceModule,'F:\ВУЗ\диплом\diplom\Unit1.cpp',0,1,1,1,1,0,0,,
 File_7=TSourceModule,'F:\diplom\matrixexception.cpp',0,1,1,1,17,0,0,,
 File_8=TSourceModule,'F:\test\matrixTest\main.cpp',0,1,42,3,84,0,0,,
 File_9=TSourceModule,'F:\diplom\AHP.cpp',0,1,1,1,1,0,0,,
 
 [Modules]
-Module0=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp
+Module0=F:\diplom\NewProjectFormUnit.cpp
 Module1=F:\diplom\MainForm.cpp
-Module2=default.htm
-Module3=F:\diplom\ahpsolver.cpp
-Module4=F:\diplom\ahpsolver.h
+Module2=F:\diplom\ahpsolver.h
+Module3=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp
+Module4=F:\diplom\Diplom.cbproj
 Module5=F:\diplom\matrix.cpp
-Count=6
+Module6=F:\diplom\ahpsolver.cpp
+Module7=default.htm
+Count=8
 EditWindowCount=1
 
-[c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp]
+[F:\diplom\NewProjectFormUnit.cpp]
 ModuleType=TSourceModule
-FormState=0
+FormState=1
 FormOnTop=0
 
 [F:\diplom\MainForm.cpp]
 ModuleType=TSourceModule
 FormState=1
-FormOnTop=1
-
-[default.htm]
-ModuleType=TURLModule
-
-[F:\diplom\ahpsolver.cpp]
-ModuleType=TSourceModule
-FormState=0
 FormOnTop=0
 
 [F:\diplom\ahpsolver.h]
@@ -43,20 +37,38 @@ ModuleType=TSourceModule
 FormState=0
 FormOnTop=0
 
+[c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp]
+ModuleType=TSourceModule
+FormState=0
+FormOnTop=0
+
+[F:\diplom\Diplom.cbproj]
+ModuleType=TBaseProject
+
 [F:\diplom\matrix.cpp]
 ModuleType=TSourceModule
 FormState=0
 FormOnTop=0
 
+[F:\diplom\ahpsolver.cpp]
+ModuleType=TSourceModule
+FormState=0
+FormOnTop=0
+
+[default.htm]
+ModuleType=TURLModule
+
 [EditWindow0]
-ViewCount=6
-CurrentEditView=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp
+ViewCount=8
+CurrentEditView=F:\diplom\NewProjectFormUnit.cpp
 View0=0
 View1=1
 View2=2
 View3=3
 View4=4
 View5=5
+View6=6
+View7=7
 PercentageSizes=1
 Create=1
 Visible=1
@@ -75,7 +87,7 @@ BorlandEditorCodeExplorer=BorlandEditorCodeExplorer@EditWindow0
 TopPanelSize=0
 LeftPanelSize=1896
 LeftPanelClients=PropertyInspector,DockSite3
-LeftPanelData=0000080001010000000061100000000000000168070000000000000100000000530E000009000000446F636B536974653301000000001E1D00001100000050726F7065727479496E73706563746F72FFFFFFFF
+LeftPanelData=00000800010100000000611000000000000001680700000000000001000000005C0E000009000000446F636B536974653301000000001E1D00001100000050726F7065727479496E73706563746F72FFFFFFFF
 RightPanelSize=2000
 RightPanelClients=DockSite2,DockSite4
 RightPanelData=00000800010100000000611000000000000001D00700000000000001000000004412000009000000446F636B536974653201000000001E1D000009000000446F636B5369746534FFFFFFFF
@@ -93,48 +105,70 @@ WelcomePageURL=bds:/default.htm
 [View1]
 CustomEditViewType=TEditView
 Module=F:\diplom\MainForm.cpp
-CursorX=28
-CursorY=89
-TopLine=61
+CursorX=1
+CursorY=76
+TopLine=43
 LeftCol=1
 Elisions=
 Bookmarks=
-EditViewName=Borland.FormDesignerView
+EditViewName=F:\diplom\MainForm.h
 
 [View2]
 CustomEditViewType=TEditView
+Module=F:\diplom\NewProjectFormUnit.cpp
+CursorX=25
+CursorY=24
+TopLine=1
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=F:\diplom\NewProjectFormUnit.cpp
+
+[View3]
+CustomEditViewType=TEditView
+Module=F:\diplom\Diplom.cpp
+CursorX=1
+CursorY=10
+TopLine=1
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=F:\diplom\Diplom.cpp
+
+[View4]
+CustomEditViewType=TEditView
 Module=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp
-CursorX=52
-CursorY=39
-TopLine=19
+CursorX=48
+CursorY=749
+TopLine=725
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp
 
-[View3]
+[View5]
 CustomEditViewType=TEditView
 Module=F:\diplom\ahpsolver.h
-CursorX=19
-CursorY=11
+CursorX=26
+CursorY=29
 TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=F:\diplom\ahpsolver.h
 
-[View4]
+[View6]
 CustomEditViewType=TEditView
 Module=F:\diplom\matrix.cpp
-CursorX=18
-CursorY=167
-TopLine=139
+CursorX=20
+CursorY=5
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
-EditViewName=F:\diplom\matrix.h
+EditViewName=F:\diplom\matrix.cpp
 
-[View5]
+[View7]
 CustomEditViewType=TEditView
 Module=F:\diplom\ahpsolver.cpp
 CursorX=47
@@ -146,12 +180,13 @@ Bookmarks=
 EditViewName=F:\diplom\ahpsolver.cpp
 
 [Watches]
-Count=2
+Count=3
 Watch0='InputDataStringGrid->Cells[j][k]',256,0,18,1,0,'Watches',1
 Watch1='str[i]',256,0,18,1,0,'Watches',1
+Watch2='test->Cells[i + fixedCols][j + fixedRows + 1]',256,0,18,1,0,'Watches',1
 
 [WatchWindow]
-WatchColumnWidth=228
+WatchColumnWidth=120
 WatchShowColumnHeaders=1
 PercentageSizes=1
 Create=1
@@ -172,9 +207,11 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=2
-Breakpoint0='F:\diplom\MainForm.cpp',63,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint1='F:\diplom\MainForm.cpp',91,'',0,1,'',1,0,0,'',1,'','','',0,''
+Count=4
+Breakpoint0='F:\diplom\NewProjectFormUnit.cpp',24,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint1='F:\diplom\NewProjectFormUnit.cpp',23,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint2='F:\diplom\MainForm.cpp',20,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint3='F:\diplom\MainForm.cpp',76,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -269,23 +306,23 @@ Visible=1
 Docked=1
 State=0
 Left=0
-Top=419
+Top=420
 Width=1896
-Height=3676
+Height=3667
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=1896
-ClientHeight=3676
+ClientHeight=3667
 TBDockHeight=7048
 LRDockWidth=1896
 Dockable=1
 StayOnTop=0
-SplitPos=134
+SplitPos=111
 
 [PropInspDesignerSelection]
 ArrangeBy=Name
-SelectedItem=GridLineWidth,OnSelectCell
-ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0,Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,Options=1,StyleElements=0,Touch=0,BevelEdges=0,Menu=0,Touch.InteractiveGestureOptions=0,Touch.InteractiveGestures=0
+SelectedItem=Color,CustomHint
+ExpandedItems=Anchors=0,BevelEdges=0,Constraints=0,LiveBindings=0
 
 [TFileExplorerForm]
 PercentageSizes=1
@@ -539,11 +576,11 @@ State=0
 Left=0
 Top=0
 Width=2000
-Height=4314
+Height=6810
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=4314
+ClientHeight=6810
 TBDockHeight=4876
 LRDockWidth=5307
 Dockable=1
@@ -641,11 +678,11 @@ State=0
 Left=0
 Top=0
 Width=1896
-Height=3514
+Height=3524
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=1896
-ClientHeight=3514
+ClientHeight=3524
 TBDockHeight=3676
 LRDockWidth=1896
 Dockable=1
@@ -784,7 +821,7 @@ LRDockWidth=2745
 Dockable=1
 StayOnTop=0
 
-[Item__C74C7DBB_4D99_4FF4_BABE_F02A005254E6_]
+[Item__CE401FF6_F956_4BDB_9F54_088BD85F0CF4_]
 PercentageSizes=1
 Create=1
 Visible=0
@@ -803,7 +840,7 @@ LRDockWidth=2745
 Dockable=1
 StayOnTop=0
 
-[Item__CE401FF6_F956_4BDB_9F54_088BD85F0CF4_]
+[Item__C74C7DBB_4D99_4FF4_BABE_F02A005254E6_]
 PercentageSizes=1
 Create=1
 Visible=0
@@ -927,11 +964,11 @@ State=0
 Left=0
 Top=23
 Width=1896
-Height=3514
+Height=3524
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=1896
-ClientHeight=3514
+ClientHeight=3524
 TBDockHeight=7048
 LRDockWidth=1896
 Dockable=1

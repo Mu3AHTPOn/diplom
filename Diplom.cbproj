@@ -6,7 +6,7 @@
         <AppType>Application</AppType>
         <MainSource>Diplom.cpp</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>1</TargetedPlatforms>
     </PropertyGroup>
@@ -165,7 +165,14 @@
             <DependentOn>matrixexception.h</DependentOn>
             <BuildOrder>6</BuildOrder>
         </CppCompile>
+        <CppCompile Include="NewProjectFormUnit.cpp">
+            <Form>NewProjectForm</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>NewProjectFormUnit.h</DependentOn>
+            <BuildOrder>8</BuildOrder>
+        </CppCompile>
         <None Include="Profiling\AQtimeModule1.aqt"/>
+        <FormResources Include="NewProjectFormUnit.dfm"/>
         <FormResources Include="MainForm.dfm"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

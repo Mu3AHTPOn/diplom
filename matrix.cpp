@@ -3,8 +3,6 @@
 #pragma hdrstop
 
 #include "matrix.h"
-
-#pragma package(smart_init)
 //---------------------------------------------------------------------------
 template<typename T>
 Matrix<T>::Matrix(int height, int width, T defaultValue)

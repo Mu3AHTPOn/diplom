@@ -72,6 +72,7 @@ void __fastcall TForm1::InputDataStringGridKeyDown(TObject *Sender, WORD &Key, T
 
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
+
 	fixedCols = InputDataStringGrid->FixedCols;
 	fixedRows = InputDataStringGrid->FixedRows;
 
@@ -86,9 +87,9 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 	int textWidth, temp(0);
 	textWidth = InputDataStringGrid->Canvas->TextWidth(InputDataStringGrid->Cells[0][1]);
 
-	for (int i = 2; i < gridSize; i++) {
+	for (int i = 1; i < gridSize; i++) {
 		UnicodeString rowName = L"Îáúåêò " + IntToStr(i);
-		InputDataStringGrid->Cells[0][i] = rowName;
+		InputDataStringGrid->Cells[0][i - 1] = rowName;
 		temp = InputDataStringGrid->Canvas->TextWidth(rowName);
 		textWidth = temp > textWidth ? temp : textWidth;
 	}
@@ -204,5 +205,6 @@ int TForm1::getObjectsCount()
 
 }
 //---------------------------------------------------------------------------
+
 
 

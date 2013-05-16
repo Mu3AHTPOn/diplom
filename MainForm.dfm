@@ -18,7 +18,7 @@ object Form1: TForm1
   object InputDataStringGrid: TStringGrid
     Left = 0
     Top = 0
-    Width = 737
+    Width = 705
     Height = 329
     BevelWidth = 5
     DefaultColWidth = 24
