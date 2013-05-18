@@ -1,4 +1,4 @@
-object NewProjectForm: TNewProjectForm
+object CreateProjectForm: TCreateProjectForm
   Left = 0
   Top = 0
   Caption = #1057#1086#1079#1076#1072#1090#1100' '#1087#1088#1086#1077#1082#1090

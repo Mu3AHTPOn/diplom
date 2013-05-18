@@ -33,7 +33,7 @@ Matrix<T>::Matrix(Matrix<T> &rhs)
 template<typename T>
 Matrix<T>::~Matrix()
 {
-    for (int i = 0; i < width; ++i)
+    for (int i = 0; i < height; ++i)
     {
         delete [] matrix[i];
     }

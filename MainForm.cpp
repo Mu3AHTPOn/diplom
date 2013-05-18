@@ -3,13 +3,15 @@
 #include <vcl.h>
 #include <Clipbrd.hpp>
 #include <limits>
-#include <boost/regex.hpp>
+#include "boost/regex.hpp"
+#include "boost/format.hpp"
 
 #pragma hdrstop
 
 #include "MainForm.h"
 #include "ahpsolver.cpp"
 #include "matrix.cpp"
+#include "UIManager.cpp"
 //---------------------------------------------------------------------------
 
 using namespace boost;
@@ -23,6 +25,8 @@ TForm1 *Form1;
 __fastcall TForm1::TForm1(TComponent* Owner)
 	: TForm(Owner)
 {
+	Form1 = this;
+	UIManager::getInstance()->addForm(Form1);
 }
 
 //---------------------------------------------------------------------------
@@ -170,14 +174,26 @@ void __fastcall TForm1::N8Click(TObject *Sender)
 	}
 
 	Matrix<double> result = integrEstimate * ahpCriteriaEstimates.getMaxEigenVectors();
-	UnicodeString resultStr;
-	
-	
-	for (int i = 0; i < result.getHeight(); ++i) {
-		resultStr += FloatToStr(result[i][0]) + "\n";
+	UnicodeString resultStr = L"(";
+//	TVarRec *args = new TVarRec[result.getHeight()];
+
+	for (int i = 0; i < result.getHeight() - 1; ++i) {
+		resultStr += Format(L"%.3f, ", new TVarRec(result[i][0]), 1);
+//		double t = ;
+//		args[i] = 0.0;
+//		args[i].VExtended[0] = t;
 	}
 
-	MessageDlg(resultStr, mtInformation, mbOKCancel, 0);
+//	args[result.getHeight() - 1] = result[result.getHeight() - 1][0];
+	resultStr += Format(L"%.3f)", new TVarRec(result[result.getHeight() - 1][0]), 1);
+
+	UnicodeString resultCaption = L"Расчитанный рейтинг\n";
+	ResultRichEdit->Text = resultCaption;
+	UnicodeString resultVector = resultStr;
+	ResultRichEdit->Text = ResultRichEdit->Text + resultVector;
+
+//	delete [] args;
+//	MessageDlg(resultStr, mtInformation, mbOKCancel, 0);
 }
 
 int TForm1::getCriteriaCount()
@@ -203,6 +219,76 @@ int TForm1::getObjectsCount()
 
 	return i - fixedRows - criteriaEstimates;
 
+}
+//---------------------------------------------------------------------------
+
+
+
+
+void __fastcall TForm1::Memo1Change(TObject *Sender)
+{
+//	Memo1->HideSelection = true;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Memo1KeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
+{
+	HideCaret(ResultRichEdit->Handle);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Memo1MouseEnter(TObject *Sender)
+{
+	   HideCaret(ResultRichEdit->Handle);
+
+}
+//---------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::N14Click(TObject *Sender)
+{
+	UIManager::getInstance()->closeApp(this);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
+{
+	UIManager::getInstance()->closeApp(this);
+}
+//---------------------------------------------------------------------------
+
+
+
+
+
+void __fastcall TForm1::ParamsValidate(TObject *Sender, int ACol, int ARow, const UnicodeString KeyName,
+		  const UnicodeString KeyValue)
+{
+	wregex expr(L"[\\d]+");
+	wchar_t *t = KeyValue.w_str();
+	bool b = regex_match(t, expr);
+	if (! b)
+	{
+		UnicodeString str = L"Значение должно быть целым числом";
+		MessageDlg(str, mtError, mbOKCancel, 0);
+		Params->Values[KeyName] = L"5";
+	} else {
+		if (ARow == 0) {
+			InputDataStringGrid->ColCount = StrToInt(KeyValue);
+		} else if (ARow == 1)
+		{
+			InputDataStringGrid->RowCount = StrToInt(KeyValue);
+		}
+	}
+
+//	UnicodeString key = Params->Keys[ARow];
+//	if (lastParam != Params->Values[key]) {
+//		lastParam = L"88";
+//		Params->Values[key] = L"88";
+//	}
+//
+//	int *n = new int();
 }
 //---------------------------------------------------------------------------
 

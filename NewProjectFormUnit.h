@@ -3,14 +3,17 @@
 #ifndef NewProjectFormUnitH
 #define NewProjectFormUnitH
 //---------------------------------------------------------------------------
+#include <vcl.h>
 #include <System.Classes.hpp>
 #include <Vcl.Controls.hpp>
 #include <Vcl.StdCtrls.hpp>
 #include <Vcl.Forms.hpp>
 #include <Vcl.ExtCtrls.hpp>
 #include <Vcl.Buttons.hpp>
+#include "MainForm.cpp"
+
 //---------------------------------------------------------------------------
-class TNewProjectForm : public TForm
+class TCreateProjectForm : public TForm
 {
 __published:	// IDE-managed Components
 	TPanel *Panel5;
@@ -29,9 +32,9 @@ __published:	// IDE-managed Components
 
 private:	// User declarations
 public:		// User declarations
-	__fastcall TNewProjectForm(TComponent* Owner);
+	__fastcall TCreateProjectForm(TComponent* Owner);
 };
 //---------------------------------------------------------------------------
-extern PACKAGE TNewProjectForm *NewProjectForm;
+extern PACKAGE TCreateProjectForm *CreateProjectForm;
 //---------------------------------------------------------------------------
 #endif
