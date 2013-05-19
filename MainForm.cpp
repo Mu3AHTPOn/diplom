@@ -9,8 +9,6 @@
 #pragma hdrstop
 
 #include "MainForm.h"
-#include "ahpsolver.cpp"
-#include "matrix.cpp"
 #include "UIManager.cpp"
 //---------------------------------------------------------------------------
 
@@ -74,31 +72,37 @@ void __fastcall TForm1::InputDataStringGridKeyDown(TObject *Sender, WORD &Key, T
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::FormCreate(TObject *Sender)
+void TForm1::initGrid()
 {
+	InputDataStringGrid->ColCount = StrToInt(Params->Values[Params->Keys[0]]) + fixedCols;
+	InputDataStringGrid->RowCount = StrToInt(Params->Values[Params->Keys[1]]) + fixedRows + 1;
 
-	fixedCols = InputDataStringGrid->FixedCols;
-	fixedRows = InputDataStringGrid->FixedRows;
-
-	activeCell.X = 1;
-	activeCell.Y = 1;
-
-	int gridSize = std::numeric_limits<short int>::max();
-	InputDataStringGrid->ColCount = gridSize;
-	InputDataStringGrid->RowCount = gridSize;
-
-	InputDataStringGrid->Cells[0][1] = L"Важность критериев";
+	InputDataStringGrid->Cells[0][fixedRows] = L"Важность критериев";
 	int textWidth, temp(0);
-	textWidth = InputDataStringGrid->Canvas->TextWidth(InputDataStringGrid->Cells[0][1]);
+	textWidth = InputDataStringGrid->Canvas->TextWidth(InputDataStringGrid->Cells[0][fixedRows]);
 
-	for (int i = 1; i < gridSize; i++) {
-		UnicodeString rowName = L"Объект " + IntToStr(i);
-		InputDataStringGrid->Cells[0][i - 1] = rowName;
+	for (int i = fixedRows + 1; i < InputDataStringGrid->RowCount + 1; i++) {
+		UnicodeString rowName = L"Объект " + IntToStr(i - fixedRows);
+		InputDataStringGrid->Cells[0][i] = rowName;
 		temp = InputDataStringGrid->Canvas->TextWidth(rowName);
 		textWidth = temp > textWidth ? temp : textWidth;
 	}
 
 	InputDataStringGrid->ColWidths[0] = textWidth + 10;
+}
+
+void __fastcall TForm1::FormCreate(TObject *Sender)
+{
+
+	MethodComboBox->ItemIndex = 0;
+
+	fixedCols = InputDataStringGrid->FixedCols;
+	fixedRows = InputDataStringGrid->FixedRows;
+
+	initGrid();
+
+	activeCell.X = 1;
+	activeCell.Y = 1;
 
 	InputDataStringGrid->Cells[1][1] = "3";
 	InputDataStringGrid->Cells[2][1] = "9";
@@ -136,65 +140,6 @@ void __fastcall TForm1::InputDataStringGridSelectCell(TObject *Sender, int ACol,
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::N8Click(TObject *Sender)
-{
-//создаём множество объектов ahpsolver для оценок важности критериев и для
-//каждого критерия в частности
-
-	const int criteriaCount = getCriteriaCount();		//TODO create methods, responds for this
-	const int objectCount = getObjectsCount();
-	
-	Matrix<int> criteriaEstimates(criteriaCount);
-	
-	Matrix<int> *objectEstimates = new Matrix<int>[criteriaCount];
-	AHPSolver<int> *ahpObjects = new AHPSolver<int>[criteriaCount];
-	
-	for (int i = 0; i < criteriaCount; ++i) {
-		criteriaEstimates[i][0] = InputDataStringGrid->Cells[i+fixedCols][fixedRows].ToInt();
-		objectEstimates[i] = *(new Matrix<int>(objectCount));
-	}
-
-	AHPSolver<int> ahpCriteriaEstimates(criteriaEstimates);
-	
-	//fill objectEstimates[
-	TStringGrid *test = InputDataStringGrid;
-	for (int i = 0; i < criteriaCount; ++i) {
-		Matrix<int> &curr = objectEstimates[i];
-		for (int j = 0; j < objectCount; ++j) {
-			curr[j][0] = InputDataStringGrid->Cells[i + fixedCols][j + fixedRows + 1].ToInt();
-		}
-
-		ahpObjects[i] = *(new AHPSolver<int>(curr));
-	}
-
-	Matrix<double> integrEstimate(ahpObjects[0].getMaxEigenVectors());
-	for(int i = 1; i < criteriaCount; ++i)
-	{
-		integrEstimate.append(ahpObjects[i].getMaxEigenVectors());
-	}
-
-	Matrix<double> result = integrEstimate * ahpCriteriaEstimates.getMaxEigenVectors();
-	UnicodeString resultStr = L"(";
-//	TVarRec *args = new TVarRec[result.getHeight()];
-
-	for (int i = 0; i < result.getHeight() - 1; ++i) {
-		resultStr += Format(L"%.3f, ", new TVarRec(result[i][0]), 1);
-//		double t = ;
-//		args[i] = 0.0;
-//		args[i].VExtended[0] = t;
-	}
-
-//	args[result.getHeight() - 1] = result[result.getHeight() - 1][0];
-	resultStr += Format(L"%.3f)", new TVarRec(result[result.getHeight() - 1][0]), 1);
-
-	UnicodeString resultCaption = L"Расчитанный рейтинг\n";
-	ResultRichEdit->Text = resultCaption;
-	UnicodeString resultVector = resultStr;
-	ResultRichEdit->Text = ResultRichEdit->Text + resultVector;
-
-//	delete [] args;
-//	MessageDlg(resultStr, mtInformation, mbOKCancel, 0);
-}
 
 int TForm1::getCriteriaCount()
 {
@@ -221,9 +166,6 @@ int TForm1::getObjectsCount()
 
 }
 //---------------------------------------------------------------------------
-
-
-
 
 void __fastcall TForm1::Memo1Change(TObject *Sender)
 {
@@ -258,39 +200,138 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 }
 //---------------------------------------------------------------------------
 
-
-
-
-
 void __fastcall TForm1::ParamsValidate(TObject *Sender, int ACol, int ARow, const UnicodeString KeyName,
 		  const UnicodeString KeyValue)
 {
 	wregex expr(L"[\\d]+");
-	wchar_t *t = KeyValue.w_str();
-	bool b = regex_match(t, expr);
-	if (! b)
+	if (! regex_match(KeyValue.w_str(), expr))
 	{
 		UnicodeString str = L"Значение должно быть целым числом";
 		MessageDlg(str, mtError, mbOKCancel, 0);
 		Params->Values[KeyName] = L"5";
 	} else {
-		if (ARow == 0) {
-			InputDataStringGrid->ColCount = StrToInt(KeyValue);
-		} else if (ARow == 1)
-		{
-			InputDataStringGrid->RowCount = StrToInt(KeyValue);
-		}
+		initGrid();
 	}
-
-//	UnicodeString key = Params->Keys[ARow];
-//	if (lastParam != Params->Values[key]) {
-//		lastParam = L"88";
-//		Params->Values[key] = L"88";
-//	}
-//
-//	int *n = new int();
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TForm1::N5Click(TObject *Sender)
+{
+	ResultRichEdit->Text = L"";
+}
+//---------------------------------------------------------------------------
 
+void __fastcall TForm1::N8Click(TObject *Sender)
+{
+	if (MethodComboBox->ItemIndex == 0) {
+	   evalAHP();
+	} else
+	{
+		evalWS();
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
+{
+	if (MethodComboBox->ItemIndex == 0) {
+	   evalAHP();
+	} else
+	{
+		evalWS();
+	}
+}
+
+void TForm1::evalAHP()
+{
+//создаём множество объектов ahpsolver для оценок важности критериев и для
+//каждого критерия в частности
+try {
+	const int criteriaCount = getCriteriaCount();
+	const int objectCount = getObjectsCount();
+
+	Matrix<int> criteriaEstimates(criteriaCount);
+
+	Matrix<int> *objectEstimates = new Matrix<int>[criteriaCount];
+	AHPSolver<int> *ahpObjects = new AHPSolver<int>[criteriaCount];
+
+	for (int i = 0; i < criteriaCount; ++i) {
+		criteriaEstimates[i][0] = InputDataStringGrid->Cells[i+fixedCols][fixedRows].ToInt();
+		objectEstimates[i] = *(new Matrix<int>(objectCount));
+	}
+
+	AHPSolver<int> ahpCriteriaEstimates(criteriaEstimates);
+
+	//fill objectEstimates
+	TStringGrid *test = InputDataStringGrid;
+	for (int i = 0; i < criteriaCount; ++i) {
+		Matrix<int> &curr = objectEstimates[i];
+		for (int j = 0; j < objectCount; ++j) {
+			curr[j][0] = InputDataStringGrid->Cells[i + fixedCols][j + fixedRows + 1].ToInt();
+		}
+
+		ahpObjects[i] = *(new AHPSolver<int>(curr));
+	}
+
+	Matrix<double> integrEstimate(ahpObjects[0].getMaxEigenVectors());
+	for(int i = 1; i < criteriaCount; ++i)
+	{
+		integrEstimate.append(ahpObjects[i].getMaxEigenVectors());
+	}
+
+	Matrix<double> result = integrEstimate * ahpCriteriaEstimates.getMaxEigenVectors();
+
+	UnicodeString resultStr = L"(";
+
+	for (int i = 0; i < result.getHeight() - 1; ++i) {
+		resultStr += Format(L"%.3f, ", new TVarRec(result[i][0]), 1);
+	}
+
+	resultStr += Format(L"%.3f)", new TVarRec(result[result.getHeight() - 1][0]), 1);
+
+	UnicodeString resultCaption = L"Расчитанный рейтинг\n";
+	ResultRichEdit->Text = resultCaption;
+	UnicodeString resultVector = resultStr;
+	ResultRichEdit->Text = ResultRichEdit->Text + resultVector;
+	} catch (...)        //faken Embarcadero!
+	{
+
+    }
+}
+
+void TForm1::evalWS()
+{
+	const int criteriaCount = getCriteriaCount();
+	const int objectCount = getObjectsCount();
+
+	Matrix<int> criteriaEstimates(criteriaCount);
+	Matrix<int> objectEstimates(objectCount, criteriaCount);
+
+	for (int i = 0; i < criteriaCount; ++i) {
+		criteriaEstimates[i][0] = InputDataStringGrid->Cells[i+fixedCols][fixedRows].ToInt();
+	}
+
+ 	//fill objectEstimates
+	TStringGrid *test = InputDataStringGrid;
+	for (int i = 0; i < criteriaCount; ++i) {
+		for (int j = 0; j < objectCount; ++j) {
+			objectEstimates[j][i] = InputDataStringGrid->Cells[i + fixedCols][j + fixedRows + 1].ToInt();
+		}
+	}
+
+	Matrix<int> &result = objectEstimates * criteriaEstimates;
+
+	UnicodeString resultStr = L"(";
+
+	for (int i = 0; i < result.getHeight() - 1; ++i) {
+		resultStr += Format(L"%.d, ", new TVarRec(result[i][0]), 1);
+	}
+
+	resultStr += Format(L"%.d)", new TVarRec(result[result.getHeight() - 1][0]), 1);
+
+	UnicodeString resultCaption = L"Расчитанный рейтинг\n";
+	ResultRichEdit->Text = resultCaption;
+	UnicodeString resultVector = resultStr;
+	ResultRichEdit->Text = ResultRichEdit->Text + resultVector;
+}
+//---------------------------------------------------------------------------
 

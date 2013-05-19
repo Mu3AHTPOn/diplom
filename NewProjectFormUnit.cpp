@@ -17,10 +17,9 @@ __fastcall TCreateProjectForm::TCreateProjectForm(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TCreateProjectForm::Panel1Click(TObject *Sender)
 {
-
 	TPanel &panel = *((TPanel*) Sender);
 	panel.BevelOuter = TBevelCut::bvRaised;
- 	Form1 = new TForm1(CreateProjectForm->Owner);
+	Form1 = new TForm1(CreateProjectForm->Owner);
 	Form1->Show();
 	CreateProjectForm->Hide();
 }
@@ -30,7 +29,7 @@ void __fastcall TCreateProjectForm::Panel1MouseDown(TObject *Sender, TMouseButto
 		  TShiftState Shift, int X, int Y)
 {
 	TPanel &panel = *((TPanel*) Sender);
-	panel.Color = clBlack;
+	panel.BevelOuter = TBevelCut::bvLowered;
 }
 //---------------------------------------------------------------------------
 
@@ -38,7 +37,7 @@ void __fastcall TCreateProjectForm::Panel1MouseUp(TObject *Sender, TMouseButton 
 		  TShiftState Shift, int X, int Y)
 {
 	TPanel &panel = *((TPanel*) Sender);
-	panel.BevelOuter = TBevelCut::bvNone;
+	panel.BevelOuter = TBevelCut::bvRaised;
 }
 //---------------------------------------------------------------------------
 
@@ -46,13 +45,14 @@ void __fastcall TCreateProjectForm::Panel1MouseUp(TObject *Sender, TMouseButton 
 void __fastcall TCreateProjectForm::Panel1MouseEnter(TObject *Sender)
 {
 	TPanel &panel = *((TPanel*) Sender);
-	panel.BevelOuter = TBevelCut::bvLowered;
+	panel.BevelOuter = TBevelCut::bvNone;
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TCreateProjectForm::Panel1MouseLeave(TObject *Sender)
 {
 	TPanel &panel = *((TPanel*) Sender);
+   	panel.BevelOuter = TBevelCut::bvRaised;
 	panel.Color = clBtnFace;
 }
 //---------------------------------------------------------------------------

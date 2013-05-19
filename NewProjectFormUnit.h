@@ -17,10 +17,11 @@ class TCreateProjectForm : public TForm
 {
 __published:	// IDE-managed Components
 	TPanel *Panel5;
-	TPanel *Panel1;
-	TPanel *Panel2;
-	TPanel *Panel3;
-	TPanel *Panel4;
+	TPanel *Panel6;
+	TPanel *Panel7;
+	TPanel *Panel8;
+	TPanel *Panel9;
+	TPanel *Panel10;
 	void __fastcall Panel1Click(TObject *Sender);
 	void __fastcall Panel1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
           int X, int Y);

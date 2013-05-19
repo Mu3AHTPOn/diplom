@@ -15,6 +15,9 @@
 #include <Vcl.ExtCtrls.hpp>
 #include <Vcl.Buttons.hpp>
 //---------------------------------------------------------------------------
+#include "ahpsolver.cpp"
+#include "matrix.cpp"
+//---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
 __published:	// IDE-managed Components
@@ -40,11 +43,14 @@ __published:	// IDE-managed Components
 	TSpeedButton *SpeedButton2;
 	TSpeedButton *SpeedButton3;
 	TSpeedButton *SpeedButton4;
+	TSpeedButton *SpeedButton5;
+	TComboBox *MethodComboBox;
+	TPopupMenu *ResultsPopupMenu;
+	TMenuItem *N5;
 	void __fastcall InputDataStringGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall InputDataStringGridSelectCell(TObject *Sender, int ACol, int ARow,
           bool &CanSelect);
-	void __fastcall N8Click(TObject *Sender);
 	void __fastcall Memo1Change(TObject *Sender);
 	void __fastcall Memo1KeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall Memo1MouseEnter(TObject *Sender);
@@ -52,6 +58,9 @@ __published:	// IDE-managed Components
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall ParamsValidate(TObject *Sender, int ACol, int ARow, const UnicodeString KeyName,
           const UnicodeString KeyValue);
+	void __fastcall N5Click(TObject *Sender);
+	void __fastcall N8Click(TObject *Sender);
+	void __fastcall SpeedButton1Click(TObject *Sender);
 
 private:	// User declarations
 	int getCriteriaCount();
@@ -59,6 +68,9 @@ private:	// User declarations
 	TGridCoord activeCell;
 	int fixedCols, fixedRows;
 	UnicodeString lastParam;
+	void evalAHP();
+	void evalWS();
+	void initGrid();
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
 };

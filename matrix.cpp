@@ -36,7 +36,8 @@ Matrix<T>::~Matrix()
     for (int i = 0; i < height; ++i)
     {
         delete [] matrix[i];
-    }
+	}
+
     delete [] matrix;
 }
 
