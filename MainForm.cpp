@@ -10,6 +10,7 @@
 
 #include "MainForm.h"
 #include "UIManager.cpp"
+#include "setColRowNameFormUnit.cpp"
 //---------------------------------------------------------------------------
 
 using namespace boost;
@@ -332,6 +333,58 @@ void TForm1::evalWS()
 	ResultRichEdit->Text = resultCaption;
 	UnicodeString resultVector = resultStr;
 	ResultRichEdit->Text = ResultRichEdit->Text + resultVector;
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::InputDataStringGridDrawCell(TObject *Sender, int ACol, int ARow,
+          TRect &Rect, TGridDrawState State)
+{
+//	if (ARow == 0) {
+//		UnicodeString fakenStr = L"sdfsdf";
+////		InputDataStringGrid->Canvas->Brush->Color = clBlack;
+//		InputDataStringGrid->Canvas->TextOutW(Rect.TopLeft().x, Rect.TopLeft().y, InputDataStringGrid->Cells[ACol][ARow]);
+////		InputDataStringGrid->Canvas->Brush->Color = clBtnFace;
+////		InputDataStringGrid->Canvas->FillRect(Rect);
+//	}
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::InputDataStringGridFixedCellClick(TObject *Sender, int ACol,
+		  int ARow)
+{
+//	InputDataStringGrid->
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
+{
+//	const int top = InputDataStringGrid->BoundsRect.Top + Form1->Top;
+//	const int left = InputDataStringGrid->Left + Form1->Left;
+//	cursorPoint(Mouse->CursorPos.x - left, Mouse->CursorPos.y - top);
+//	delete[] tagCursorPoint;
+	const int cols = InputDataStringGrid->ColCount;
+	const int rows = InputDataStringGrid->RowCount;
+	TPoint cursorPoint = InputDataStringGrid->ScreenToClient(Mouse->CursorPos);
+	for (int i = 0; i < cols; i++) {
+		TRect rect = InputDataStringGrid->CellRect(i, 0);
+		if (rect.Contains(cursorPoint)) {
+			UnicodeString newName;
+			TsetCollRowNameForm *form = new TsetCollRowNameForm(this);
+			form->setResultStr(&newName);
+			try {
+			  form->ShowModal();
+			  InputDataStringGrid->Cells[i][0] = newName;
+			} __finally {
+			  form->Free();
+			}
+			return;
+		}
+	}
+	for (int j = 0; j < rows; j++) {
+	}
 }
 //---------------------------------------------------------------------------
 

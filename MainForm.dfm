@@ -31,6 +31,9 @@ object Form1: TForm1
     DefaultColWidth = 24
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing, goTabs, goFixedColClick, goFixedRowClick]
     TabOrder = 0
+    OnDblClick = InputDataStringGridDblClick
+    OnDrawCell = InputDataStringGridDrawCell
+    OnFixedCellClick = InputDataStringGridFixedCellClick
     OnKeyDown = InputDataStringGridKeyDown
     OnSelectCell = InputDataStringGridSelectCell
   end

@@ -61,6 +61,13 @@ __published:	// IDE-managed Components
 	void __fastcall N5Click(TObject *Sender);
 	void __fastcall N8Click(TObject *Sender);
 	void __fastcall SpeedButton1Click(TObject *Sender);
+	void __fastcall InputDataStringGridDrawCell(TObject *Sender, int ACol, int ARow,
+          TRect &Rect, TGridDrawState State);
+	void __fastcall InputDataStringGridFixedCellClick(TObject *Sender, int ACol, int ARow);
+	void __fastcall InputDataStringGridDblClick(TObject *Sender);
+
+
+
 
 private:	// User declarations
 	int getCriteriaCount();
