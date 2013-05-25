@@ -17,6 +17,10 @@
 //---------------------------------------------------------------------------
 #include "ahpsolver.cpp"
 #include "matrix.cpp"
+
+#include <vector>
+
+using std::vector;
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
@@ -78,8 +82,10 @@ private:	// User declarations
 	void evalAHP();
 	void evalWS();
 	void initGrid();
+	void fillFixedCols();
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
+	vector<UnicodeString> *colNames, *rowNames;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;

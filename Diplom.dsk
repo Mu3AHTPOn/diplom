@@ -1,25 +1,26 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\sdk\windef.h',0,1,331,1,353,0,0,,
-File_1=TSourceModule,'F:\diplom\NewProjectFormUnit.cpp',0,1,14,59,46,0,0,,
-File_2=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.Classes.hpp',0,1,1258,1,1185,0,0,,
-File_3=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.ValEdit.hpp',0,1,118,102,139,0,0,,
-File_4=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Dialogs.hpp',0,1,1376,46,1392,0,0,,
-File_5=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Controls.hpp',0,1,2304,1,2326,0,0,,
-File_6=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\list',0,1,424,1,445,0,0,,
-File_7=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.UITypes.hpp',0,1,96,1,118,0,0,,
-File_8=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\ustring.h',0,1,52,25,28,0,0,,
-File_9=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Clipbrd.hpp',0,1,1,1,34,0,0,,
-File_10=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysset.h',0,1,169,1,190,0,0,,
-File_11=TSourceModule,'F:\ВУЗ\диплом\diplom.tmp\MainForm.cpp',0,1,1,1,1,0,0,,
-File_12=TSourceModule,'F:\ВУЗ\диплом\diplom\Unit1.cpp',0,1,1,1,1,0,0,,
-File_13=TSourceModule,'F:\test\matrixTest\main.cpp',0,1,42,3,84,0,0,,
+File_0=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\vector',0,1,307,1,329,0,0,,
+File_1=TSourceModule,'F:\diplom\setColRowNameFormUnit.cpp',0,1,8,13,32,0,0,,
+File_2=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\sdk\windef.h',0,1,331,1,353,0,0,,
+File_3=TSourceModule,'F:\diplom\NewProjectFormUnit.cpp',0,1,14,59,46,0,0,,
+File_4=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.Classes.hpp',0,1,1258,1,1185,0,0,,
+File_5=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.ValEdit.hpp',0,1,118,102,139,0,0,,
+File_6=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Dialogs.hpp',0,1,1376,46,1392,0,0,,
+File_7=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Controls.hpp',0,1,2304,1,2326,0,0,,
+File_8=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\list',0,1,424,1,445,0,0,,
+File_9=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.UITypes.hpp',0,1,96,1,118,0,0,,
+File_10=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\ustring.h',0,1,52,25,28,0,0,,
+File_11=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Clipbrd.hpp',0,1,1,1,34,0,0,,
+File_12=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysset.h',0,1,169,1,190,0,0,,
+File_13=TSourceModule,'F:\ВУЗ\диплом\diplom.tmp\MainForm.cpp',0,1,1,1,1,0,0,,
+File_14=TSourceModule,'F:\ВУЗ\диплом\diplom\Unit1.cpp',0,1,1,1,1,0,0,,
 
 [Modules]
 Module0=F:\diplom\MainForm.cpp
-Module1=F:\diplom\setColRowNameFormUnit.cpp
-Module2=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Forms.hpp
+Module1=F:\diplom\AddColRowNamesUnit.cpp
+Module2=F:\diplom\Diplom.cbproj
 Module3=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\SystemTypes.h
-Module4=F:\diplom\Diplom.cbproj
+Module4=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Forms.hpp
 Module5=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp
 Module6=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Graphics.hpp
 Module7=F:\diplom\UIManager.cpp
@@ -37,23 +38,23 @@ ModuleType=TSourceModule
 FormState=1
 FormOnTop=0
 
-[F:\diplom\setColRowNameFormUnit.cpp]
+[F:\diplom\AddColRowNamesUnit.cpp]
 ModuleType=TSourceModule
 FormState=1
 FormOnTop=0
 
-[c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Forms.hpp]
-ModuleType=TSourceModule
-FormState=0
-FormOnTop=0
+[F:\diplom\Diplom.cbproj]
+ModuleType=TBaseProject
 
 [c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\SystemTypes.h]
 ModuleType=TSourceModule
 FormState=0
 FormOnTop=0
 
-[F:\diplom\Diplom.cbproj]
-ModuleType=TBaseProject
+[c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Forms.hpp]
+ModuleType=TSourceModule
+FormState=0
+FormOnTop=0
 
 [c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp]
 ModuleType=TSourceModule
@@ -151,22 +152,22 @@ WelcomePageURL=bds:/default.htm
 [View1]
 CustomEditViewType=TEditView
 Module=F:\diplom\MainForm.cpp
-CursorX=31
-CursorY=376
-TopLine=335
+CursorX=29
+CursorY=386
+TopLine=357
 LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\MainForm.cpp
 
 [View2]
 CustomEditViewType=TEditView
-Module=F:\diplom\setColRowNameFormUnit.cpp
-CursorX=13
-CursorY=32
-TopLine=8
+Module=F:\diplom\AddColRowNamesUnit.cpp
+CursorX=12
+CursorY=201
+TopLine=201
 LeftCol=1
 Bookmarks=
-EditViewName=F:\diplom\setColRowNameFormUnit.cpp
+EditViewName=F:\diplom\AddColRowNamesUnit.cpp
 
 [View3]
 CustomEditViewType=TEditView
@@ -279,13 +280,14 @@ Bookmarks=
 EditViewName=F:\diplom\eigensolver.h
 
 [Watches]
-Count=3
-Watch0='t[0]',256,0,18,1,0,'Watches',1
-Watch1='this->matrix',256,0,18,1,0,'Watches',1
-Watch2='this->width',256,0,18,1,0,'Watches',1
+Count=4
+Watch0='colNames->size()',256,0,18,1,0,'Watches',1
+Watch1='t',256,0,18,1,0,'Watches',1
+Watch2='ColNamesListBox->Items->Strings[0]',256,0,18,1,0,'Watches',1
+Watch3='colNames->at(0)',256,0,18,1,0,'Watches',1
 
 [WatchWindow]
-WatchColumnWidth=120
+WatchColumnWidth=145
 WatchShowColumnHeaders=1
 PercentageSizes=1
 Create=1
@@ -306,12 +308,11 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=5
-Breakpoint0='F:\diplom\MainForm.cpp',208,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint1='F:\diplom\MainForm.cpp',227,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint2='F:\diplom\NewProjectFormUnit.cpp',20,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint3='F:\diplom\MainForm.cpp',381,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint4='F:\diplom\MainForm.cpp',379,'',0,1,'',1,0,0,'',1,'','','',0,''
+Count=4
+Breakpoint0='F:\diplom\MainForm.cpp',228,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint1='F:\diplom\NewProjectFormUnit.cpp',20,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint2='F:\diplom\MainForm.cpp',378,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint3='F:\diplom\MainForm.cpp',376,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -422,7 +423,7 @@ SplitPos=111
 [PropInspDesignerSelection]
 ArrangeBy=Name
 SelectedItem=Caption,
-ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0,ImageMargins=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,Font=0,BevelEdges=0,StyleElements=0,Touch=0
+ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0
 
 [TFileExplorerForm]
 PercentageSizes=1
@@ -692,7 +693,7 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=-182
+Left=-363
 Top=-100
 Width=1844
 Height=3143
@@ -921,7 +922,7 @@ LRDockWidth=2745
 Dockable=1
 StayOnTop=0
 
-[Item__C74C7DBB_4D99_4FF4_BABE_F02A005254E6_]
+[Item__CE401FF6_F956_4BDB_9F54_088BD85F0CF4_]
 PercentageSizes=1
 Create=1
 Visible=0
@@ -940,7 +941,7 @@ LRDockWidth=2745
 Dockable=1
 StayOnTop=0
 
-[Item__CE401FF6_F956_4BDB_9F54_088BD85F0CF4_]
+[Item__C74C7DBB_4D99_4FF4_BABE_F02A005254E6_]
 PercentageSizes=1
 Create=1
 Visible=0

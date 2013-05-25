@@ -11,6 +11,7 @@
 #include "MainForm.h"
 #include "UIManager.cpp"
 #include "setColRowNameFormUnit.cpp"
+#include "AddColRowNamesUnit.cpp"
 //---------------------------------------------------------------------------
 
 using namespace boost;
@@ -26,6 +27,13 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 {
 	Form1 = this;
 	UIManager::getInstance()->addForm(Form1);
+	Form1->Hide();
+	AddColRowNamesForm = new TAddColRowNamesForm(this);
+	colNames = new vector<UnicodeString>();
+	rowNames = new vector<UnicodeString>();
+	AddColRowNamesForm->setRowNamesArray(rowNames);
+	AddColRowNamesForm->setColNamesArray(colNames);
+	AddColRowNamesForm->ShowModal();
 }
 
 //---------------------------------------------------------------------------
@@ -361,10 +369,6 @@ void __fastcall TForm1::InputDataStringGridFixedCellClick(TObject *Sender, int A
 
 void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 {
-//	const int top = InputDataStringGrid->BoundsRect.Top + Form1->Top;
-//	const int left = InputDataStringGrid->Left + Form1->Left;
-//	cursorPoint(Mouse->CursorPos.x - left, Mouse->CursorPos.y - top);
-//	delete[] tagCursorPoint;
 	const int cols = InputDataStringGrid->ColCount;
 	const int rows = InputDataStringGrid->RowCount;
 	TPoint cursorPoint = InputDataStringGrid->ScreenToClient(Mouse->CursorPos);
@@ -386,5 +390,7 @@ void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 	for (int j = 0; j < rows; j++) {
 	}
 }
+
+
 //---------------------------------------------------------------------------
 

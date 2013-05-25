@@ -4,8 +4,9 @@
 #pragma hdrstop
 #include <tchar.h>
 //---------------------------------------------------------------------------
-USEFORM("MainForm.cpp", Form1);
 USEFORM("setColRowNameFormUnit.cpp", setCollRowNameForm);
+USEFORM("MainForm.cpp", Form1);
+USEFORM("AddColRowNamesUnit.cpp", AddColRowNamesForm);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
@@ -15,6 +16,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 		Application->MainFormOnTaskBar = true;
 		Application->CreateForm(__classid(TForm1), &Form1);
 		Application->CreateForm(__classid(TsetCollRowNameForm), &setCollRowNameForm);
+		Application->CreateForm(__classid(TAddColRowNamesForm), &AddColRowNamesForm);
 		Application->Run();
 	}
 	catch (Exception &exception)
