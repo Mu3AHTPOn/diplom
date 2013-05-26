@@ -17,6 +17,7 @@ __published:	// IDE-managed Components
 	TButton *Button2;
 	void __fastcall Button1Click(TObject *Sender);
 	void __fastcall Button2Click(TObject *Sender);
+	void __fastcall FormShow(TObject *Sender);
 private:	// User declarations
 	UnicodeString* result;
 public:		// User declarations

@@ -30,6 +30,9 @@ __published:	// IDE-managed Components
 	TLabel *Label2;
 	TButton *CancelButton;
 	TButton *NextButton;
+	TLabel *Label3;
+	TEdit *ProjectName;
+	TButton *Button1;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall RowsListBoxClick(TObject *Sender);
 	void __fastcall listEditKeyPress(TObject *Sender, System::WideChar &Key);
@@ -47,6 +50,8 @@ __published:	// IDE-managed Components
 	void __fastcall ColMoveDownButtonClick(TObject *Sender);
 	void __fastcall ColNamesListBoxDblClick(TObject *Sender);
 	void __fastcall ColNamesListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
+	void __fastcall FormShow(TObject *Sender);
+	void __fastcall Button1Click(TObject *Sender);
 
 private:	// User declarations
 	TEdit *listEdit;
@@ -60,10 +65,15 @@ private:	// User declarations
 	void onListExit(TListBox* list);
 
 	vector<UnicodeString> *colNames, *rowNames;
+	UnicodeString *projectName;
+	bool *isOpen, *isClose;
 public:		// User declarations
 	__fastcall TAddColRowNamesForm(TComponent* Owner);
-	void setColNamesArray(vector<UnicodeString> *vector);
-	void setRowNamesArray(vector<UnicodeString> *vector);
+	void setColNamesArray(vector<UnicodeString> *inVector);
+	void setRowNamesArray(vector<UnicodeString> *inVector);
+	void setProjectName(UnicodeString *projectName);
+	void setIsOpen(bool *isOpen);
+	void setIsClose(bool *isClose);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TAddColRowNamesForm *AddColRowNamesForm;

@@ -33,3 +33,10 @@ void __fastcall TsetCollRowNameForm::Button2Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TsetCollRowNameForm::FormShow(TObject *Sender)
+{
+	Edit1->Text = (*result);
+	Edit1->SelectAll();
+}
+//---------------------------------------------------------------------------
+

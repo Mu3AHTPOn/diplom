@@ -17,6 +17,7 @@
 //---------------------------------------------------------------------------
 #include "ahpsolver.cpp"
 #include "matrix.cpp"
+#include <Vcl.Dialogs.hpp>
 
 #include <vector>
 
@@ -27,9 +28,9 @@ class TForm1 : public TForm
 __published:	// IDE-managed Components
 	TMainMenu *MainMenu1;
 	TMenuItem *N1;
-	TMenuItem *N2;
-	TMenuItem *N3;
-	TMenuItem *N4;
+	TMenuItem *MMNewProject;
+	TMenuItem *MMOPentProject;
+	TMenuItem *MMCloseProject;
 	TMenuItem *N6;
 	TMenuItem *N7;
 	TMenuItem *N8;
@@ -39,18 +40,20 @@ __published:	// IDE-managed Components
 	TMenuItem *N10;
 	TStringGrid *InputDataStringGrid;
 	TToolBar *ToolBar2;
-	TValueListEditor *Params;
 	TRichEdit *ResultRichEdit;
-	TMenuItem *N14;
+	TMenuItem *MMCloseApp;
 	TPanel *Panel1;
 	TSpeedButton *SpeedButton1;
 	TSpeedButton *SpeedButton2;
 	TSpeedButton *SpeedButton3;
-	TSpeedButton *SpeedButton4;
+	TSpeedButton *NewProjectButton;
 	TSpeedButton *SpeedButton5;
 	TComboBox *MethodComboBox;
 	TPopupMenu *ResultsPopupMenu;
 	TMenuItem *N5;
+	TOpenDialog *OpenDialog1;
+	TSaveDialog *SaveDialog1;
+	TMenuItem *MMEditProject;
 	void __fastcall InputDataStringGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall InputDataStringGridSelectCell(TObject *Sender, int ACol, int ARow,
@@ -58,7 +61,7 @@ __published:	// IDE-managed Components
 	void __fastcall Memo1Change(TObject *Sender);
 	void __fastcall Memo1KeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall Memo1MouseEnter(TObject *Sender);
-	void __fastcall N14Click(TObject *Sender);
+	void __fastcall MMCloseAppClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall ParamsValidate(TObject *Sender, int ACol, int ARow, const UnicodeString KeyName,
           const UnicodeString KeyValue);
@@ -69,9 +72,12 @@ __published:	// IDE-managed Components
           TRect &Rect, TGridDrawState State);
 	void __fastcall InputDataStringGridFixedCellClick(TObject *Sender, int ACol, int ARow);
 	void __fastcall InputDataStringGridDblClick(TObject *Sender);
-
-
-
+	void __fastcall MMNewProjectClick(TObject *Sender);
+	void __fastcall SpeedButton2Click(TObject *Sender);
+	void __fastcall SpeedButton3Click(TObject *Sender);
+	void __fastcall NewProjectButtonClick(TObject *Sender);
+	void __fastcall SpeedButton5Click(TObject *Sender);
+	void __fastcall MMCloseProjectClick(TObject *Sender);
 
 private:	// User declarations
 	int getCriteriaCount();
@@ -82,10 +88,17 @@ private:	// User declarations
 	void evalAHP();
 	void evalWS();
 	void initGrid();
-	void fillFixedCols();
+	void drawFixedColNames(int ACol, int ARow, TRect &Rect);
+	void setRowHeight(UnicodeString &str);
+	void setColWidth(UnicodeString &str);
+	void saveProject();
+	void loadProject();
+	void newProject();
+	void closeProject();
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
 	vector<UnicodeString> *colNames, *rowNames;
+	UnicodeString *projectName;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;

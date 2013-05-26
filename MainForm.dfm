@@ -24,12 +24,19 @@ object Form1: TForm1
   object InputDataStringGrid: TStringGrid
     Left = 0
     Top = 27
-    Width = 817
+    Width = 1058
     Height = 367
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelWidth = 5
     DefaultColWidth = 24
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Font.Quality = fqProof
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing, goTabs, goFixedColClick, goFixedRowClick]
+    ParentFont = False
     TabOrder = 0
     OnDblClick = InputDataStringGridDblClick
     OnDrawCell = InputDataStringGridDrawCell
@@ -45,7 +52,7 @@ object Form1: TForm1
     ButtonHeight = 21
     Caption = 'ToolBar2'
     TabOrder = 1
-    object SpeedButton4: TSpeedButton
+    object NewProjectButton: TSpeedButton
       Left = 0
       Top = 0
       Width = 23
@@ -80,6 +87,7 @@ object Form1: TForm1
         C5C5C5C5C5C5C5C577B5773DB03D5FC45F42B44297D897FFFFFF}
       ParentShowHint = False
       ShowHint = True
+      OnClick = NewProjectButtonClick
     end
     object SpeedButton3: TSpeedButton
       Left = 23
@@ -116,6 +124,7 @@ object Form1: TForm1
         FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
       ParentShowHint = False
       ShowHint = True
+      OnClick = SpeedButton3Click
     end
     object SpeedButton2: TSpeedButton
       Left = 46
@@ -152,6 +161,7 @@ object Form1: TForm1
         84848A8A8A8F8F8F9090907B7B7B5050503C3C3C626262F5F5F5}
       ParentShowHint = False
       ShowHint = True
+      OnClick = SpeedButton2Click
     end
     object SpeedButton5: TSpeedButton
       Left = 69
@@ -188,6 +198,7 @@ object Form1: TForm1
         FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
       ParentShowHint = False
       ShowHint = True
+      OnClick = SpeedButton5Click
     end
     object MethodComboBox: TComboBox
       Left = 92
@@ -241,22 +252,6 @@ object Form1: TForm1
       OnClick = SpeedButton1Click
     end
   end
-  object Params: TValueListEditor
-    Left = 815
-    Top = 24
-    Width = 242
-    Height = 367
-    Anchors = [akTop, akRight, akBottom]
-    DisplayOptions = [doAutoColResize, doKeyColFixed]
-    Strings.Strings = (
-      #1050#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1082#1088#1080#1090#1077#1088#1080#1077#1074'=6'
-      #1050#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1086#1073#1098#1077#1082#1090#1086#1074'=3')
-    TabOrder = 2
-    OnValidate = ParamsValidate
-    ColWidths = (
-      148
-      88)
-  end
   object ResultRichEdit: TRichEdit
     Left = -1
     Top = 414
@@ -272,7 +267,7 @@ object Form1: TForm1
     PopupMenu = ResultsPopupMenu
     ReadOnly = True
     ScrollBars = ssBoth
-    TabOrder = 3
+    TabOrder = 2
     OnKeyDown = Memo1KeyDown
     OnMouseEnter = Memo1MouseEnter
   end
@@ -289,25 +284,30 @@ object Form1: TForm1
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 4
+    TabOrder = 3
   end
   object MainMenu1: TMainMenu
-    Left = 736
-    Top = 360
+    Left = 704
+    Top = 352
     object N1: TMenuItem
       Caption = #1060#1072#1081#1083
-      object N2: TMenuItem
+      object MMNewProject: TMenuItem
         Caption = #1053#1086#1074#1099#1081' '#1087#1088#1086#1077#1082#1090
+        OnClick = MMNewProjectClick
       end
-      object N3: TMenuItem
+      object MMOPentProject: TMenuItem
         Caption = #1054#1090#1082#1088#1099#1090#1100' '#1087#1088#1086#1077#1082#1090
       end
-      object N4: TMenuItem
-        Caption = #1047#1072#1082#1088#1099#1090#1100' '#1087#1088#1086#1077#1082#1090
+      object MMEditProject: TMenuItem
+        Caption = #1056#1077#1076#1072#1082#1090#1080#1088#1086#1074#1072#1090#1100' '#1087#1088#1086#1077#1082#1090
       end
-      object N14: TMenuItem
+      object MMCloseProject: TMenuItem
+        Caption = #1047#1072#1082#1088#1099#1090#1100' '#1087#1088#1086#1077#1082#1090
+        OnClick = MMCloseProjectClick
+      end
+      object MMCloseApp: TMenuItem
         Caption = #1047#1072#1082#1088#1099#1090#1100' '#1087#1088#1086#1075#1088#1072#1084#1084#1091
-        OnClick = N14Click
+        OnClick = MMCloseAppClick
       end
     end
     object N6: TMenuItem
@@ -340,5 +340,17 @@ object Form1: TForm1
       Caption = #1054#1095#1080#1089#1090#1080#1090#1100
       OnClick = N5Click
     end
+  end
+  object OpenDialog1: TOpenDialog
+    Filter = 'Project file|*.awm'
+    Left = 784
+    Top = 440
+  end
+  object SaveDialog1: TSaveDialog
+    DefaultExt = 'awp'
+    FileName = 'myProject'
+    Filter = 'Project files|*.awm'
+    Left = 728
+    Top = 456
   end
 end

@@ -1,9 +1,11 @@
 object AddColRowNamesForm: TAddColRowNamesForm
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
   Caption = #1044#1086#1073#1072#1074#1083#1077#1085#1080#1077' '#1080#1084#1105#1085' '#1086#1073#1098#1077#1082#1090#1086#1074'/'#1082#1088#1080#1090#1077#1088#1080#1077#1074
-  ClientHeight = 299
-  ClientWidth = 450
+  ClientHeight = 328
+  ClientWidth = 460
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,12 +13,14 @@ object AddColRowNamesForm: TAddColRowNamesForm
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poDesktopCenter
   OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object RowAddButton: TSpeedButton
-    Left = 171
-    Top = 48
+    Left = 179
+    Top = 80
     Width = 23
     Height = 22
     Hint = #1044#1086#1073#1072#1074#1080#1090#1100' (insert)'
@@ -52,8 +56,8 @@ object AddColRowNamesForm: TAddColRowNamesForm
     OnClick = RowAddButtonClick
   end
   object RowRemoveButton: TSpeedButton
-    Left = 171
-    Top = 76
+    Left = 179
+    Top = 108
     Width = 23
     Height = 22
     Hint = #1059#1076#1072#1083#1080#1090#1100' (del)'
@@ -89,8 +93,8 @@ object AddColRowNamesForm: TAddColRowNamesForm
     OnClick = RowRemoveButtonClick
   end
   object RowMoveUpButton: TSpeedButton
-    Left = 171
-    Top = 104
+    Left = 179
+    Top = 136
     Width = 23
     Height = 22
     Hint = #1055#1086#1076#1085#1103#1090#1100' '#1074#1099#1096#1077
@@ -126,8 +130,8 @@ object AddColRowNamesForm: TAddColRowNamesForm
     OnClick = RowMoveUpButtonClick
   end
   object RowMoveDownButton: TSpeedButton
-    Left = 171
-    Top = 132
+    Left = 179
+    Top = 164
     Width = 23
     Height = 22
     Hint = #1054#1087#1091#1089#1090#1080#1090#1100' '#1085#1080#1078#1077
@@ -163,8 +167,8 @@ object AddColRowNamesForm: TAddColRowNamesForm
     OnClick = RowMoveDownButtonClick
   end
   object Label1: TLabel
-    Left = 16
-    Top = 23
+    Left = 24
+    Top = 55
     Width = 178
     Height = 19
     Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1103' '#1086#1073#1098#1077#1082#1090#1086#1074
@@ -176,8 +180,8 @@ object AddColRowNamesForm: TAddColRowNamesForm
     ParentFont = False
   end
   object ColAddButton: TSpeedButton
-    Left = 411
-    Top = 48
+    Left = 419
+    Top = 80
     Width = 23
     Height = 22
     Hint = #1044#1086#1073#1072#1074#1080#1090#1100' (insert)'
@@ -213,8 +217,8 @@ object AddColRowNamesForm: TAddColRowNamesForm
     OnClick = ColAddButtonClick
   end
   object ColRemoveButton: TSpeedButton
-    Left = 411
-    Top = 76
+    Left = 419
+    Top = 108
     Width = 23
     Height = 22
     Hint = #1059#1076#1072#1083#1080#1090#1100' (del)'
@@ -250,8 +254,8 @@ object AddColRowNamesForm: TAddColRowNamesForm
     OnClick = ColRemoveButtonClick
   end
   object ColMoveUpButton: TSpeedButton
-    Left = 411
-    Top = 104
+    Left = 419
+    Top = 136
     Width = 23
     Height = 22
     Hint = #1055#1086#1076#1085#1103#1090#1100' '#1074#1099#1096#1077
@@ -287,8 +291,8 @@ object AddColRowNamesForm: TAddColRowNamesForm
     OnClick = ColMoveUpButtonClick
   end
   object ColMoveDownButton: TSpeedButton
-    Left = 411
-    Top = 132
+    Left = 419
+    Top = 164
     Width = 23
     Height = 22
     Hint = #1054#1087#1091#1089#1090#1080#1090#1100' '#1085#1080#1078#1077
@@ -324,8 +328,8 @@ object AddColRowNamesForm: TAddColRowNamesForm
     OnClick = ColMoveDownButtonClick
   end
   object Label2: TLabel
-    Left = 255
-    Top = 23
+    Left = 263
+    Top = 55
     Width = 186
     Height = 19
     Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1103' '#1082#1088#1080#1090#1077#1088#1080#1077#1074
@@ -336,9 +340,16 @@ object AddColRowNamesForm: TAddColRowNamesForm
     Font.Style = []
     ParentFont = False
   end
+  object Label3: TLabel
+    Left = 24
+    Top = 24
+    Width = 64
+    Height = 13
+    Caption = #1048#1084#1103' '#1087#1088#1086#1077#1090#1082#1072
+  end
   object RowNamesListBox: TListBox
-    Left = 16
-    Top = 48
+    Left = 24
+    Top = 80
     Width = 149
     Height = 169
     ItemHeight = 13
@@ -347,8 +358,8 @@ object AddColRowNamesForm: TAddColRowNamesForm
     OnKeyDown = RowNamesListBoxKeyDown
   end
   object ColNamesListBox: TListBox
-    Left = 256
-    Top = 48
+    Left = 264
+    Top = 80
     Width = 149
     Height = 169
     ItemHeight = 13
@@ -357,8 +368,8 @@ object AddColRowNamesForm: TAddColRowNamesForm
     OnKeyDown = ColNamesListBoxKeyDown
   end
   object CancelButton: TButton
-    Left = 119
-    Top = 248
+    Left = 144
+    Top = 280
     Width = 75
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1072
@@ -366,12 +377,29 @@ object AddColRowNamesForm: TAddColRowNamesForm
     OnClick = CancelButtonClick
   end
   object NextButton: TButton
-    Left = 223
-    Top = 248
+    Left = 239
+    Top = 280
     Width = 75
     Height = 25
     Caption = #1044#1072#1083#1077#1077
     TabOrder = 3
     OnClick = NextButtonClick
+  end
+  object ProjectName: TEdit
+    Left = 104
+    Top = 21
+    Width = 193
+    Height = 21
+    TabOrder = 4
+  end
+  object Button1: TButton
+    Left = 8
+    Top = 264
+    Width = 75
+    Height = 25
+    Caption = #1054#1090#1082#1088#1099#1090#1100
+    TabOrder = 5
+    Visible = False
+    OnClick = Button1Click
   end
 end

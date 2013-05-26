@@ -93,14 +93,33 @@ void TAddColRowNamesForm::removeCurrentItem(TListBox *list)
 	listEdit->Text = L"";
 }
 //---------------------------------------------------------------------------
-void TAddColRowNamesForm::setColNamesArray(vector<UnicodeString> *vector)
+void TAddColRowNamesForm::setColNamesArray(vector<UnicodeString> *inVector)
 {
-	this->colNames = vector;
+	this->colNames = inVector;
 }
 
-void TAddColRowNamesForm::setRowNamesArray(vector<UnicodeString> *vector)
+void TAddColRowNamesForm::setRowNamesArray(vector<UnicodeString> *inVector)
 {
-	this->rowNames = vector;
+	this->rowNames = inVector;
+	vector<UnicodeString>::iterator iter;
+	for (iter = inVector->begin(); iter != inVector->end(); ++iter) {
+		RowNamesListBox->Items->Add(*iter);
+	}
+}
+//---------------------------------------------------------------------------
+void TAddColRowNamesForm::setProjectName(UnicodeString *projectName)
+{
+	this->projectName = projectName;
+}
+//---------------------------------------------------------------------------
+void TAddColRowNamesForm::setIsOpen(bool *isOpen)
+{
+	this->isOpen = isOpen;
+}
+//---------------------------------------------------------------------------
+void TAddColRowNamesForm::setIsClose(bool *isClose)
+{
+	this->isClose = isClose;
 }
 //---------------------------------------------------------------------------
 void TAddColRowNamesForm::addItem(TListBox *list, bool inEnd)
@@ -193,6 +212,7 @@ void __fastcall TAddColRowNamesForm::RowRemoveButtonClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TAddColRowNamesForm::CancelButtonClick(TObject *Sender)
 {
+	(*isClose) = true;
 	Close();
 }
 //---------------------------------------------------------------------------
@@ -212,13 +232,17 @@ void __fastcall TAddColRowNamesForm::NextButtonClick(TObject *Sender)
 		return;
 	}
 
+	colNames->clear();
 	for (int i = 0; i < colCount; i++) {
 		colNames->push_back(ColNamesListBox->Items->Strings[i]);
 	}
 
+	rowNames->clear();
 	for (int i = 0; i < rowCount; i++) {
-		rowNames->push_back(i);
+		rowNames->push_back(RowNamesListBox->Items->Strings[i]);
 	}
+
+	(*projectName) = ProjectName->Text;
 
 	Close();
 }
@@ -252,6 +276,31 @@ void __fastcall TAddColRowNamesForm::ColNamesListBoxKeyDown(TObject *Sender, WOR
           TShiftState Shift)
 {
 	onListKeyDown(ColNamesListBox, Key, Shift);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TAddColRowNamesForm::FormShow(TObject *Sender)
+{
+	ProjectName->Text = (*projectName);
+
+	ColNamesListBox->Items->Clear();
+	vector<UnicodeString>::iterator iter;
+	for (iter = colNames->begin(); iter != colNames->end(); ++iter) {
+		ColNamesListBox->Items->Add(*iter);
+	}
+
+	RowNamesListBox->Items->Clear();
+	for (iter = rowNames->begin(); iter != rowNames->end(); ++iter) {
+		RowNamesListBox->Items->Add(*iter);
+	}
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TAddColRowNamesForm::Button1Click(TObject *Sender)
+{
+	(*isOpen) = true;
+    Close();
 }
 //---------------------------------------------------------------------------
 
