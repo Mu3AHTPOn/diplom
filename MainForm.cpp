@@ -3,8 +3,7 @@
 #include <vcl.h>
 #include <Clipbrd.hpp>
 #include <limits>
-#include "boost/regex.hpp"
-#include "boost/format.hpp"
+
 
 #pragma hdrstop
 
@@ -12,10 +11,9 @@
 #include "UIManager.cpp"
 #include "setColRowNameFormUnit.cpp"
 #include "NewProjectUnit.cpp"
+#include "ProjectManager.cpp"
 #include <DBXJSON.hpp>
 //---------------------------------------------------------------------------
-
-using namespace boost;
 
 #pragma resource "*.dfm"
 
@@ -24,7 +22,7 @@ TForm1 *Form1;
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
-	: TForm(Owner)
+	: TForm(Owner), gridRegex(L"[\\d]*")
 {
 	Form1 = this;
 	UIManager::getInstance()->addForm(Form1);
@@ -105,19 +103,6 @@ void TForm1::initGrid()
 {
 	InputDataStringGrid->ColCount = colNames->size() + fixedCols;
 	InputDataStringGrid->RowCount = rowNames->size() + fixedRows + 1;
-
-//	InputDataStringGrid->Cells[0][fixedRows] = L"Важность критериев";
-//	int textWidth, temp(0);
-//	textWidth = InputDataStringGrid->Canvas->TextWidth(InputDataStringGrid->Cells[0][fixedRows]);
-
-//	for (int i = fixedRows + 1; i < InputDataStringGrid->RowCount + 1; i++) {
-//		UnicodeString rowName = L"Объект " + IntToStr(i - fixedRows);
-//		InputDataStringGrid->Cells[0][i] = rowName;
-//		temp = InputDataStringGrid->Canvas->TextWidth(rowName);
-//		textWidth = temp > textWidth ? temp : textWidth;
-//	}
-
-//	InputDataStringGrid->ColWidths[0] = textWidth + 10;
 }
 
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -132,32 +117,6 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 
 	activeCell.X = 1;
 	activeCell.Y = 1;
-
-//	InputDataStringGrid->Cells[1][1] = "3";
-//	InputDataStringGrid->Cells[2][1] = "9";
-//	InputDataStringGrid->Cells[3][1] = "5";
-//	InputDataStringGrid->Cells[4][1] = "7";
-//	InputDataStringGrid->Cells[5][1] = "5";
-//	InputDataStringGrid->Cells[6][1] = "7";
-//
-//	InputDataStringGrid->Cells[1][1+1] = "4";
-//	InputDataStringGrid->Cells[1][2+1] = "9";
-//	InputDataStringGrid->Cells[1][3+1] = "8";
-//	InputDataStringGrid->Cells[2][1+1] = "5";
-//	InputDataStringGrid->Cells[2][1+2] = "5";
-//	InputDataStringGrid->Cells[2][1+3] = "5";
-//	InputDataStringGrid->Cells[3][1+1] = "5";
-//	InputDataStringGrid->Cells[3][1+2] = "7";
-//	InputDataStringGrid->Cells[3][1+3] = "8";
-//	InputDataStringGrid->Cells[4][1+1] = "5";
-//	InputDataStringGrid->Cells[4][1+2] = "7";
-//	InputDataStringGrid->Cells[4][1+3] = "8";
-//	InputDataStringGrid->Cells[5][1+1] = "5";
-//	InputDataStringGrid->Cells[5][1+2] = "6";
-//	InputDataStringGrid->Cells[5][1+3] = "9";
-//	InputDataStringGrid->Cells[6][1+1] = "5";
-//	InputDataStringGrid->Cells[6][1+2] = "3";
-//	InputDataStringGrid->Cells[6][1+3] = "9";
 }
 //---------------------------------------------------------------------------
 
@@ -371,21 +330,6 @@ void __fastcall TForm1::InputDataStringGridDrawCell(TObject *Sender, int ACol, i
 	if (ACol == 0 || ARow == 0) {
 		drawFixedColNames(ACol, ARow, Rect);
 	}
-
-//	if (ARow == 0) {
-//		UnicodeString fakenStr = L"sdfsdf";
-////		InputDataStringGrid->Canvas->Brush->Color = clBlack;
-//		InputDataStringGrid->Canvas->TextOutW(Rect.TopLeft().x, Rect.TopLeft().y, InputDataStringGrid->Cells[ACol][ARow]);
-////		InputDataStringGrid->Canvas->Brush->Color = clBtnFace;
-////		InputDataStringGrid->Canvas->FillRect(Rect);
-//	}
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TForm1::InputDataStringGridFixedCellClick(TObject *Sender, int ACol,
-		  int ARow)
-{
-//	InputDataStringGrid->
 }
 //---------------------------------------------------------------------------
 
@@ -403,7 +347,6 @@ void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 			try {
 			  form->ShowModal();
 			  if (newName != L"") {
-//				  colNames->at(i - 1) = newName;
 				  setColWidth(*newName);
 				  InputDataStringGrid->Refresh();
 			  }
@@ -423,7 +366,6 @@ void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 			try {
 			  form->ShowModal();
 			  if (newName != L"") {
-//				  rowNames->at(i - 2) = newName;
 				  setRowHeight(*newName);
 				  InputDataStringGrid->Refresh();
 			  }
@@ -457,13 +399,6 @@ void TForm1::drawFixedColNames(int ACol, int ARow, TRect &Rect)
 	if (ARow == 0) {
 		UnicodeString &name = colNames->at(ACol- 1);
         setRowHeight(name);
-
-//		TLogFont lf;
-////		font->Assign(InputDataStringGrid->Canvas->Font);
-//		GetObject(InputDataStringGrid->Canvas->Font->Handle, sizeof(lf), &lf);
-//		lf.lfOrientation = 900;
-//		lf.lfEscapement = 900;
-//		InputDataStringGrid->Canvas->Font->Handle = CreateFontIndirect(&lf);
 
 		InputDataStringGrid->Canvas->Font->Orientation = 90 * 10;
 		InputDataStringGrid->Canvas->TextOut(Rect.Left, Rect.Bottom - 6, name);
@@ -523,13 +458,6 @@ void TForm1::saveProject()
 			js->AddPair(L"tableData", tableData);
 			js->AddPair(L"projectName", *projectName);
 			UnicodeString projectJSON = js->ToString();
-//				UnicodeString f = L"name";
-//				TJSONArray *test = (TJSONArray*) js->Get("array")->JsonValue;
-//				int size = test->Size();
-//				TJSONValue *value = test->Get(0);
-//				f = value->Value();
-//				int t;
-//				++t;
 
 			fs->Write(projectJSON.BytesOf(), projectJSON.Length());
 			js->Free();
@@ -545,12 +473,6 @@ void TForm1::loadProject()
 	UnicodeString fileName = OpenDialog1->FileName;
 	TFileStream *fs = new TFileStream(fileName, fmOpenRead);
 	try {
-//		   	int iFileHandle = FileOpen(fileName, fmOpenRead);
-//			int iFileLength = FileSeek(iFileHandle, 0, 2);
-//			char *chars = new char[iFileLength + 1];
-//			int iBytesRead = FileRead(iFileHandle, chars, iFileLength);
-//			FileClose(iFileHandle);
-
 		int n = fs->Size;
 		char *chars = new char[n+1];
 
@@ -583,8 +505,6 @@ void TForm1::loadProject()
 		(*projectName) = js->Get(L"projectName")->JsonValue->Value();
 		Form1->Caption = (*projectName);
 
-//		colNamesJSON->Free();
-//		rowNamesJSON->Free();
 		delete [] chars;
 		js->Free();
 		initGrid();
@@ -592,16 +512,6 @@ void TForm1::loadProject()
 		InputDataStringGrid->FixedCols = 1;			//bug
 		InputDataStringGrid->Refresh();
 
-//			UnicodeString projectJSON = js->ToString();
-//				UnicodeString f = L"name";
-//				TJSONArray *test = (TJSONArray*) js->Get("array")->JsonValue;
-//				int size = test->Size();
-//				TJSONValue *value = test->Get(0);
-//				f = value->Value();
-//				int t;
-//				++t;
-
-//			fs->Write(projectJSON.BytesOf(), projectJSON.Length());
 	} __finally {
 		fs->Free();
 		}
@@ -690,6 +600,17 @@ void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
 	initGrid();
 	InputDataStringGrid->Refresh();
 	Form1->Caption = (*projectName);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol,
+		  int ARow, const UnicodeString Value)
+{
+	if (! regex_match(Value.w_str(), gridRegex))
+	{
+		UnicodeString str = InputDataStringGrid->Cells[ACol][ARow];
+		InputDataStringGrid->Cells[ACol][ARow] = str.SubString(1, str.Length() - 1);
+	}
 }
 //---------------------------------------------------------------------------
 

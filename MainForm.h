@@ -18,10 +18,14 @@
 #include "ahpsolver.cpp"
 #include "matrix.cpp"
 #include <Vcl.Dialogs.hpp>
-
+#include <VCLTee.Chart.hpp>
+#include <VCLTee.TeEngine.hpp>
+#include <VCLTee.TeeProcs.hpp>
+#include "boost/regex.hpp"
 #include <vector>
 
 using std::vector;
+using boost::wregex;
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
@@ -55,6 +59,7 @@ __published:	// IDE-managed Components
 	TSaveDialog *SaveDialog1;
 	TMenuItem *MMEditProject;
 	TMenuItem *MMSaveProject;
+	TChart *Chart1;
 	void __fastcall InputDataStringGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall InputDataStringGridSelectCell(TObject *Sender, int ACol, int ARow,
@@ -71,7 +76,6 @@ __published:	// IDE-managed Components
 	void __fastcall SpeedButton1Click(TObject *Sender);
 	void __fastcall InputDataStringGridDrawCell(TObject *Sender, int ACol, int ARow,
           TRect &Rect, TGridDrawState State);
-	void __fastcall InputDataStringGridFixedCellClick(TObject *Sender, int ACol, int ARow);
 	void __fastcall InputDataStringGridDblClick(TObject *Sender);
 	void __fastcall MMNewProjectClick(TObject *Sender);
 	void __fastcall SpeedButton2Click(TObject *Sender);
@@ -82,13 +86,10 @@ __published:	// IDE-managed Components
 	void __fastcall MMOPentProjectClick(TObject *Sender);
 	void __fastcall MMSaveProjectClick(TObject *Sender);
 	void __fastcall MMEditProjectClick(TObject *Sender);
+	void __fastcall InputDataStringGridSetEditText(TObject *Sender, int ACol, int ARow,
+          const UnicodeString Value);
 
 private:	// User declarations
-	int getCriteriaCount();
-	int getObjectsCount();
-	TGridCoord activeCell;
-	int fixedCols, fixedRows;
-	UnicodeString lastParam;
 	void evalAHP();
 	void evalWS();
 	void initGrid();
@@ -99,6 +100,13 @@ private:	// User declarations
 	void loadProject();
 	void newProject();
 	void closeProject();
+
+	int getCriteriaCount();
+	int getObjectsCount();
+	TGridCoord activeCell;
+	int fixedCols, fixedRows;
+	UnicodeString lastParam;
+	const wregex gridRegex;
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
 	vector<UnicodeString> *colNames, *rowNames;

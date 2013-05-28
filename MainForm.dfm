@@ -24,7 +24,7 @@ object Form1: TForm1
   object InputDataStringGrid: TStringGrid
     Left = 0
     Top = 27
-    Width = 1058
+    Width = 618
     Height = 367
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelWidth = 5
@@ -35,14 +35,14 @@ object Form1: TForm1
     Font.Name = 'Tahoma'
     Font.Style = []
     Font.Quality = fqProof
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goEditing, goTabs, goFixedColClick, goFixedRowClick]
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goRowSizing, goColSizing, goEditing, goTabs, goFixedColClick, goFixedRowClick]
     ParentFont = False
     TabOrder = 0
     OnDblClick = InputDataStringGridDblClick
     OnDrawCell = InputDataStringGridDrawCell
-    OnFixedCellClick = InputDataStringGridFixedCellClick
     OnKeyDown = InputDataStringGridKeyDown
     OnSelectCell = InputDataStringGridSelectCell
+    OnSetEditText = InputDataStringGridSetEditText
   end
   object ToolBar2: TToolBar
     Left = 0
@@ -270,6 +270,16 @@ object Form1: TForm1
     TabOrder = 2
     OnKeyDown = Memo1KeyDown
     OnMouseEnter = Memo1MouseEnter
+  end
+  object Chart1: TChart
+    Left = 616
+    Top = 27
+    Width = 441
+    Height = 367
+    Title.Text.Strings = (
+      'TChart')
+    TabOrder = 4
+    ColorPaletteIndex = 13
   end
   object Panel1: TPanel
     Left = 0
