@@ -1,4 +1,4 @@
-object AddColRowNamesForm: TAddColRowNamesForm
+object NewProjectForm: TNewProjectForm
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu]

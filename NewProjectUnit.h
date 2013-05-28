@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------
 
-#ifndef AddColRowNamesUnitH
-#define AddColRowNamesUnitH
+#ifndef NewProjectUnitH
+#define NewProjectUnitH
 //---------------------------------------------------------------------------
 #include <System.Classes.hpp>
 #include <Vcl.Controls.hpp>
@@ -13,7 +13,7 @@
 
 using std::vector;
 //---------------------------------------------------------------------------
-class TAddColRowNamesForm : public TForm
+class TNewProjectForm : public TForm
 {
 __published:	// IDE-managed Components
 	TListBox *RowNamesListBox;
@@ -67,12 +67,12 @@ private:	// User declarations
 	vector<UnicodeString> *colNames, *rowNames;
 	UnicodeString *projectName;
 public:		// User declarations
-	__fastcall TAddColRowNamesForm(TComponent* Owner);
+	__fastcall TNewProjectForm(TComponent* Owner);
 	void setColNamesArray(vector<UnicodeString> *inVector);
 	void setRowNamesArray(vector<UnicodeString> *inVector);
 	void setProjectName(UnicodeString *projectName);
 };
 //---------------------------------------------------------------------------
-extern PACKAGE TAddColRowNamesForm *AddColRowNamesForm;
+extern PACKAGE TNewProjectForm *NewProjectForm;
 //---------------------------------------------------------------------------
 #endif

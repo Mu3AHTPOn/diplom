@@ -11,7 +11,7 @@
 #include "MainForm.h"
 #include "UIManager.cpp"
 #include "setColRowNameFormUnit.cpp"
-#include "AddColRowNamesUnit.cpp"
+#include "NewProjectUnit.cpp"
 #include <DBXJSON.hpp>
 //---------------------------------------------------------------------------
 
@@ -29,17 +29,17 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 	Form1 = this;
 	UIManager::getInstance()->addForm(Form1);
 	Form1->Hide();
-	AddColRowNamesForm = new TAddColRowNamesForm(this);
+	NewProjectForm = new TNewProjectForm(this);
 	colNames = new vector<UnicodeString>();
 	rowNames = new vector<UnicodeString>();
 	projectName = new UnicodeString(L"Новый проект");
 	bool isClose(false), isOpen(false);
-	AddColRowNamesForm->setRowNamesArray(rowNames);
-	AddColRowNamesForm->setColNamesArray(colNames);
-	AddColRowNamesForm->setProjectName(projectName);
-//	AddColRowNamesForm->setIsClose(&isClose);
-//	AddColRowNamesForm->setIsOpen(&isOpen);
-//	AddColRowNamesForm->ShowModal();
+	NewProjectForm->setRowNamesArray(rowNames);
+	NewProjectForm->setColNamesArray(colNames);
+	NewProjectForm->setProjectName(projectName);
+//	NewProjectForm->setIsClose(&isClose);
+//	NewProjectForm->setIsOpen(&isOpen);
+//	NewProjectForm->ShowModal();
 //	
 //	if (isClose) {
 //		this->Close();
@@ -611,7 +611,7 @@ void TForm1::loadProject()
 void TForm1::newProject()
 {
 	closeProject();
-	AddColRowNamesForm->ShowModal();
+	NewProjectForm->ShowModal();
 	if (colNames->size() > 0 && rowNames->size() > 0) {
 		initGrid();
 		InputDataStringGrid->Refresh();
@@ -686,7 +686,7 @@ void __fastcall TForm1::MMSaveProjectClick(TObject *Sender)
 
 void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
 {
-    AddColRowNamesForm->ShowModal();
+    NewProjectForm->ShowModal();
 	initGrid();
 	InputDataStringGrid->Refresh();
 	Form1->Caption = (*projectName);

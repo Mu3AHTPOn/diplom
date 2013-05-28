@@ -3,17 +3,17 @@
 #include <vcl.h>
 #pragma hdrstop
 
-#include "AddColRowNamesUnit.h"
+#include "NewProjectUnit.h"
 //---------------------------------------------------------------------------
 #pragma resource "*.dfm"
-TAddColRowNamesForm *AddColRowNamesForm;
+TNewProjectForm *NewProjectForm;
 //---------------------------------------------------------------------------
-__fastcall TAddColRowNamesForm::TAddColRowNamesForm(TComponent* Owner)
+__fastcall TNewProjectForm::TNewProjectForm(TComponent* Owner)
 	: TForm(Owner)
 {
 }
 //---------------------------------------------------------------------------
-void __fastcall TAddColRowNamesForm::FormCreate(TObject *Sender)
+void __fastcall TNewProjectForm::FormCreate(TObject *Sender)
 {
 	listEdit = new TEdit(this);
 	listEdit->Parent = RowNamesListBox;
@@ -26,33 +26,33 @@ void __fastcall TAddColRowNamesForm::FormCreate(TObject *Sender)
 
 
 //---------------------------------------------------------------------------
-void __fastcall TAddColRowNamesForm::RowsListBoxClick(TObject *Sender)
+void __fastcall TNewProjectForm::RowsListBoxClick(TObject *Sender)
 {
 	showEditText(RowNamesListBox);
 }
 //---------------------------------------------------------------------------
-void __fastcall TAddColRowNamesForm::ColNamesListBoxDblClick(TObject *Sender)
+void __fastcall TNewProjectForm::ColNamesListBoxDblClick(TObject *Sender)
 {
 	showEditText(ColNamesListBox);
 }
 //---------------------------------------------------------------------------
-void __fastcall TAddColRowNamesForm::listEditKeyPress(TObject *Sender, System::WideChar &Key)
+void __fastcall TNewProjectForm::listEditKeyPress(TObject *Sender, System::WideChar &Key)
 {
 	onListKeyPress(Key);
 }
 //---------------------------------------------------------------------------
-void __fastcall TAddColRowNamesForm::ListEditExit(TObject *Sender)
+void __fastcall TNewProjectForm::ListEditExit(TObject *Sender)
 {
 	onListExit();
 }
 //---------------------------------------------------------------------------
-void __fastcall TAddColRowNamesForm::RowNamesListBoxKeyDown(TObject *Sender, WORD &Key,
+void __fastcall TNewProjectForm::RowNamesListBoxKeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift)
 {
 	onListKeyDown(RowNamesListBox, Key, Shift);
 }
 //---------------------------------------------------------------------------
-void TAddColRowNamesForm::showEditText(TListBox *list)
+void TNewProjectForm::showEditText(TListBox *list)
 {
 	int i(list->ItemIndex);
 	if (i == -1) {
@@ -76,7 +76,7 @@ void TAddColRowNamesForm::showEditText(TListBox *list)
 
 //---------------------------------------------------------------------------
 
-void TAddColRowNamesForm::removeCurrentItem(TListBox *list)
+void TNewProjectForm::removeCurrentItem(TListBox *list)
 {
 	onListExit();
 	int i = list->ItemIndex;
@@ -93,22 +93,22 @@ void TAddColRowNamesForm::removeCurrentItem(TListBox *list)
 	listEdit->Visible = false;
 }
 //---------------------------------------------------------------------------
-void TAddColRowNamesForm::setColNamesArray(vector<UnicodeString> *inVector)
+void TNewProjectForm::setColNamesArray(vector<UnicodeString> *inVector)
 {
 	this->colNames = inVector;
 }
 
-void TAddColRowNamesForm::setRowNamesArray(vector<UnicodeString> *inVector)
+void TNewProjectForm::setRowNamesArray(vector<UnicodeString> *inVector)
 {
 	this->rowNames = inVector;
 }
 //---------------------------------------------------------------------------
-void TAddColRowNamesForm::setProjectName(UnicodeString *projectName)
+void TNewProjectForm::setProjectName(UnicodeString *projectName)
 {
 	this->projectName = projectName;
 }
 //---------------------------------------------------------------------------
-void TAddColRowNamesForm::addItem(TListBox *list, bool inEnd)
+void TNewProjectForm::addItem(TListBox *list, bool inEnd)
 {
 	onListExit();
 
@@ -123,7 +123,7 @@ void TAddColRowNamesForm::addItem(TListBox *list, bool inEnd)
 	showEditText(list);
 }
 //---------------------------------------------------------------------------
-void TAddColRowNamesForm::moveItemUp(TListBox *list)
+void TNewProjectForm::moveItemUp(TListBox *list)
 {
 	onListExit();
 	int i = list->ItemIndex;
@@ -133,7 +133,7 @@ void TAddColRowNamesForm::moveItemUp(TListBox *list)
 	}
 }
 
-void TAddColRowNamesForm::moveItemDown(TListBox *list)
+void TNewProjectForm::moveItemDown(TListBox *list)
 {
 	onListExit();
 	int i = list->ItemIndex;
@@ -143,7 +143,7 @@ void TAddColRowNamesForm::moveItemDown(TListBox *list)
 	}
 }
 //---------------------------------------------------------------------------
-void TAddColRowNamesForm::onListKeyPress(System::WideChar &Key)
+void TNewProjectForm::onListKeyPress(System::WideChar &Key)
 {
 	TListBox* list = (TListBox*) listEdit->Parent;
 	if (Key == 13U) {      //onEnter
@@ -161,7 +161,7 @@ void TAddColRowNamesForm::onListKeyPress(System::WideChar &Key)
 //	list->Items->Strings[list->ItemIndex] = listEdit->Text;
 }
 //---------------------------------------------------------------------------
-void TAddColRowNamesForm::onListKeyDown(TListBox* list, WORD &Key, TShiftState Shift)
+void TNewProjectForm::onListKeyDown(TListBox* list, WORD &Key, TShiftState Shift)
 {
 	if (Key == 46U) {       //onDel
 		removeCurrentItem(list);
@@ -171,7 +171,7 @@ void TAddColRowNamesForm::onListKeyDown(TListBox* list, WORD &Key, TShiftState S
     }
 }
 //---------------------------------------------------------------------------
-void TAddColRowNamesForm::onListExit()
+void TNewProjectForm::onListExit()
 {
 	TListBox *list = (TListBox*) listEdit->Parent;
 	if (list->Count > 0 && listEdit->Text != L"") {
@@ -181,35 +181,35 @@ void TAddColRowNamesForm::onListExit()
 	}
 }
 //---------------------------------------------------------------------------
-void __fastcall TAddColRowNamesForm::RowAddButtonClick(TObject *Sender)
+void __fastcall TNewProjectForm::RowAddButtonClick(TObject *Sender)
 {
 	addItem(RowNamesListBox, true);
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TAddColRowNamesForm::RowMoveUpButtonClick(TObject *Sender)
+void __fastcall TNewProjectForm::RowMoveUpButtonClick(TObject *Sender)
 {
 	moveItemUp(RowNamesListBox);
 }
 //---------------------------------------------------------------------------
-void __fastcall TAddColRowNamesForm::RowMoveDownButtonClick(TObject *Sender)
+void __fastcall TNewProjectForm::RowMoveDownButtonClick(TObject *Sender)
 {
 	moveItemDown(RowNamesListBox);
 }
 //---------------------------------------------------------------------------
-void __fastcall TAddColRowNamesForm::RowRemoveButtonClick(TObject *Sender)
+void __fastcall TNewProjectForm::RowRemoveButtonClick(TObject *Sender)
 {
 	removeCurrentItem(RowNamesListBox);
 }
 //---------------------------------------------------------------------------
-void __fastcall TAddColRowNamesForm::CancelButtonClick(TObject *Sender)
+void __fastcall TNewProjectForm::CancelButtonClick(TObject *Sender)
 {
 	Close();
 }
 //---------------------------------------------------------------------------
 
 
-void __fastcall TAddColRowNamesForm::NextButtonClick(TObject *Sender)
+void __fastcall TNewProjectForm::NextButtonClick(TObject *Sender)
 {
 	onListExit();
 	int colCount = ColNamesListBox->Count;
@@ -241,37 +241,37 @@ void __fastcall TAddColRowNamesForm::NextButtonClick(TObject *Sender)
 
 //---------------------------------------------------------------------------
 
-void __fastcall TAddColRowNamesForm::ColAddButtonClick(TObject *Sender)
+void __fastcall TNewProjectForm::ColAddButtonClick(TObject *Sender)
 {
 	addItem(ColNamesListBox, true);
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TAddColRowNamesForm::ColRemoveButtonClick(TObject *Sender)
+void __fastcall TNewProjectForm::ColRemoveButtonClick(TObject *Sender)
 {
 	removeCurrentItem(ColNamesListBox);
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TAddColRowNamesForm::ColMoveUpButtonClick(TObject *Sender)
+void __fastcall TNewProjectForm::ColMoveUpButtonClick(TObject *Sender)
 {
 	moveItemUp(ColNamesListBox);
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TAddColRowNamesForm::ColMoveDownButtonClick(TObject *Sender)
+void __fastcall TNewProjectForm::ColMoveDownButtonClick(TObject *Sender)
 {
 	moveItemDown(ColNamesListBox);
 }
 //---------------------------------------------------------------------------
-void __fastcall TAddColRowNamesForm::ColNamesListBoxKeyDown(TObject *Sender, WORD &Key,
+void __fastcall TNewProjectForm::ColNamesListBoxKeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift)
 {
 	onListKeyDown(ColNamesListBox, Key, Shift);
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TAddColRowNamesForm::FormShow(TObject *Sender)
+void __fastcall TNewProjectForm::FormShow(TObject *Sender)
 {
 	ProjectName->Text = (*projectName);
 
@@ -287,7 +287,7 @@ void __fastcall TAddColRowNamesForm::FormShow(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-void __fastcall TAddColRowNamesForm::Button1Click(TObject *Sender)
+void __fastcall TNewProjectForm::Button1Click(TObject *Sender)
 {
     Close();
 }

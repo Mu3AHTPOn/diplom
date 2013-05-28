@@ -6,7 +6,7 @@
 //---------------------------------------------------------------------------
 USEFORM("setColRowNameFormUnit.cpp", setCollRowNameForm);
 USEFORM("MainForm.cpp", Form1);
-USEFORM("AddColRowNamesUnit.cpp", AddColRowNamesForm);
+USEFORM("NewProjectUnit.cpp", NewProjectForm);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {

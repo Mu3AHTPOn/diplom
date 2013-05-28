@@ -137,12 +137,6 @@
         <Defines>NDEBUG;$(Defines)</Defines>
     </PropertyGroup>
     <ItemGroup>
-        <CppCompile Include="AddColRowNamesUnit.cpp">
-            <Form>AddColRowNamesForm</Form>
-            <FormType>dfm</FormType>
-            <DependentOn>AddColRowNamesUnit.h</DependentOn>
-            <BuildOrder>10</BuildOrder>
-        </CppCompile>
         <CppCompile Include="ahpsolver.cpp">
             <DependentOn>ahpsolver.h</DependentOn>
             <BuildOrder>5</BuildOrder>
@@ -171,6 +165,12 @@
             <DependentOn>matrixexception.h</DependentOn>
             <BuildOrder>6</BuildOrder>
         </CppCompile>
+        <CppCompile Include="NewProjectUnit.cpp">
+            <Form>NewProjectForm</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>NewProjectUnit.h</DependentOn>
+            <BuildOrder>10</BuildOrder>
+        </CppCompile>
         <None Include="Profiling\AQtimeModule1.aqt"/>
         <CppCompile Include="setColRowNameFormUnit.cpp">
             <Form>setCollRowNameForm</Form>
@@ -184,7 +184,7 @@
         </CppCompile>
         <FormResources Include="setColRowNameFormUnit.dfm"/>
         <FormResources Include="MainForm.dfm"/>
-        <FormResources Include="AddColRowNamesUnit.dfm"/>
+        <FormResources Include="NewProjectUnit.dfm"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
