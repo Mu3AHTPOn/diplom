@@ -297,9 +297,15 @@ object Form1: TForm1
       end
       object MMOPentProject: TMenuItem
         Caption = #1054#1090#1082#1088#1099#1090#1100' '#1087#1088#1086#1077#1082#1090
+        OnClick = MMOPentProjectClick
+      end
+      object MMSaveProject: TMenuItem
+        Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1087#1088#1086#1077#1082#1090
+        OnClick = MMSaveProjectClick
       end
       object MMEditProject: TMenuItem
         Caption = #1056#1077#1076#1072#1082#1090#1080#1088#1086#1074#1072#1090#1100' '#1087#1088#1086#1077#1082#1090
+        OnClick = MMEditProjectClick
       end
       object MMCloseProject: TMenuItem
         Caption = #1047#1072#1082#1088#1099#1090#1100' '#1087#1088#1086#1077#1082#1090

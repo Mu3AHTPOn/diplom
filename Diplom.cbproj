@@ -126,7 +126,7 @@
         <TASM_Debugging>None</TASM_Debugging>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <LinkPackageStatics>rtl.lib;vcl.lib</LinkPackageStatics>
+        <LinkPackageStatics>rtl.lib;vcl.lib;DbxCommonDriver.lib;dbrtl.lib</LinkPackageStatics>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DynamicRTL>false</DynamicRTL>
         <UsePackages>false</UsePackages>

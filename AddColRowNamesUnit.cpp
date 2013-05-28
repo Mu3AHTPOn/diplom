@@ -16,11 +16,12 @@ __fastcall TAddColRowNamesForm::TAddColRowNamesForm(TComponent* Owner)
 void __fastcall TAddColRowNamesForm::FormCreate(TObject *Sender)
 {
 	listEdit = new TEdit(this);
+	listEdit->Parent = RowNamesListBox;
 	listEdit->Visible = false;
 	listEdit->Ctl3D = false;
 	listEdit->BorderStyle = bsNone;
 	listEdit->OnKeyPress = listEditKeyPress;
-	listEdit->OnExit = RowsListBoxExit;
+	listEdit->OnExit = ListEditExit;
 }
 
 
@@ -40,9 +41,9 @@ void __fastcall TAddColRowNamesForm::listEditKeyPress(TObject *Sender, System::W
 	onListKeyPress(Key);
 }
 //---------------------------------------------------------------------------
-void __fastcall TAddColRowNamesForm::RowsListBoxExit(TObject *Sender)
+void __fastcall TAddColRowNamesForm::ListEditExit(TObject *Sender)
 {
-	onListExit(RowNamesListBox);
+	onListExit();
 }
 //---------------------------------------------------------------------------
 void __fastcall TAddColRowNamesForm::RowNamesListBoxKeyDown(TObject *Sender, WORD &Key,
@@ -51,7 +52,6 @@ void __fastcall TAddColRowNamesForm::RowNamesListBoxKeyDown(TObject *Sender, WOR
 	onListKeyDown(RowNamesListBox, Key, Shift);
 }
 //---------------------------------------------------------------------------
-
 void TAddColRowNamesForm::showEditText(TListBox *list)
 {
 	int i(list->ItemIndex);
@@ -78,6 +78,7 @@ void TAddColRowNamesForm::showEditText(TListBox *list)
 
 void TAddColRowNamesForm::removeCurrentItem(TListBox *list)
 {
+	onListExit();
 	int i = list->ItemIndex;
 	if (i != -1) {
 		list->Items->Delete(i);
@@ -90,7 +91,6 @@ void TAddColRowNamesForm::removeCurrentItem(TListBox *list)
 	}
 
 	listEdit->Visible = false;
-	listEdit->Text = L"";
 }
 //---------------------------------------------------------------------------
 void TAddColRowNamesForm::setColNamesArray(vector<UnicodeString> *inVector)
@@ -101,10 +101,6 @@ void TAddColRowNamesForm::setColNamesArray(vector<UnicodeString> *inVector)
 void TAddColRowNamesForm::setRowNamesArray(vector<UnicodeString> *inVector)
 {
 	this->rowNames = inVector;
-	vector<UnicodeString>::iterator iter;
-	for (iter = inVector->begin(); iter != inVector->end(); ++iter) {
-		RowNamesListBox->Items->Add(*iter);
-	}
 }
 //---------------------------------------------------------------------------
 void TAddColRowNamesForm::setProjectName(UnicodeString *projectName)
@@ -112,18 +108,10 @@ void TAddColRowNamesForm::setProjectName(UnicodeString *projectName)
 	this->projectName = projectName;
 }
 //---------------------------------------------------------------------------
-void TAddColRowNamesForm::setIsOpen(bool *isOpen)
-{
-	this->isOpen = isOpen;
-}
-//---------------------------------------------------------------------------
-void TAddColRowNamesForm::setIsClose(bool *isClose)
-{
-	this->isClose = isClose;
-}
-//---------------------------------------------------------------------------
 void TAddColRowNamesForm::addItem(TListBox *list, bool inEnd)
 {
+	onListExit();
+
 	int index = inEnd ? -1 : list->ItemIndex;
 	list->Items->Insert(index, "¬ведите название");
 	if (index == -1) {
@@ -137,6 +125,7 @@ void TAddColRowNamesForm::addItem(TListBox *list, bool inEnd)
 //---------------------------------------------------------------------------
 void TAddColRowNamesForm::moveItemUp(TListBox *list)
 {
+	onListExit();
 	int i = list->ItemIndex;
 	if (i > 0) {
 		list->Items->Move(i, i - 1);
@@ -146,6 +135,7 @@ void TAddColRowNamesForm::moveItemUp(TListBox *list)
 
 void TAddColRowNamesForm::moveItemDown(TListBox *list)
 {
+	onListExit();
 	int i = list->ItemIndex;
 	if (i < list->Count - 1) {
 		list->Items->Move(i, i + 1);
@@ -166,10 +156,9 @@ void TAddColRowNamesForm::onListKeyPress(System::WideChar &Key)
 		Key = 0U;
 		list->SetFocus();
 		listEdit->Text = L"";
-	} else
-	{
-		list->Items->Strings[list->ItemIndex] = listEdit->Text;
 	}
+
+//	list->Items->Strings[list->ItemIndex] = listEdit->Text;
 }
 //---------------------------------------------------------------------------
 void TAddColRowNamesForm::onListKeyDown(TListBox* list, WORD &Key, TShiftState Shift)
@@ -182,11 +171,14 @@ void TAddColRowNamesForm::onListKeyDown(TListBox* list, WORD &Key, TShiftState S
     }
 }
 //---------------------------------------------------------------------------
-void TAddColRowNamesForm::onListExit(TListBox* list)
+void TAddColRowNamesForm::onListExit()
 {
-//	->Items->Strings[RowsListBox->ItemIndex] = listEdit->Text;
-	listEdit->Visible = false;
-	listEdit->Text = L"";
+	TListBox *list = (TListBox*) listEdit->Parent;
+	if (list->Count > 0 && listEdit->Text != L"") {
+		list->Items->Strings[list->ItemIndex] = listEdit->Text;
+		listEdit->Visible = false;
+		listEdit->Text = L"";
+	}
 }
 //---------------------------------------------------------------------------
 void __fastcall TAddColRowNamesForm::RowAddButtonClick(TObject *Sender)
@@ -212,7 +204,6 @@ void __fastcall TAddColRowNamesForm::RowRemoveButtonClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TAddColRowNamesForm::CancelButtonClick(TObject *Sender)
 {
-	(*isClose) = true;
 	Close();
 }
 //---------------------------------------------------------------------------
@@ -220,6 +211,7 @@ void __fastcall TAddColRowNamesForm::CancelButtonClick(TObject *Sender)
 
 void __fastcall TAddColRowNamesForm::NextButtonClick(TObject *Sender)
 {
+	onListExit();
 	int colCount = ColNamesListBox->Count;
 	int rowCount = RowNamesListBox->Count;
 	if (colCount == 0) {
@@ -295,12 +287,13 @@ void __fastcall TAddColRowNamesForm::FormShow(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-
-
 void __fastcall TAddColRowNamesForm::Button1Click(TObject *Sender)
 {
-	(*isOpen) = true;
     Close();
 }
 //---------------------------------------------------------------------------
+
+
+//---------------------------------------------------------------------------
+
 

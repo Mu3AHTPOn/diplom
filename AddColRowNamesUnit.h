@@ -36,7 +36,7 @@ __published:	// IDE-managed Components
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall RowsListBoxClick(TObject *Sender);
 	void __fastcall listEditKeyPress(TObject *Sender, System::WideChar &Key);
-	void __fastcall RowsListBoxExit(TObject *Sender);
+	void __fastcall ListEditExit(TObject *Sender);
 	void __fastcall RowNamesListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall RowMoveUpButtonClick(TObject *Sender);
 	void __fastcall RowMoveDownButtonClick(TObject *Sender);
@@ -62,18 +62,15 @@ private:	// User declarations
 	void moveItemDown(TListBox* list);
 	void onListKeyDown(TListBox* list, WORD &Key, TShiftState Shift);
 	void onListKeyPress(System::WideChar &Key);
-	void onListExit(TListBox* list);
+	void onListExit();
 
 	vector<UnicodeString> *colNames, *rowNames;
 	UnicodeString *projectName;
-	bool *isOpen, *isClose;
 public:		// User declarations
 	__fastcall TAddColRowNamesForm(TComponent* Owner);
 	void setColNamesArray(vector<UnicodeString> *inVector);
 	void setRowNamesArray(vector<UnicodeString> *inVector);
 	void setProjectName(UnicodeString *projectName);
-	void setIsOpen(bool *isOpen);
-	void setIsClose(bool *isClose);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TAddColRowNamesForm *AddColRowNamesForm;

@@ -54,6 +54,7 @@ __published:	// IDE-managed Components
 	TOpenDialog *OpenDialog1;
 	TSaveDialog *SaveDialog1;
 	TMenuItem *MMEditProject;
+	TMenuItem *MMSaveProject;
 	void __fastcall InputDataStringGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall InputDataStringGridSelectCell(TObject *Sender, int ACol, int ARow,
@@ -78,6 +79,9 @@ __published:	// IDE-managed Components
 	void __fastcall NewProjectButtonClick(TObject *Sender);
 	void __fastcall SpeedButton5Click(TObject *Sender);
 	void __fastcall MMCloseProjectClick(TObject *Sender);
+	void __fastcall MMOPentProjectClick(TObject *Sender);
+	void __fastcall MMSaveProjectClick(TObject *Sender);
+	void __fastcall MMEditProjectClick(TObject *Sender);
 
 private:	// User declarations
 	int getCriteriaCount();

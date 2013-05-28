@@ -612,17 +612,19 @@ void TForm1::newProject()
 {
 	closeProject();
 	AddColRowNamesForm->ShowModal();
-	initGrid();
-	InputDataStringGrid->Refresh();
-	Form1->Caption = (*projectName);
-	for (int i = 0; i < InputDataStringGrid->ColCount; i++) {
-		for (int j = 0; j < InputDataStringGrid->RowCount; j++) {
-				InputDataStringGrid->Cells[i][j] = L"";
+	if (colNames->size() > 0 && rowNames->size() > 0) {
+		initGrid();
+		InputDataStringGrid->Refresh();
+		Form1->Caption = (*projectName);
+		for (int i = 0; i < InputDataStringGrid->ColCount; i++) {
+			for (int j = 0; j < InputDataStringGrid->RowCount; j++) {
+					InputDataStringGrid->Cells[i][j] = L"";
+			}
 		}
-	}
 
-	InputDataStringGrid->Visible = true;
-	InputDataStringGrid->FixedCols = 1;			//bug
+		InputDataStringGrid->Visible = true;
+		InputDataStringGrid->FixedCols = 1;			//bug
+	}
 }
 //--------------------------------------------------------------------------
 void TForm1::closeProject()
@@ -667,6 +669,27 @@ void __fastcall TForm1::SpeedButton5Click(TObject *Sender)
 void __fastcall TForm1::MMCloseProjectClick(TObject *Sender)
 {
 	closeProject();	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::MMOPentProjectClick(TObject *Sender)
+{
+	loadProject();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::MMSaveProjectClick(TObject *Sender)
+{
+	saveProject();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
+{
+    AddColRowNamesForm->ShowModal();
+	initGrid();
+	InputDataStringGrid->Refresh();
+	Form1->Caption = (*projectName);
 }
 //---------------------------------------------------------------------------
 
