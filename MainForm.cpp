@@ -21,7 +21,8 @@ TForm1 *Form1;
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
-	: TForm(Owner), gridRegex(L"[\\d]*"), projectManager(ProjectManager::getInstance())
+	: TForm(Owner), gridRegex(L"[\\d]*"), projectManager(ProjectManager::getInstance()),
+	isOnChartButtonPresssed(false)
 {
 	Form1 = this;
 	UIManager::getInstance()->addForm(Form1);
@@ -702,3 +703,91 @@ void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TForm1::Chart1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
+          int X, int Y)
+{
+//	if (not on border)
+	if (Button == mbLeft) {
+		isOnChartButtonPresssed = true;
+		lastChartMousePoint = Mouse->CursorPos;
+		isChartMoving = isOnChartBorder(X, Y);
+    }
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift,
+		  int X, int Y)
+{
+	isOnChartButtonPresssed = false;
+	isChartMoving = false;
+}
+//---------------------------------------------------------------------------
+bool TForm1::isOnChartBorder(int X, int Y)
+{
+	const bool isLeft= X < 3;
+	const bool isRight = X > Chart1->Width - 3;
+	const bool isTop = Y < 3;
+	const bool isBottom = Y > Chart1->Height - 3;
+
+	return isLeft || isRight || isTop || isBottom;	//TODO change
+}
+
+void __fastcall TForm1::Chart1MouseMove(TObject *Sender, TShiftState Shift, int X,
+          int Y)
+{
+	const int right = Chart1->Left + Chart1->Width;
+//	const int bottom = Chart1->Top + Chart1->Height;
+//	const bool isLeft= X > Chart1->Left - 2 && X < Chart1->Left + 2;
+//	const bool isRight = X > right - 2 && X < right + 2;
+//	const bool isTop = Y > Chart1->Top - 2 && Y < Chart1->Top + 2;
+//	const bool isBottom = Y > right - 2 && Y < right + 2;
+
+	const bool isLeft= X < 3;
+	const bool isRight = X > Chart1->Width - 3;
+	const bool isTop = Y < 3;
+	const bool isBottom = Y > Chart1->Height - 3;
+
+	if (isLeft)
+	{
+		if (isTop)
+		{
+			Chart1->OriginalCursor = crSizeNWSE;
+//			Form1->Cursor = crSizeNWSE;
+		} else if (isBottom) {
+			Chart1->OriginalCursor = crSizeNESW;
+//			Form1->Cursor = crSizeNESW;
+		} else {
+			Chart1->OriginalCursor = crSizeWE;
+//			Form1->Cursor = crSizeWE;
+		}
+	} else if (isRight) {
+		if (isTop)
+		{
+			Chart1->OriginalCursor = crSizeNESW;
+//			Form1->Cursor = crSizeNESW;
+		} else if (isBottom) {
+			Chart1->OriginalCursor = crSizeNWSE;;
+//			Form1->Cursor = crSizeNWSE;
+		} else {
+			Chart1->OriginalCursor = crSizeWE;
+//			Form1->Cursor = crSizeWE;
+			if (isOnChartButtonPresssed) {
+				const TPoint changing(Mouse->CursorPos.X - lastChartMousePoint.X, Mouse->CursorPos.Y - lastChartMousePoint.Y);
+				lastChartMousePoint = Mouse->CursorPos;
+				Chart1->Width += changing.X;
+			}
+		}
+	} else if (isBottom || isTop) {
+		Chart1->OriginalCursor = crSizeNS;
+//		Form1->Cursor = crSizeNS;
+	} else {
+		Chart1->OriginalCursor = crDefault;
+		Form1->Cursor = crDefault;
+		if (isOnChartButtonPresssed && ! isChartMoving) {
+			const TPoint changing(Mouse->CursorPos.X - lastChartMousePoint.X, Mouse->CursorPos.Y - lastChartMousePoint.Y);
+			lastChartMousePoint = Mouse->CursorPos;
+			Chart1->Left += changing.X;
+			Chart1->Top += changing.Y;
+		}
+	}
+}
+//---------------------------------------------------------------------------

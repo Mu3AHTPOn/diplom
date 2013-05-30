@@ -91,6 +91,12 @@ __published:	// IDE-managed Components
 	void __fastcall MMEditProjectClick(TObject *Sender);
 	void __fastcall InputDataStringGridSetEditText(TObject *Sender, int ACol, int ARow,
           const UnicodeString Value);
+	void __fastcall Chart1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
+          int X, int Y);
+	void __fastcall Chart1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
+	void __fastcall Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift,
+          int X, int Y);
+
 
 private:	// User declarations
 	void evalAHP();
@@ -106,6 +112,7 @@ private:	// User declarations
 	bool closeProject();
 	bool showSaveDialog();
 	bool isDataValid();
+	bool isOnChartBorder(int X, int Y);
 
 	int getCriteriaCount();
 	int getObjectsCount();
@@ -114,6 +121,9 @@ private:	// User declarations
 	UnicodeString lastParam;
 	const wregex gridRegex;
 	ProjectManager &projectManager;
+	bool isOnChartButtonPresssed;
+	bool isChartMoving;
+	TPoint lastChartMousePoint;
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
 	vector<UnicodeString> *colNames, *rowNames;

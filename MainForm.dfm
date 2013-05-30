@@ -206,10 +206,10 @@ object Form1: TForm1
       Width = 181
       Height = 21
       Hint = #1042#1099#1073#1086#1088' '#1084#1077#1090#1086#1076#1072' '#1088#1072#1089#1095#1105#1090#1072
+      Style = csDropDownList
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
-      Text = #1052#1077#1090#1086#1076' '#1072#1085#1072#1083#1080#1079#1072' '#1080#1077#1088#1072#1088#1093#1080#1081
       Items.Strings = (
         #1052#1077#1090#1086#1076' '#1072#1085#1072#1083#1080#1079#1072' '#1080#1077#1088#1072#1088#1093#1080#1081
         #1052#1077#1090#1086#1076' '#1074#1079#1074#1077#1096#1077#1085#1085#1086#1081' '#1089#1091#1084#1084#1099' '#1084#1077#1089#1090)
@@ -272,20 +272,26 @@ object Form1: TForm1
     OnMouseEnter = Memo1MouseEnter
   end
   object Chart1: TChart
-    Left = 744
-    Top = 27
-    Width = 375
-    Height = 367
+    Left = 392
+    Top = 64
+    Width = 289
+    Height = 290
+    AllowPanning = pmNone
     Legend.Alignment = laBottom
     Legend.CheckBoxesStyle = cbsRadio
     Legend.TextStyle = ltsPlain
+    Legend.Visible = False
     Title.Font.Height = -13
     Title.Text.Strings = (
       #1056#1077#1079#1091#1083#1100#1090#1072#1090' '#1074#1099#1095#1080#1089#1083#1077#1085#1080#1081)
+    Panning.MouseWheel = pmwNone
     View3D = False
-    BevelOuter = bvNone
+    Zoom.Allow = False
     TabOrder = 4
-    Anchors = [akLeft, akTop, akRight, akBottom]
+    Anchors = []
+    OnMouseDown = Chart1MouseDown
+    OnMouseMove = Chart1MouseMove
+    OnMouseUp = Chart1MouseUp
     ColorPaletteIndex = 13
     object Series1: TBarSeries
       ColorEachPoint = True

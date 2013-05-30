@@ -1,11 +1,11 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.UITypes.hpp',0,1,76,64,98,0,0,,
-File_1=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Dialogs.hpp',0,74,1394,175,1416,0,0,,
-File_2=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\VCLTee.TeEngine.hpp',0,1,2568,1,2590,0,0,,
-File_3=TSourceModule,'F:\diplom\UIManager.cpp',0,1,1,1,47,0,0,,
-File_4=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysmac.h',0,1,573,23,595,0,0,,
-File_5=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\Data.DBXJSON.hpp',0,1,124,1,146,0,0,,
-File_6=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.Classes.hpp',0,1,1536,1,1557,0,0,,
+File_0=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.Classes.hpp',0,1,31,37,53,0,0,,
+File_1=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.UITypes.hpp',0,1,76,64,98,0,0,,
+File_2=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Dialogs.hpp',0,74,1394,175,1416,0,0,,
+File_3=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\VCLTee.TeEngine.hpp',0,1,2568,1,2590,0,0,,
+File_4=TSourceModule,'F:\diplom\UIManager.cpp',0,1,1,1,47,0,0,,
+File_5=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysmac.h',0,1,573,23,595,0,0,,
+File_6=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\Data.DBXJSON.hpp',0,1,124,1,146,0,0,,
 File_7=TSourceModule,'F:\diplom\DiplomPCH1.h',0,1,1,1,1,0,0,,
 File_8=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\xutility',0,1,324,29,347,0,0,,
 File_9=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysdyn.h',0,1,450,1,472,0,0,,
@@ -18,17 +18,16 @@ File_14=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\includ
 [Modules]
 Module0=F:\diplom\MainForm.cpp
 Module1=F:\diplom\ProjectManager.cpp
-Module2=F:\diplom\matrix.cpp
-Module3=default.htm
-Module4=F:\diplom\NewProjectUnit.cpp
-Module5=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Graphics.hpp
-Module6=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\SystemTypes.h
-Module7=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp
-Module8=F:\diplom\ahpsolver.h
-Module9=F:\diplom\ahpsolver.cpp
-Module10=F:\diplom\eigensolver.cpp
-Module11=F:\diplom\eigensolver.h
-Count=12
+Module2=F:\diplom\NewProjectUnit.cpp
+Module3=F:\diplom\matrix.cpp
+Module4=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Graphics.hpp
+Module5=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\SystemTypes.h
+Module6=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp
+Module7=F:\diplom\ahpsolver.h
+Module8=F:\diplom\ahpsolver.cpp
+Module9=F:\diplom\eigensolver.cpp
+Module10=F:\diplom\eigensolver.h
+Count=11
 EditWindowCount=1
 
 [F:\diplom\MainForm.cpp]
@@ -41,17 +40,14 @@ ModuleType=TSourceModule
 FormState=0
 FormOnTop=0
 
-[F:\diplom\matrix.cpp]
-ModuleType=TSourceModule
-FormState=0
-FormOnTop=0
-
-[default.htm]
-ModuleType=TURLModule
-
 [F:\diplom\NewProjectUnit.cpp]
 ModuleType=TSourceModule
 FormState=1
+FormOnTop=0
+
+[F:\diplom\matrix.cpp]
+ModuleType=TSourceModule
+FormState=0
 FormOnTop=0
 
 [c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Graphics.hpp]
@@ -90,7 +86,7 @@ FormState=0
 FormOnTop=0
 
 [EditWindow0]
-ViewCount=12
+ViewCount=11
 CurrentEditView=F:\diplom\MainForm.cpp
 View0=0
 View1=1
@@ -103,7 +99,6 @@ View7=7
 View8=8
 View9=9
 View10=10
-View11=11
 PercentageSizes=1
 Create=1
 Visible=1
@@ -134,20 +129,16 @@ BottomMiddlePanelClients=DockSite0,GraphDrawingModel
 BottomMiddelPanelData=0000080001020200000009000000446F636B536974653010000000477261706844726177696E6756696577961D00000000000002F206000000000000FFFFFFFF
 
 [View0]
-CustomEditViewType=TWelcomePageView
-WelcomePageURL=bds:/default.htm
-
-[View1]
 CustomEditViewType=TEditView
 Module=F:\diplom\MainForm.cpp
-CursorX=89
-CursorY=319
-TopLine=290
+CursorX=27
+CursorY=721
+TopLine=726
 LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\MainForm.cpp
 
-[View2]
+[View1]
 CustomEditViewType=TEditView
 Module=F:\diplom\ProjectManager.cpp
 CursorX=78
@@ -157,7 +148,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\ProjectManager.cpp
 
-[View3]
+[View2]
 CustomEditViewType=TEditView
 Module=F:\diplom\NewProjectUnit.cpp
 CursorX=33
@@ -167,7 +158,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\NewProjectUnit.cpp
 
-[View4]
+[View3]
 CustomEditViewType=TEditView
 Module=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\SystemTypes.h
 CursorX=5
@@ -177,7 +168,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\SystemTypes.h
 
-[View5]
+[View4]
 CustomEditViewType=TEditView
 Module=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp
 CursorX=18
@@ -187,7 +178,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp
 
-[View6]
+[View5]
 CustomEditViewType=TEditView
 Module=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Graphics.hpp
 CursorX=1
@@ -197,7 +188,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Graphics.hpp
 
-[View7]
+[View6]
 CustomEditViewType=TEditView
 Module=F:\diplom\ahpsolver.h
 CursorX=26
@@ -207,17 +198,17 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\ahpsolver.h
 
-[View8]
+[View7]
 CustomEditViewType=TEditView
 Module=F:\diplom\matrix.cpp
-CursorX=12
-CursorY=229
-TopLine=199
+CursorX=8
+CursorY=255
+TopLine=220
 LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\matrix.cpp
 
-[View9]
+[View8]
 CustomEditViewType=TEditView
 Module=F:\diplom\ahpsolver.cpp
 CursorX=1
@@ -227,7 +218,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\ahpsolver.cpp
 
-[View10]
+[View9]
 CustomEditViewType=TEditView
 Module=F:\diplom\eigensolver.cpp
 CursorX=1
@@ -237,7 +228,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\eigensolver.cpp
 
-[View11]
+[View10]
 CustomEditViewType=TEditView
 Module=F:\diplom\eigensolver.h
 CursorX=1
@@ -277,9 +268,12 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=2
-Breakpoint0='F:\diplom\MainForm.cpp',688,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint1='F:\diplom\MainForm.cpp',451,'',0,1,'',1,0,0,'',1,'','','',0,''
+Count=5
+Breakpoint0='F:\diplom\MainForm.cpp',695,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint1='F:\diplom\MainForm.cpp',458,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint2='F:\diplom\MainForm.cpp',776,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint3='F:\diplom\MainForm.cpp',749,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint4='F:\diplom\MainForm.cpp',710,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -386,6 +380,11 @@ LRDockWidth=1896
 Dockable=1
 StayOnTop=0
 SplitPos=111
+
+[PropInspDesignerSelection]
+ArrangeBy=Name
+SelectedItem=AllowPanning,OnMouseUp
+ExpandedItems=Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,StyleElements=0,Touch=0,Anchors=0,BevelEdges=0,Constraints=0,LeftAxis=0,LeftWall=0,Legend=0,Pages=0,BackWall=0,Border=0,BottomAxis=0,BottomWall=0,DepthAxis=0,DepthTopAxis=0,Emboss=0,Foot=0,Frame=0,Gradient=0,Panning=0,RightAxis=0,RightWall=0,Shadow=0,SubFoot=0,SubTitle=0
 
 [TFileExplorerForm]
 PercentageSizes=1
