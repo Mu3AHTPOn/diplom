@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   Caption = 'Form1'
   ClientHeight = 541
-  ClientWidth = 1058
+  ClientWidth = 1119
   Color = clBtnFace
   Constraints.MinHeight = 600
   Constraints.MinWidth = 900
@@ -17,16 +17,16 @@ object Form1: TForm1
   OnClose = FormClose
   OnCreate = FormCreate
   DesignSize = (
-    1058
+    1119
     541)
   PixelsPerInch = 96
   TextHeight = 13
   object InputDataStringGrid: TStringGrid
     Left = 0
     Top = 27
-    Width = 618
+    Width = 746
     Height = 367
-    Anchors = [akLeft, akTop, akRight, akBottom]
+    Anchors = [akLeft, akTop, akBottom]
     BevelWidth = 5
     DefaultColWidth = 24
     Font.Charset = DEFAULT_CHARSET
@@ -47,7 +47,7 @@ object Form1: TForm1
   object ToolBar2: TToolBar
     Left = 0
     Top = 0
-    Width = 1058
+    Width = 1119
     Height = 29
     ButtonHeight = 21
     Caption = 'ToolBar2'
@@ -253,9 +253,9 @@ object Form1: TForm1
     end
   end
   object ResultRichEdit: TRichEdit
-    Left = -1
+    Left = 0
     Top = 414
-    Width = 1058
+    Width = 1119
     Height = 130
     Anchors = [akLeft, akRight, akBottom]
     Font.Charset = RUSSIAN_CHARSET
@@ -272,19 +272,38 @@ object Form1: TForm1
     OnMouseEnter = Memo1MouseEnter
   end
   object Chart1: TChart
-    Left = 616
+    Left = 744
     Top = 27
-    Width = 441
+    Width = 375
     Height = 367
+    Legend.Alignment = laBottom
+    Legend.CheckBoxesStyle = cbsRadio
+    Legend.TextStyle = ltsPlain
+    Title.Font.Height = -13
     Title.Text.Strings = (
-      'TChart')
+      #1056#1077#1079#1091#1083#1100#1090#1072#1090' '#1074#1099#1095#1080#1089#1083#1077#1085#1080#1081)
+    View3D = False
+    BevelOuter = bvNone
     TabOrder = 4
+    Anchors = [akLeft, akTop, akRight, akBottom]
     ColorPaletteIndex = 13
+    object Series1: TBarSeries
+      ColorEachPoint = True
+      Marks.Arrow.Visible = True
+      Marks.Callout.Brush.Color = clBlack
+      Marks.Callout.Arrow.Visible = True
+      Marks.Visible = True
+      XValues.Name = 'X'
+      XValues.Order = loAscending
+      YValues.Name = 'Bar'
+      YValues.Order = loNone
+      Data = {0000000000}
+    end
   end
   object Panel1: TPanel
     Left = 0
     Top = 390
-    Width = 1058
+    Width = 1119
     Height = 25
     Anchors = [akLeft, akRight, akBottom]
     Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099

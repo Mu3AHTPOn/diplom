@@ -14,12 +14,14 @@ class ProjectManager {
 public:
 	inline bool isSavedCurrentPreject();
 	inline void setIsCurrentProjectSaved(bool isSaved);
+    inline bool isProjectOpen();
+	inline void setIsProjectOpen(bool isSaved);
 	static ProjectManager& getInstance();
 protected:
 	ProjectManager();
 private:
 	map<UnicodeString, UnicodeString> recentProjects;
-	bool isSavedCurrentProject;
+	bool isSavedCurrentProject, isOpenProject;
 	static ProjectManager* instance;
 };
 #endif

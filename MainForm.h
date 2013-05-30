@@ -22,7 +22,9 @@
 #include <VCLTee.TeEngine.hpp>
 #include <VCLTee.TeeProcs.hpp>
 #include "boost/regex.hpp"
+#include <VCLTee.Series.hpp>
 #include <vector>
+#include "ProjectManager.cpp"
 
 using std::vector;
 using boost::wregex;
@@ -60,6 +62,7 @@ __published:	// IDE-managed Components
 	TMenuItem *MMEditProject;
 	TMenuItem *MMSaveProject;
 	TChart *Chart1;
+	TBarSeries *Series1;
 	void __fastcall InputDataStringGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall InputDataStringGridSelectCell(TObject *Sender, int ACol, int ARow,
@@ -92,6 +95,7 @@ __published:	// IDE-managed Components
 private:	// User declarations
 	void evalAHP();
 	void evalWS();
+	void showResultAtChart(Matrix<double> &result);
 	void initGrid();
 	void drawFixedColNames(int ACol, int ARow, TRect &Rect);
 	void setRowHeight(UnicodeString &str);
@@ -99,7 +103,9 @@ private:	// User declarations
 	void saveProject();
 	void loadProject();
 	void newProject();
-	void closeProject();
+	bool closeProject();
+	bool showSaveDialog();
+	bool isDataValid();
 
 	int getCriteriaCount();
 	int getObjectsCount();
@@ -107,6 +113,7 @@ private:	// User declarations
 	int fixedCols, fixedRows;
 	UnicodeString lastParam;
 	const wregex gridRegex;
+	ProjectManager &projectManager;
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
 	vector<UnicodeString> *colNames, *rowNames;

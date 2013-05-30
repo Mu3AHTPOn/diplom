@@ -16,7 +16,7 @@ ProjectManager& ProjectManager::getInstance()
 	return (*instance);
 }
 
-ProjectManager::ProjectManager(): isSavedCurrentProject(false)
+ProjectManager::ProjectManager(): isSavedCurrentProject(false) ,isOpenProject(false)
 {
 
 }
@@ -29,4 +29,14 @@ void ProjectManager::setIsCurrentProjectSaved(bool isSaved)
 bool ProjectManager::isSavedCurrentPreject()
 {
 	return isSavedCurrentProject;
+}
+
+void ProjectManager::setIsProjectOpen(bool isOpen)
+{
+	isOpenProject = isOpen;
+}
+
+bool ProjectManager::isProjectOpen()
+{
+	return isOpenProject;
 }

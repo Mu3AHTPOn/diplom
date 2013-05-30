@@ -3,6 +3,9 @@
 #pragma hdrstop
 
 #include "matrix.h"
+#include <math.h>
+
+using std::sqrt;
 //---------------------------------------------------------------------------
 template<typename T>
 Matrix<T>::Matrix(int height, int width, T defaultValue)
@@ -38,7 +41,7 @@ Matrix<T>::~Matrix()
         delete [] matrix[i];
 	}
 
-    delete [] matrix;
+	delete [] matrix;
 }
 
 template<typename T>
@@ -225,3 +228,56 @@ void Matrix<T>::initMatrix(T value)
     }
 }
 
+template<typename T>
+Matrix<T>& Matrix<T>::normalize()
+{
+//	T max(matrix[0][0]), min(max);
+	double *lengths = new double[getWidth()];
+//	for (int i = 0; i < getHeight(); ++i)
+//	{
+//		for (int j = 0; j < getWidth(); ++j)
+//		{
+//			const T value = matrix[i][j];
+//
+//			averages[j] += value;
+//
+////			if (value > max)
+////			{
+////				max = value;
+////			}
+////
+////			if (value < min)
+////			{
+////				min = value;
+////			}
+////		}
+//	}
+
+	for (int j = 0; j < getWidth(); ++j)
+	{
+		lengths[j] = getLength(j);
+	}
+
+    for (int i = 0; i < getHeight(); ++i)
+	{
+		for (int j = 0; j < getWidth(); ++j)
+		{
+			matrix[i][j] /= lengths[j];
+		}
+	}
+
+    delete [] lengths;
+    return *this;
+}
+
+template<typename T>
+double Matrix<T>::getLength(int col)
+{
+	double sum(0);
+	for (int i = 0; i < getHeight(); ++i)
+	{
+        sum += matrix[i][col] * matrix[i][col];
+	}
+
+    return sqrt(sum);
+}

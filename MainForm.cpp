@@ -11,7 +11,6 @@
 #include "UIManager.cpp"
 #include "setColRowNameFormUnit.cpp"
 #include "NewProjectUnit.cpp"
-#include "ProjectManager.cpp"
 #include <DBXJSON.hpp>
 //---------------------------------------------------------------------------
 
@@ -22,7 +21,7 @@ TForm1 *Form1;
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
-	: TForm(Owner), gridRegex(L"[\\d]*")
+	: TForm(Owner), gridRegex(L"[\\d]*"), projectManager(ProjectManager::getInstance())
 {
 	Form1 = this;
 	UIManager::getInstance()->addForm(Form1);
@@ -52,6 +51,12 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 
 	InputDataStringGrid->Visible = false;
 	Form1->Caption = (*projectName);
+
+	const int AHP = Form1->Canvas->TextWidth(L"Метод анализа иерархий");
+	const int WS = Form1->Canvas->TextWidth(L"Метод взвешенной суммы мест");
+
+    MethodComboBox->Width = AHP > WS ? AHP + 30 : WS + 30;
+
 }
 
 //---------------------------------------------------------------------------
@@ -178,12 +183,21 @@ void __fastcall TForm1::Memo1MouseEnter(TObject *Sender)
 
 void __fastcall TForm1::MMCloseAppClick(TObject *Sender)
 {
-	UIManager::getInstance()->closeApp(this);
+	if (closeProject())
+	{
+		UIManager::getInstance()->closeApp(this);
+	}
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 {
+	if (! closeProject())
+	{
+		Action = caNone;
+		return;
+	}
+
 	UIManager::getInstance()->closeApp(this);
 }
 //---------------------------------------------------------------------------
@@ -280,6 +294,8 @@ try {
 	ResultRichEdit->Text = resultCaption;
 	UnicodeString resultVector = resultStr;
 	ResultRichEdit->Text = ResultRichEdit->Text + resultVector;
+
+	showResultAtChart(result);
 	} catch (...)        //faken Embarcadero!
 	{
 
@@ -291,8 +307,8 @@ void TForm1::evalWS()
 	const int criteriaCount = getCriteriaCount();
 	const int objectCount = getObjectsCount();
 
-	Matrix<int> criteriaEstimates(criteriaCount);
-	Matrix<int> objectEstimates(objectCount, criteriaCount);
+	Matrix<double> criteriaEstimates(criteriaCount);
+	Matrix<double> objectEstimates(objectCount, criteriaCount);
 
 	for (int i = 0; i < criteriaCount; ++i) {
 		criteriaEstimates[i][0] = InputDataStringGrid->Cells[i+fixedCols][fixedRows].ToInt();
@@ -306,20 +322,33 @@ void TForm1::evalWS()
 		}
 	}
 
-	Matrix<int> &result = objectEstimates * criteriaEstimates;
+	Matrix<double> &result = objectEstimates.normalize() * criteriaEstimates.normalize();
 
 	UnicodeString resultStr = L"(";
 
 	for (int i = 0; i < result.getHeight() - 1; ++i) {
-		resultStr += Format(L"%.d, ", new TVarRec(result[i][0]), 1);
+		resultStr += Format(L"%.3f, ", new TVarRec(result[i][0]), 1);
 	}
 
-	resultStr += Format(L"%.d)", new TVarRec(result[result.getHeight() - 1][0]), 1);
+	resultStr += Format(L"%.3f)", new TVarRec(result[result.getHeight() - 1][0]), 1);
 
 	UnicodeString resultCaption = L"Расчитанный рейтинг\n";
 	ResultRichEdit->Text = resultCaption;
 	UnicodeString resultVector = resultStr;
 	ResultRichEdit->Text = ResultRichEdit->Text + resultVector;
+
+	showResultAtChart(result);
+}
+
+void TForm1::showResultAtChart(Matrix<double> &result)
+{
+	Chart1->Series[0]->Clear();
+
+	for (int i = 0; i < result.getHeight(); ++i)
+	{
+		Chart1->Series[0]->Add(result[i][0], rowNames->at(i));
+	}
+
 }
 //---------------------------------------------------------------------------
 
@@ -349,6 +378,7 @@ void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 			  if (newName != L"") {
 				  setColWidth(*newName);
 				  InputDataStringGrid->Refresh();
+				  projectManager.setIsCurrentProjectSaved(false);
 			  }
 			} __finally {
 			  form->Free();
@@ -461,6 +491,9 @@ void TForm1::saveProject()
 
 			fs->Write(projectJSON.BytesOf(), projectJSON.Length());
 			js->Free();
+
+			projectManager.setIsCurrentProjectSaved(true);
+
 		} __finally {
 			fs->Free();
 		}
@@ -469,6 +502,11 @@ void TForm1::saveProject()
 
 void TForm1::loadProject()
 {
+	if (! closeProject())
+	{
+        return;
+    }
+
 	if (OpenDialog1->Execute(this->Handle)) {
 	UnicodeString fileName = OpenDialog1->FileName;
 	TFileStream *fs = new TFileStream(fileName, fmOpenRead);
@@ -512,6 +550,8 @@ void TForm1::loadProject()
 		InputDataStringGrid->FixedCols = 1;			//bug
 		InputDataStringGrid->Refresh();
 
+        projectManager.setIsProjectOpen(true);
+        projectManager.setIsCurrentProjectSaved(true);
 	} __finally {
 		fs->Free();
 		}
@@ -520,9 +560,14 @@ void TForm1::loadProject()
 //--------------------------------------------------------------------------
 void TForm1::newProject()
 {
-	closeProject();
+	if (! closeProject())
+	{
+        return;
+	}
+
 	NewProjectForm->ShowModal();
 	if (colNames->size() > 0 && rowNames->size() > 0) {
+	   projectManager.setIsProjectOpen(true);
 		initGrid();
 		InputDataStringGrid->Refresh();
 		Form1->Caption = (*projectName);
@@ -537,13 +582,54 @@ void TForm1::newProject()
 	}
 }
 //--------------------------------------------------------------------------
-void TForm1::closeProject()
+// return false if project doesn't close
+bool TForm1::closeProject()
 {
-		//TODO check to save
+	if (! showSaveDialog())
+	{
+		return false;
+	}
+
 	colNames->clear();
 	rowNames->clear();
 	(*projectName) = L"Новый проект";
 	InputDataStringGrid->Visible = false;
+	projectManager.setIsProjectOpen(false);
+	return true;
+}
+//--------------------------------------------------------------------------
+//return false if user click on cancel
+bool TForm1::showSaveDialog()
+{
+    if (projectManager.isProjectOpen() && ! projectManager.isSavedCurrentPreject()) {
+       const int dialogResult = MessageDlg(L"Сохранить текущий проект?", mtConfirmation, mbYesNoCancel, 0);
+		if (dialogResult == mrYes) {
+		   saveProject();
+		} else if (dialogResult == mrCancel) {
+			return false;
+		}
+	}
+
+	return true;
+}
+//--------------------------------------------------------------------------
+bool TForm1::isDataValid()
+{
+	const int cols = InputDataStringGrid->ColCount;
+	const int rows = InputDataStringGrid->RowCount;
+	for (int i = 0; i < cols; ++i)
+	{
+		for (int j = 0; j < rows; ++j)
+		{
+			if (! regex_match(InputDataStringGrid->Cells[i][j].w_str(), gridRegex))
+			{
+				MessageDlg(L"Ошибка! Введены неверные данные (вводить можно только целые числа)", mtError, TMsgDlgButtons() << mbOK, 0);
+				return false;
+			}
+		}
+	}
+
+	return true;
 }
 //--------------------------------------------------------------------------
 void __fastcall TForm1::MMNewProjectClick(TObject *Sender)
@@ -566,7 +652,7 @@ void __fastcall TForm1::SpeedButton3Click(TObject *Sender)
 
 void __fastcall TForm1::NewProjectButtonClick(TObject *Sender)
 {
-	newProject();	
+	newProject();
 }
 //---------------------------------------------------------------------------
 
@@ -578,7 +664,7 @@ void __fastcall TForm1::SpeedButton5Click(TObject *Sender)
 
 void __fastcall TForm1::MMCloseProjectClick(TObject *Sender)
 {
-	closeProject();	
+	closeProject();
 }
 //---------------------------------------------------------------------------
 
@@ -611,6 +697,8 @@ void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol
 		UnicodeString str = InputDataStringGrid->Cells[ACol][ARow];
 		InputDataStringGrid->Cells[ACol][ARow] = str.SubString(1, str.Length() - 1);
 	}
+
+	projectManager.setIsCurrentProjectSaved(false);
 }
 //---------------------------------------------------------------------------
 

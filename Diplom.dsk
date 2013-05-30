@@ -1,74 +1,57 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysdyn.h',0,1,450,1,472,0,0,,
-File_1=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\sdk\wingdi.h',0,1,3258,1,3280,0,0,,
-File_2=TSourceModule,'F:\diplom\setColRowNameFormUnit.cpp',0,1,8,10,25,0,0,,
-File_3=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\ustring.h',0,1,88,46,47,0,0,,
-File_4=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.SysUtils.hpp',0,1,2834,1,2856,0,0,,
-File_5=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\vector',0,1,1212,1,1233,0,0,,
-File_6=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\SOURCE\VCL\ustring.cpp',0,1,88,1,109,0,0,,
-File_7=TSourceModule,'F:\diplom\UIManager.cpp',0,1,22,1,47,0,0,,
-File_8=TSourceModule,'C:\Program Files (x86)\Embarcadero\RAD Studio\10.0\include\boost_1_39\boost\none.hpp',0,1,1,27,23,0,0,,
-File_9=TSourceModule,'F:\diplom\json_spirit\json_spirit.h',0,1,1,1,8,0,0,,
-File_10=TSourceModule,'F:\diplom\json_spirit\json_spirit_value.h',0,1,52,43,152,0,0,,
-File_11=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\iosfwd',0,1,107,17,129,0,0,,
-File_12=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Forms.hpp',0,1,1070,1,1091,0,0,,
-File_13=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Controls.hpp',0,1,2307,35,2333,0,0,,
-File_14=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\sdk\windef.h',0,1,331,1,353,0,0,,
+File_0=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.UITypes.hpp',0,1,76,64,98,0,0,,
+File_1=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Dialogs.hpp',0,74,1394,175,1416,0,0,,
+File_2=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\VCLTee.TeEngine.hpp',0,1,2568,1,2590,0,0,,
+File_3=TSourceModule,'F:\diplom\UIManager.cpp',0,1,1,1,47,0,0,,
+File_4=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysmac.h',0,1,573,23,595,0,0,,
+File_5=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\Data.DBXJSON.hpp',0,1,124,1,146,0,0,,
+File_6=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.Classes.hpp',0,1,1536,1,1557,0,0,,
+File_7=TSourceModule,'F:\diplom\DiplomPCH1.h',0,1,1,1,1,0,0,,
+File_8=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\xutility',0,1,324,29,347,0,0,,
+File_9=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysdyn.h',0,1,450,1,472,0,0,,
+File_10=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\sdk\wingdi.h',0,1,3258,1,3280,0,0,,
+File_11=TSourceModule,'F:\diplom\setColRowNameFormUnit.cpp',0,1,8,10,25,0,0,,
+File_12=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\ustring.h',0,1,88,46,47,0,0,,
+File_13=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.SysUtils.hpp',0,1,2834,1,2856,0,0,,
+File_14=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\vector',0,1,1212,1,1233,0,0,,
 
 [Modules]
-Module0=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysmac.h
-Module1=F:\diplom\MainForm.cpp
-Module2=default.htm
-Module3=F:\diplom\Diplom.cbproj
-Module4=F:\diplom\AddColRowNamesUnit.cpp
-Module5=F:\diplom\DiplomPCH1.h
-Module6=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.Classes.hpp
-Module7=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\Data.DBXJSON.hpp
-Module8=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Graphics.hpp
-Module9=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\SystemTypes.h
-Module10=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp
-Module11=F:\diplom\ahpsolver.h
-Module12=F:\diplom\matrix.cpp
-Module13=F:\diplom\ahpsolver.cpp
-Module14=F:\diplom\eigensolver.cpp
-Module15=F:\diplom\eigensolver.h
-Count=16
+Module0=F:\diplom\MainForm.cpp
+Module1=F:\diplom\ProjectManager.cpp
+Module2=F:\diplom\matrix.cpp
+Module3=default.htm
+Module4=F:\diplom\NewProjectUnit.cpp
+Module5=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Graphics.hpp
+Module6=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\SystemTypes.h
+Module7=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp
+Module8=F:\diplom\ahpsolver.h
+Module9=F:\diplom\ahpsolver.cpp
+Module10=F:\diplom\eigensolver.cpp
+Module11=F:\diplom\eigensolver.h
+Count=12
 EditWindowCount=1
-
-[c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysmac.h]
-ModuleType=TSourceModule
-FormState=0
-FormOnTop=0
 
 [F:\diplom\MainForm.cpp]
 ModuleType=TSourceModule
 FormState=1
 FormOnTop=0
 
+[F:\diplom\ProjectManager.cpp]
+ModuleType=TSourceModule
+FormState=0
+FormOnTop=0
+
+[F:\diplom\matrix.cpp]
+ModuleType=TSourceModule
+FormState=0
+FormOnTop=0
+
 [default.htm]
 ModuleType=TURLModule
 
-[F:\diplom\Diplom.cbproj]
-ModuleType=TBaseProject
-
-[F:\diplom\AddColRowNamesUnit.cpp]
+[F:\diplom\NewProjectUnit.cpp]
 ModuleType=TSourceModule
 FormState=1
-FormOnTop=0
-
-[F:\diplom\DiplomPCH1.h]
-ModuleType=TSourceModule
-FormState=0
-FormOnTop=0
-
-[c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.Classes.hpp]
-ModuleType=TSourceModule
-FormState=0
-FormOnTop=0
-
-[c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\Data.DBXJSON.hpp]
-ModuleType=TSourceModule
-FormState=0
 FormOnTop=0
 
 [c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Graphics.hpp]
@@ -91,11 +74,6 @@ ModuleType=TSourceModule
 FormState=0
 FormOnTop=0
 
-[F:\diplom\matrix.cpp]
-ModuleType=TSourceModule
-FormState=0
-FormOnTop=0
-
 [F:\diplom\ahpsolver.cpp]
 ModuleType=TSourceModule
 FormState=0
@@ -112,8 +90,8 @@ FormState=0
 FormOnTop=0
 
 [EditWindow0]
-ViewCount=16
-CurrentEditView=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysmac.h
+ViewCount=12
+CurrentEditView=F:\diplom\MainForm.cpp
 View0=0
 View1=1
 View2=2
@@ -126,10 +104,6 @@ View8=8
 View9=9
 View10=10
 View11=11
-View12=12
-View13=13
-View14=14
-View15=15
 PercentageSizes=1
 Create=1
 Visible=1
@@ -157,7 +131,7 @@ BottomPanelClients=DockSite1,MessageView
 BottomPanelData=0000080001020100000009000000446F636B5369746531724500000000000002F8050000000000000100000000724500000F0000004D65737361676556696577466F726DFFFFFFFF
 BottomMiddlePanelSize=0
 BottomMiddlePanelClients=DockSite0,GraphDrawingModel
-BottomMiddelPanelData=0000080001020200000009000000446F636B536974653010000000477261706844726177696E67566965772C2A00000000000002EF0500000000000001000000002C2A000009000000446F636B5369746530FFFFFFFF
+BottomMiddelPanelData=0000080001020200000009000000446F636B536974653010000000477261706844726177696E6756696577961D00000000000002F206000000000000FFFFFFFF
 
 [View0]
 CustomEditViewType=TWelcomePageView
@@ -166,74 +140,34 @@ WelcomePageURL=bds:/default.htm
 [View1]
 CustomEditViewType=TEditView
 Module=F:\diplom\MainForm.cpp
-CursorX=1
-CursorY=104
-TopLine=82
+CursorX=89
+CursorY=319
+TopLine=290
 LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\MainForm.cpp
 
 [View2]
 CustomEditViewType=TEditView
-Module=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysmac.h
-CursorX=23
-CursorY=595
-TopLine=573
+Module=F:\diplom\ProjectManager.cpp
+CursorX=78
+CursorY=19
+TopLine=10
 LeftCol=1
 Bookmarks=
-EditViewName=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysmac.h
+EditViewName=F:\diplom\ProjectManager.cpp
 
 [View3]
 CustomEditViewType=TEditView
-Module=F:\diplom\Diplom.cpp
-CursorX=45
-CursorY=7
+Module=F:\diplom\NewProjectUnit.cpp
+CursorX=33
+CursorY=20
 TopLine=1
 LeftCol=1
 Bookmarks=
-EditViewName=F:\diplom\Diplom.cpp
+EditViewName=F:\diplom\NewProjectUnit.cpp
 
 [View4]
-CustomEditViewType=TEditView
-Module=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\Data.DBXJSON.hpp
-CursorX=1
-CursorY=146
-TopLine=124
-LeftCol=1
-Bookmarks=
-EditViewName=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\Data.DBXJSON.hpp
-
-[View5]
-CustomEditViewType=TEditView
-Module=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.Classes.hpp
-CursorX=1
-CursorY=1557
-TopLine=1536
-LeftCol=1
-Bookmarks=
-EditViewName=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.Classes.hpp
-
-[View6]
-CustomEditViewType=TEditView
-Module=F:\diplom\DiplomPCH1.h
-CursorX=1
-CursorY=1
-TopLine=1
-LeftCol=1
-Bookmarks=
-EditViewName=F:\diplom\DiplomPCH1.h
-
-[View7]
-CustomEditViewType=TEditView
-Module=F:\diplom\AddColRowNamesUnit.cpp
-CursorX=1
-CursorY=223
-TopLine=96
-LeftCol=1
-Bookmarks=
-EditViewName=F:\diplom\AddColRowNamesUnit.cpp
-
-[View8]
 CustomEditViewType=TEditView
 Module=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\SystemTypes.h
 CursorX=5
@@ -243,7 +177,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\SystemTypes.h
 
-[View9]
+[View5]
 CustomEditViewType=TEditView
 Module=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp
 CursorX=18
@@ -253,7 +187,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp
 
-[View10]
+[View6]
 CustomEditViewType=TEditView
 Module=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Graphics.hpp
 CursorX=1
@@ -263,7 +197,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Graphics.hpp
 
-[View11]
+[View7]
 CustomEditViewType=TEditView
 Module=F:\diplom\ahpsolver.h
 CursorX=26
@@ -273,17 +207,17 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\ahpsolver.h
 
-[View12]
+[View8]
 CustomEditViewType=TEditView
 Module=F:\diplom\matrix.cpp
-CursorX=1
-CursorY=41
-TopLine=10
+CursorX=12
+CursorY=229
+TopLine=199
 LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\matrix.cpp
 
-[View13]
+[View9]
 CustomEditViewType=TEditView
 Module=F:\diplom\ahpsolver.cpp
 CursorX=1
@@ -293,7 +227,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\ahpsolver.cpp
 
-[View14]
+[View10]
 CustomEditViewType=TEditView
 Module=F:\diplom\eigensolver.cpp
 CursorX=1
@@ -303,7 +237,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\eigensolver.cpp
 
-[View15]
+[View11]
 CustomEditViewType=TEditView
 Module=F:\diplom\eigensolver.h
 CursorX=1
@@ -344,8 +278,8 @@ StayOnTop=0
 
 [Breakpoints]
 Count=2
-Breakpoint0='F:\diplom\NewProjectFormUnit.cpp',20,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint1='F:\diplom\MainForm.cpp',440,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint0='F:\diplom\MainForm.cpp',688,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint1='F:\diplom\MainForm.cpp',451,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -601,12 +535,12 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=6073
-Height=1105
+Width=2339
+Height=1238
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=6073
-ClientHeight=1105
+ClientWidth=2339
+ClientHeight=1238
 TBDockHeight=3210
 LRDockWidth=2823
 Dockable=1
@@ -621,11 +555,11 @@ State=0
 Left=0
 Top=0
 Width=2339
-Height=1171
+Height=1238
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2339
-ClientHeight=1171
+ClientHeight=1238
 TBDockHeight=1152
 LRDockWidth=3677
 Dockable=1
@@ -686,11 +620,11 @@ State=0
 Left=0
 Top=0
 Width=2339
-Height=1171
+Height=1238
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2339
-ClientHeight=1171
+ClientHeight=1238
 TBDockHeight=2229
 LRDockWidth=3698
 Dockable=1
@@ -743,11 +677,11 @@ State=0
 Left=0
 Top=0
 Width=2339
-Height=1171
+Height=1238
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2339
-ClientHeight=1171
+ClientHeight=1238
 TBDockHeight=4829
 LRDockWidth=3562
 Dockable=1
@@ -762,11 +696,11 @@ State=0
 Left=0
 Top=0
 Width=2339
-Height=1171
+Height=1238
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2339
-ClientHeight=1171
+ClientHeight=1238
 TBDockHeight=4829
 LRDockWidth=3562
 Dockable=1
@@ -1019,14 +953,14 @@ Visible=0
 Docked=1
 State=0
 Left=0
-Top=23
-Width=6073
-Height=1343
+Top=0
+Width=2339
+Height=1476
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=6073
-ClientHeight=1343
-TBDockHeight=1343
+ClientWidth=2339
+ClientHeight=1476
+TBDockHeight=1476
 LRDockWidth=2339
 Dockable=1
 StayOnTop=0
