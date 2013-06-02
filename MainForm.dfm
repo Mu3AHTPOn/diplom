@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   Caption = 'Form1'
   ClientHeight = 541
-  ClientWidth = 1119
+  ClientWidth = 884
   Color = clBtnFace
   Constraints.MinHeight = 600
   Constraints.MinWidth = 900
@@ -14,17 +14,18 @@ object Form1: TForm1
   Font.Style = []
   Menu = MainMenu1
   OldCreateOrder = False
+  Position = poScreenCenter
   OnClose = FormClose
   OnCreate = FormCreate
   DesignSize = (
-    1119
+    884
     541)
   PixelsPerInch = 96
   TextHeight = 13
   object InputDataStringGrid: TStringGrid
     Left = 0
     Top = 27
-    Width = 746
+    Width = 1119
     Height = 367
     Anchors = [akLeft, akTop, akBottom]
     BevelWidth = 5
@@ -41,13 +42,12 @@ object Form1: TForm1
     OnDblClick = InputDataStringGridDblClick
     OnDrawCell = InputDataStringGridDrawCell
     OnKeyDown = InputDataStringGridKeyDown
-    OnSelectCell = InputDataStringGridSelectCell
     OnSetEditText = InputDataStringGridSetEditText
   end
   object ToolBar2: TToolBar
     Left = 0
     Top = 0
-    Width = 1119
+    Width = 884
     Height = 29
     ButtonHeight = 21
     Caption = 'ToolBar2'
@@ -255,7 +255,7 @@ object Form1: TForm1
   object ResultRichEdit: TRichEdit
     Left = 0
     Top = 414
-    Width = 1119
+    Width = 884
     Height = 130
     Anchors = [akLeft, akRight, akBottom]
     Font.Charset = RUSSIAN_CHARSET
@@ -271,9 +271,24 @@ object Form1: TForm1
     OnKeyDown = Memo1KeyDown
     OnMouseEnter = Memo1MouseEnter
   end
+  object Panel1: TPanel
+    Left = 0
+    Top = 390
+    Width = 884
+    Height = 25
+    Anchors = [akLeft, akRight, akBottom]
+    Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Times New Roman'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 3
+  end
   object Chart1: TChart
-    Left = 392
-    Top = 64
+    Left = 575
+    Top = 48
     Width = 289
     Height = 290
     AllowPanning = pmNone
@@ -287,6 +302,8 @@ object Form1: TForm1
     Panning.MouseWheel = pmwNone
     View3D = False
     Zoom.Allow = False
+    Constraints.MinHeight = 200
+    Constraints.MinWidth = 200
     TabOrder = 4
     Anchors = []
     OnMouseDown = Chart1MouseDown
@@ -305,21 +322,6 @@ object Form1: TForm1
       YValues.Order = loNone
       Data = {0000000000}
     end
-  end
-  object Panel1: TPanel
-    Left = 0
-    Top = 390
-    Width = 1119
-    Height = 25
-    Anchors = [akLeft, akRight, akBottom]
-    Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'Times New Roman'
-    Font.Style = [fsBold]
-    ParentFont = False
-    TabOrder = 3
   end
   object MainMenu1: TMainMenu
     Left = 704

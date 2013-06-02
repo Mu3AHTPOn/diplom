@@ -8,10 +8,11 @@ template<typename T>
 class AHPSolver
 {
 public:
-	AHPSolver() {}
+	AHPSolver();
 	AHPSolver(Matrix<T> &esimates);
     ~AHPSolver();
-    inline Matrix<double> & getPairwiseComparationMatrix();
+	inline Matrix<double> & getPairwiseComparationMatrix();
+	inline void setPairwiseComparationMatrix(Matrix<double> & m);
 //    double evaluateConsistency(Matrix &m, double &maxEigenValue);
     double evaluatePairwiseConsistency();
     inline Matrix<double> &getMaxEigenVectors();

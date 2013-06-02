@@ -24,8 +24,9 @@ class Matrix
         Matrix<T>& operator =(Matrix<T>& rhs);
         Matrix<T>& operator /(double value);
 		Matrix<T>& append(Matrix<T>& rhs) throw(MatrixException);
-		Matrix<T>& normalize();
+		Matrix<T>& normalizeToOne();
 		double getLength(int col);
+		T getSum(int col);
 
         inline int getWidth() const;
         inline int getHeight() const;

@@ -4,7 +4,7 @@ object NewProjectForm: TNewProjectForm
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = #1044#1086#1073#1072#1074#1083#1077#1085#1080#1077' '#1080#1084#1105#1085' '#1086#1073#1098#1077#1082#1090#1086#1074'/'#1082#1088#1080#1090#1077#1088#1080#1077#1074
-  ClientHeight = 328
+  ClientHeight = 350
   ClientWidth = 460
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -20,7 +20,7 @@ object NewProjectForm: TNewProjectForm
   TextHeight = 13
   object RowAddButton: TSpeedButton
     Left = 179
-    Top = 80
+    Top = 112
     Width = 23
     Height = 22
     Hint = #1044#1086#1073#1072#1074#1080#1090#1100' (insert)'
@@ -57,7 +57,7 @@ object NewProjectForm: TNewProjectForm
   end
   object RowRemoveButton: TSpeedButton
     Left = 179
-    Top = 108
+    Top = 140
     Width = 23
     Height = 22
     Hint = #1059#1076#1072#1083#1080#1090#1100' (del)'
@@ -94,7 +94,7 @@ object NewProjectForm: TNewProjectForm
   end
   object RowMoveUpButton: TSpeedButton
     Left = 179
-    Top = 136
+    Top = 168
     Width = 23
     Height = 22
     Hint = #1055#1086#1076#1085#1103#1090#1100' '#1074#1099#1096#1077
@@ -131,7 +131,7 @@ object NewProjectForm: TNewProjectForm
   end
   object RowMoveDownButton: TSpeedButton
     Left = 179
-    Top = 164
+    Top = 196
     Width = 23
     Height = 22
     Hint = #1054#1087#1091#1089#1090#1080#1090#1100' '#1085#1080#1078#1077
@@ -168,7 +168,7 @@ object NewProjectForm: TNewProjectForm
   end
   object Label1: TLabel
     Left = 24
-    Top = 55
+    Top = 87
     Width = 178
     Height = 19
     Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1103' '#1086#1073#1098#1077#1082#1090#1086#1074
@@ -181,7 +181,7 @@ object NewProjectForm: TNewProjectForm
   end
   object ColAddButton: TSpeedButton
     Left = 419
-    Top = 80
+    Top = 112
     Width = 23
     Height = 22
     Hint = #1044#1086#1073#1072#1074#1080#1090#1100' (insert)'
@@ -218,7 +218,7 @@ object NewProjectForm: TNewProjectForm
   end
   object ColRemoveButton: TSpeedButton
     Left = 419
-    Top = 108
+    Top = 140
     Width = 23
     Height = 22
     Hint = #1059#1076#1072#1083#1080#1090#1100' (del)'
@@ -255,7 +255,7 @@ object NewProjectForm: TNewProjectForm
   end
   object ColMoveUpButton: TSpeedButton
     Left = 419
-    Top = 136
+    Top = 168
     Width = 23
     Height = 22
     Hint = #1055#1086#1076#1085#1103#1090#1100' '#1074#1099#1096#1077
@@ -292,7 +292,7 @@ object NewProjectForm: TNewProjectForm
   end
   object ColMoveDownButton: TSpeedButton
     Left = 419
-    Top = 164
+    Top = 196
     Width = 23
     Height = 22
     Hint = #1054#1087#1091#1089#1090#1080#1090#1100' '#1085#1080#1078#1077
@@ -329,7 +329,7 @@ object NewProjectForm: TNewProjectForm
   end
   object Label2: TLabel
     Left = 263
-    Top = 55
+    Top = 87
     Width = 186
     Height = 19
     Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1103' '#1082#1088#1080#1090#1077#1088#1080#1077#1074
@@ -347,9 +347,16 @@ object NewProjectForm: TNewProjectForm
     Height = 13
     Caption = #1048#1084#1103' '#1087#1088#1086#1077#1090#1082#1072
   end
+  object Label4: TLabel
+    Left = 24
+    Top = 51
+    Width = 77
+    Height = 13
+    Caption = #1052#1077#1090#1086#1076' '#1088#1072#1089#1095#1105#1090#1072
+  end
   object RowNamesListBox: TListBox
     Left = 24
-    Top = 80
+    Top = 112
     Width = 149
     Height = 169
     ItemHeight = 13
@@ -359,7 +366,7 @@ object NewProjectForm: TNewProjectForm
   end
   object ColNamesListBox: TListBox
     Left = 264
-    Top = 80
+    Top = 112
     Width = 149
     Height = 169
     ItemHeight = 13
@@ -369,7 +376,7 @@ object NewProjectForm: TNewProjectForm
   end
   object CancelButton: TButton
     Left = 144
-    Top = 280
+    Top = 312
     Width = 75
     Height = 25
     Caption = #1054#1090#1084#1077#1085#1072
@@ -378,7 +385,7 @@ object NewProjectForm: TNewProjectForm
   end
   object NextButton: TButton
     Left = 239
-    Top = 280
+    Top = 312
     Width = 75
     Height = 25
     Caption = #1044#1072#1083#1077#1077
@@ -386,20 +393,24 @@ object NewProjectForm: TNewProjectForm
     OnClick = NextButtonClick
   end
   object ProjectName: TEdit
-    Left = 104
+    Left = 121
     Top = 21
     Width = 193
     Height = 21
     TabOrder = 4
   end
-  object Button1: TButton
-    Left = 8
-    Top = 264
-    Width = 75
-    Height = 25
-    Caption = #1054#1090#1082#1088#1099#1090#1100
+  object MethodComboBox: TComboBox
+    Left = 121
+    Top = 48
+    Width = 193
+    Height = 21
+    Hint = #1042#1099#1073#1086#1088' '#1084#1077#1090#1086#1076#1072' '#1088#1072#1089#1095#1105#1090#1072
+    Style = csDropDownList
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 5
-    Visible = False
-    OnClick = Button1Click
+    Items.Strings = (
+      #1052#1077#1090#1086#1076' '#1072#1085#1072#1083#1080#1079#1072' '#1080#1077#1088#1072#1088#1093#1080#1081
+      #1052#1077#1090#1086#1076' '#1074#1079#1074#1077#1096#1077#1085#1085#1086#1081' '#1089#1091#1084#1084#1099' '#1084#1077#1089#1090)
   end
 end

@@ -32,7 +32,8 @@ __published:	// IDE-managed Components
 	TButton *NextButton;
 	TLabel *Label3;
 	TEdit *ProjectName;
-	TButton *Button1;
+	TComboBox *MethodComboBox;
+	TLabel *Label4;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall RowsListBoxClick(TObject *Sender);
 	void __fastcall listEditKeyPress(TObject *Sender, System::WideChar &Key);

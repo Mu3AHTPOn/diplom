@@ -151,6 +151,12 @@
             <DependentOn>eigensolver.h</DependentOn>
             <BuildOrder>4</BuildOrder>
         </CppCompile>
+        <CppCompile Include="EvalCriteriaWeights.cpp">
+            <Form>EvalCriteriaWeightsForm</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>EvalCriteriaWeights.h</DependentOn>
+            <BuildOrder>12</BuildOrder>
+        </CppCompile>
         <CppCompile Include="MainForm.cpp">
             <Form>Form1</Form>
             <FormType>dfm</FormType>
@@ -189,6 +195,7 @@
         <FormResources Include="NewProjectUnit.dfm"/>
         <FormResources Include="setColRowNameFormUnit.dfm"/>
         <FormResources Include="MainForm.dfm"/>
+        <FormResources Include="EvalCriteriaWeights.dfm"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

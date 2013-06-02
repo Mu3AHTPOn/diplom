@@ -4,9 +4,10 @@
 #pragma hdrstop
 #include <tchar.h>
 //---------------------------------------------------------------------------
+USEFORM("NewProjectUnit.cpp", NewProjectForm);
 USEFORM("setColRowNameFormUnit.cpp", setCollRowNameForm);
 USEFORM("MainForm.cpp", Form1);
-USEFORM("NewProjectUnit.cpp", NewProjectForm);
+USEFORM("EvalCriteriaWeights.cpp", EvalCriteriaWeightsForm);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {

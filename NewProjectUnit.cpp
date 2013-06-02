@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "NewProjectUnit.h"
+#include "EvalCriteriaWeights.cpp"
 //---------------------------------------------------------------------------
 #pragma resource "*.dfm"
 TNewProjectForm *NewProjectForm;
@@ -22,6 +23,12 @@ void __fastcall TNewProjectForm::FormCreate(TObject *Sender)
 	listEdit->BorderStyle = bsNone;
 	listEdit->OnKeyPress = listEditKeyPress;
 	listEdit->OnExit = ListEditExit;
+
+	const int AHP = Canvas->TextWidth((*MethodComboBox->Items)[0]);
+	const int WS = Canvas->TextWidth((*MethodComboBox->Items)[1]);
+
+	MethodComboBox->Width = AHP > WS ? AHP + 30 : WS + 30;
+	MethodComboBox->ItemIndex = 0;
 }
 
 
@@ -236,7 +243,40 @@ void __fastcall TNewProjectForm::NextButtonClick(TObject *Sender)
 
 	(*projectName) = ProjectName->Text;
 
-	Close();
+	if (MethodComboBox->ItemIndex == 0)
+	{
+		EvalCriteriaWeightsForm->setColNamesArray(colNames);
+		Hide();
+		bool isBack(false);
+		EvalCriteriaWeightsForm->setBackPointer(&isBack);
+		EvalCriteriaWeightsForm->ShowModal();
+		if (isBack) {
+			Show();
+		} else {
+			Close();
+		}
+	} else
+	{
+		if (MessageDlg(L"Желаете ли вы рассчитать важность критериев с помощью метода анализа ииерархий?",
+						mtConfirmation,
+						mbYesNo,
+						0,
+						mbYes) == mrYes)
+		{
+			EvalCriteriaWeightsForm->setColNamesArray(colNames);
+			Hide();
+			bool isBack(false);
+			EvalCriteriaWeightsForm->setBackPointer(&isBack);
+			EvalCriteriaWeightsForm->ShowModal();
+			if (isBack) {
+				Show();
+			} else {
+				Close();
+			}
+		} else {
+			Close();
+		}
+	}
 }
 
 //---------------------------------------------------------------------------
@@ -293,7 +333,5 @@ void __fastcall TNewProjectForm::Button1Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-
-//---------------------------------------------------------------------------
 
 

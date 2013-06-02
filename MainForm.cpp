@@ -21,7 +21,7 @@ TForm1 *Form1;
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
-	: TForm(Owner), gridRegex(L"[\\d]*"), projectManager(ProjectManager::getInstance()),
+	: TForm(Owner), gridRegex(L"[\\d]+"),floatGridRegex(L"[\\d]*(.|,){0,1}[\\d]*"), projectManager(ProjectManager::getInstance()),
 	isOnChartButtonPresssed(false)
 {
 	Form1 = this;
@@ -30,34 +30,24 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 	NewProjectForm = new TNewProjectForm(this);
 	colNames = new vector<UnicodeString>();
 	rowNames = new vector<UnicodeString>();
+	criteriaEstimates = new vector<double>();
 	projectName = new UnicodeString(L"Новый проект");
 	bool isClose(false), isOpen(false);
 	NewProjectForm->setRowNamesArray(rowNames);
 	NewProjectForm->setColNamesArray(colNames);
 	NewProjectForm->setProjectName(projectName);
-//	NewProjectForm->setIsClose(&isClose);
-//	NewProjectForm->setIsOpen(&isOpen);
-//	NewProjectForm->ShowModal();
-//	
-//	if (isClose) {
-//		this->Close();
-//		return;
-//	}
-//
-//	if (isOpen) {
-//		fixedCols = InputDataStringGrid->FixedCols;
-//		fixedRows = InputDataStringGrid->FixedRows;
-//        loadProject();
-//	}
+
+	EvalCriteriaWeightsForm = new TEvalCriteriaWeightsForm(this);
+	EvalCriteriaWeightsForm->setColNamesArray(colNames);
+	EvalCriteriaWeightsForm->setCriteriaEstimatesArray(criteriaEstimates);
 
 	InputDataStringGrid->Visible = false;
 	Form1->Caption = (*projectName);
 
-	const int AHP = Form1->Canvas->TextWidth(L"Метод анализа иерархий");
-	const int WS = Form1->Canvas->TextWidth(L"Метод взвешенной суммы мест");
+	const int AHP = Canvas->TextWidth((*MethodComboBox->Items)[0]);
+	const int WS = Canvas->TextWidth((*MethodComboBox->Items)[1]);
 
-    MethodComboBox->Width = AHP > WS ? AHP + 30 : WS + 30;
-
+	MethodComboBox->Width = AHP > WS ? AHP + 30 : WS + 30;
 }
 
 //---------------------------------------------------------------------------
@@ -71,7 +61,7 @@ void __fastcall TForm1::InputDataStringGridKeyDown(TObject *Sender, WORD &Key, T
 		str = new wchar_t[len];
 		cb->GetTextBuf(str, len);
 		UnicodeString uStr(str, len);
-		int i = 0, j = activeCell.X, k = activeCell.Y;
+		int i = 0, j = InputDataStringGrid->Col, k = InputDataStringGrid->Row;
 		UnicodeString pasteString;
 		while(str[i])
 		{
@@ -87,7 +77,7 @@ void __fastcall TForm1::InputDataStringGridKeyDown(TObject *Sender, WORD &Key, T
 				pasteString = "";
 
 				++i;
-				j = activeCell.X;
+				j = InputDataStringGrid->Col;
 				++k;
 			}
 
@@ -100,7 +90,7 @@ void __fastcall TForm1::InputDataStringGridKeyDown(TObject *Sender, WORD &Key, T
 	} else if (Shift.Contains(ssCtrl) && Key == 67U) { //copy event
 
 	} else if (Key == 46U) {
-		InputDataStringGrid->Cells[activeCell.X][activeCell.Y] = "";
+		InputDataStringGrid->Cells[InputDataStringGrid->Col][InputDataStringGrid->Row] = "";
 	}
 }
 //---------------------------------------------------------------------------
@@ -121,18 +111,11 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 
 	initGrid();
 
-	activeCell.X = 1;
-	activeCell.Y = 1;
+//	InputDataStringGrid->Col = 1;
+//	InputDataStringGrid->Row = 1;
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::InputDataStringGridSelectCell(TObject *Sender, int ACol, int ARow,
-          bool &CanSelect)
-{
-	activeCell.X = ACol;
-	activeCell.Y = ARow;
-}
-//---------------------------------------------------------------------------
 
 
 int TForm1::getCriteriaCount()
@@ -203,20 +186,6 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::ParamsValidate(TObject *Sender, int ACol, int ARow, const UnicodeString KeyName,
-		  const UnicodeString KeyValue)
-{
-//	wregex expr(L"[\\d]+");
-//	if (! regex_match(KeyValue.w_str(), expr))
-//	{
-//		UnicodeString str = L"Значение должно быть целым числом";
-//		MessageDlg(str, mtError, mbOKCancel, 0);
-//		Params->Values[KeyName] = L"5";
-//	} else {
-//		initGrid();
-//	}
-}
-//---------------------------------------------------------------------------
 
 void __fastcall TForm1::N5Click(TObject *Sender)
 {
@@ -226,22 +195,26 @@ void __fastcall TForm1::N5Click(TObject *Sender)
 
 void __fastcall TForm1::N8Click(TObject *Sender)
 {
-	if (MethodComboBox->ItemIndex == 0) {
-	   evalAHP();
-	} else
-	{
-		evalWS();
+	if (isDataValid()) {
+		if (MethodComboBox->ItemIndex == 0) {
+		   evalAHP();
+		} else
+		{
+			evalWS();
+		}
 	}
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
 {
-	if (MethodComboBox->ItemIndex == 0) {
-	   evalAHP();
-	} else
-	{
-		evalWS();
-	}
+	if (isDataValid()) {
+		if (MethodComboBox->ItemIndex == 0) {
+		   evalAHP();
+		} else
+		{
+			evalWS();
+		}
+    }
 }
 
 void TForm1::evalAHP()
@@ -252,20 +225,18 @@ try {
 	const int criteriaCount = getCriteriaCount();
 	const int objectCount = getObjectsCount();
 
-	Matrix<int> criteriaEstimates(criteriaCount);
+	Matrix<double> criteriaEstimates(criteriaCount);
 
 	Matrix<int> *objectEstimates = new Matrix<int>[criteriaCount];
 	AHPSolver<int> *ahpObjects = new AHPSolver<int>[criteriaCount];
 
 	for (int i = 0; i < criteriaCount; ++i) {
-		criteriaEstimates[i][0] = InputDataStringGrid->Cells[i+fixedCols][fixedRows].ToInt();
+		criteriaEstimates[i][0] = InputDataStringGrid->Cells[i+fixedCols][fixedRows].ToDouble();
 		objectEstimates[i] = *(new Matrix<int>(objectCount));
 	}
 
-	AHPSolver<int> ahpCriteriaEstimates(criteriaEstimates);
 
 	//fill objectEstimates
-	TStringGrid *test = InputDataStringGrid;
 	for (int i = 0; i < criteriaCount; ++i) {
 		Matrix<int> &curr = objectEstimates[i];
 		for (int j = 0; j < objectCount; ++j) {
@@ -281,7 +252,7 @@ try {
 		integrEstimate.append(ahpObjects[i].getMaxEigenVectors());
 	}
 
-	Matrix<double> result = integrEstimate * ahpCriteriaEstimates.getMaxEigenVectors();
+	Matrix<double> result = integrEstimate * criteriaEstimates;
 
 	UnicodeString resultStr = L"(";
 
@@ -291,10 +262,23 @@ try {
 
 	resultStr += Format(L"%.3f)", new TVarRec(result[result.getHeight() - 1][0]), 1);
 
-	UnicodeString resultCaption = L"Расчитанный рейтинг\n";
-	ResultRichEdit->Text = resultCaption;
-	UnicodeString resultVector = resultStr;
-	ResultRichEdit->Text = ResultRichEdit->Text + resultVector;
+	UnicodeString methodCaption = L"Метод анализа иерархий";
+	UnicodeString resultCaption = L"Расчитанный рейтинг";
+	ResultRichEdit->Lines->Add(methodCaption);
+	ResultRichEdit->Lines->Add(resultCaption);
+//	ResultRichEdit->SelStart= methodCaption.Length();
+//	ResultRichEdit->SelAttributes->Color = clRed;
+//	ResultRichEdit->SelAttributes->Style = ResultRichEdit->SelAttributes->Style << fsBold;
+//	ResultRichEdit->Lines->Add(methodCaption);
+	ResultRichEdit->Lines->Add(resultStr);
+	ResultRichEdit->Lines->Add("");
+//	int t = ResultRichEdit->Perform(EM_LINEINDEX, ResultRichEdit->Lines->Count - 1, 0);;
+//	ResultRichEdit->SelStart = t;
+	for (int i = 0; i < ResultRichEdit->Lines->Count; ++i)
+	{
+		ResultRichEdit->Perform(EM_SCROLL, SB_LINEDOWN, 0);
+	}
+
 
 	showResultAtChart(result);
 	} catch (...)        //faken Embarcadero!
@@ -323,7 +307,7 @@ void TForm1::evalWS()
 		}
 	}
 
-	Matrix<double> &result = objectEstimates.normalize() * criteriaEstimates.normalize();
+	Matrix<double> &result = (objectEstimates * criteriaEstimates).normalizeToOne();
 
 	UnicodeString resultStr = L"(";
 
@@ -333,10 +317,16 @@ void TForm1::evalWS()
 
 	resultStr += Format(L"%.3f)", new TVarRec(result[result.getHeight() - 1][0]), 1);
 
-	UnicodeString resultCaption = L"Расчитанный рейтинг\n";
-	ResultRichEdit->Text = resultCaption;
-	UnicodeString resultVector = resultStr;
-	ResultRichEdit->Text = ResultRichEdit->Text + resultVector;
+	UnicodeString methodCaption = L"Метод взвешенной суммы мест";
+	UnicodeString resultCaption = L"Расчитанный рейтинг";
+	ResultRichEdit->Lines->Add(methodCaption);
+	ResultRichEdit->Lines->Add(resultCaption);
+	ResultRichEdit->Lines->Add(resultStr);
+	ResultRichEdit->Lines->Add(L"");
+    for (int i = 0; i < ResultRichEdit->Lines->Count; ++i)
+	{
+		ResultRichEdit->Perform(EM_SCROLL, SB_LINEDOWN, 0);
+	}
 
 	showResultAtChart(result);
 }
@@ -360,6 +350,14 @@ void __fastcall TForm1::InputDataStringGridDrawCell(TObject *Sender, int ACol, i
 	if (ACol == 0 || ARow == 0) {
 		drawFixedColNames(ACol, ARow, Rect);
 	}
+
+	if (ARow == 1 && ! (InputDataStringGrid->Row == ARow && InputDataStringGrid->Col == ACol))
+	{
+		InputDataStringGrid->Canvas->Brush->Color = cl3DLight;
+		InputDataStringGrid->Canvas->FillRect(InputDataStringGrid->CellRect(ACol, ARow));
+		UnicodeString str = ACol == 0 ? UnicodeString(L"Важность критериев") : InputDataStringGrid->Cells[ACol][ARow];
+		InputDataStringGrid->Canvas->TextOut(Rect.Left + 2, Rect.Top + 4, str);
+    }
 }
 //---------------------------------------------------------------------------
 
@@ -445,11 +443,11 @@ void TForm1::setRowHeight(UnicodeString &str)
 }
  //---------------------------------------------------------------------------
 
-void TForm1::setColWidth(UnicodeString &str)
+void TForm1::setColWidth(UnicodeString &str, int col)
 {
-	int columnWidth = InputDataStringGrid->ColWidths[0];
+	int columnWidth = InputDataStringGrid->ColWidths[col];
 	int newColumnWidth = InputDataStringGrid->Canvas->TextWidth(str) + 6 + 6 + InputDataStringGrid->GridLineWidth;
-	InputDataStringGrid->ColWidths[0] = columnWidth > newColumnWidth ? columnWidth : newColumnWidth;
+	InputDataStringGrid->ColWidths[col] = columnWidth > newColumnWidth ? columnWidth : newColumnWidth;
 }
 //---------------------------------------------------------------------------
 
@@ -500,7 +498,7 @@ void TForm1::saveProject()
 		}
 	}
 }
-
+//--------------------------------------------------------------------------
 void TForm1::loadProject()
 {
 	if (! closeProject())
@@ -533,11 +531,17 @@ void TForm1::loadProject()
 			rowNames->push_back(rowNamesJSON->Get(i)->Value());
 		}
 
+		initGrid();
+		InputDataStringGrid->Visible = true;
+		InputDataStringGrid->FixedCols = 1;			//bug
+
 		TJSONArray *tableData = (TJSONArray*) js->Get(L"tableData")->JsonValue;
-		for (int i = 0; i < tableData->Size() - fixedCols; i++) {
+		for (int i = 0; i < tableData->Size(); i++) {
 			TJSONArray *rowData = (TJSONArray*) tableData->Get(i);
 			for (int j = 0; j < rowData->Size(); j++) {
-				InputDataStringGrid->Cells[i + fixedCols][j + fixedRows] = rowData->Get(j)->Value();
+				UnicodeString str(rowData->Get(j)->Value());
+				InputDataStringGrid->Cells[i + fixedCols][j + fixedRows] = str;
+				setColWidth(str, i + fixedCols);
 			}
 		}
 
@@ -546,13 +550,11 @@ void TForm1::loadProject()
 
 		delete [] chars;
 		js->Free();
-		initGrid();
-		InputDataStringGrid->Visible = true;
-		InputDataStringGrid->FixedCols = 1;			//bug
 		InputDataStringGrid->Refresh();
 
         projectManager.setIsProjectOpen(true);
-        projectManager.setIsCurrentProjectSaved(true);
+		projectManager.setIsCurrentProjectSaved(true);
+		InputDataStringGrid->SetFocus();
 	} __finally {
 		fs->Free();
 		}
@@ -580,7 +582,17 @@ void TForm1::newProject()
 
 		InputDataStringGrid->Visible = true;
 		InputDataStringGrid->FixedCols = 1;			//bug
+		InputDataStringGrid->SetFocus();
 	}
+
+	if (criteriaEstimates->size() > 0) {
+		for (int i = 0; i < criteriaEstimates->size(); ++i)
+		{
+			UnicodeString str(Format(L"%.2f", new TVarRec(criteriaEstimates->at(i)), 1));
+			InputDataStringGrid->Cells[i + 1][1] = str;
+			setColWidth(str, i + 1);
+        }
+    }
 }
 //--------------------------------------------------------------------------
 // return false if project doesn't close
@@ -618,16 +630,29 @@ bool TForm1::isDataValid()
 {
 	const int cols = InputDataStringGrid->ColCount;
 	const int rows = InputDataStringGrid->RowCount;
-	for (int i = 0; i < cols; ++i)
+	for (int i = fixedCols; i < cols; ++i)
 	{
-		for (int j = 0; j < rows; ++j)
+		for (int j = fixedRows ; j < rows; ++j)
 		{
-			if (! regex_match(InputDataStringGrid->Cells[i][j].w_str(), gridRegex))
+			const UnicodeString &val = InputDataStringGrid->Cells[i][j];
+			const bool isValid = j == 1 ? regex_match(val.w_str(), floatGridRegex) : regex_match(val.w_str(), gridRegex);
+			if (! isValid)
 			{
-				MessageDlg(L"Ошибка! Введены неверные данные (вводить можно только целые числа)", mtError, TMsgDlgButtons() << mbOK, 0);
+				MessageDlg(L"Введены неверные данные (вводить можно только целые числа)", mtError, TMsgDlgButtons() << mbOK, 0);
+				InputDataStringGrid->Col = i;
+				InputDataStringGrid->Row = j;
 				return false;
 			}
 		}
+
+//		try {
+//			double t = InputDataStringGrid->Cells[i+fixedCols][fixedRows].ToDouble();
+//            UnicodeString
+//		} catch (EConvertError &e) {
+//			for (int k = 0;  k < cols; ++k) {
+//				InputDataStringGrid->Cells[+fixedCols][fixedRows].
+//			}
+//		}
 	}
 
 	return true;
@@ -687,18 +712,38 @@ void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
 	initGrid();
 	InputDataStringGrid->Refresh();
 	Form1->Caption = (*projectName);
+
+	if (criteriaEstimates->size() > 0) {
+		for (int i = 0; i < criteriaEstimates->size(); ++i)
+		{
+			UnicodeString str(Format(L"%.2f", new TVarRec(criteriaEstimates->at(i)), 1));
+			InputDataStringGrid->Cells[i + 1][1] = str;
+			setColWidth(str, i + 1);
+        }
+    }
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol,
 		  int ARow, const UnicodeString Value)
 {
-	if (! regex_match(Value.w_str(), gridRegex))
+	const bool isValid = ARow == 1 ? regex_match(Value.w_str(), floatGridRegex) : regex_match(Value.w_str(), gridRegex);
+	if (! isValid)
 	{
 		UnicodeString str = InputDataStringGrid->Cells[ACol][ARow];
 		InputDataStringGrid->Cells[ACol][ARow] = str.SubString(1, str.Length() - 1);
+	} else if (ARow != 1 && StrToInt(Value) < 1)
+	{
+		MessageDlg(L"Оценки не должны быть меньше 1", mtError, TMsgDlgButtons() << mbOK, 0);
+		InputDataStringGrid->Col = ACol;
+		InputDataStringGrid->Row = ARow;
+		InputDataStringGrid->Cells[ACol][ARow] = L"";
 	}
 
+	if (ARow != 0) {
+		UnicodeString str(Value);
+		setColWidth(str, ACol);
+    }
 	projectManager.setIsCurrentProjectSaved(false);
 }
 //---------------------------------------------------------------------------
@@ -706,11 +751,10 @@ void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol
 void __fastcall TForm1::Chart1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
           int X, int Y)
 {
-//	if (not on border)
 	if (Button == mbLeft) {
 		isOnChartButtonPresssed = true;
 		lastChartMousePoint = Mouse->CursorPos;
-		isChartMoving = isOnChartBorder(X, Y);
+		isOnChartBorder(X, Y);
     }
 }
 //---------------------------------------------------------------------------
@@ -718,76 +762,105 @@ void __fastcall TForm1::Chart1MouseUp(TObject *Sender, TMouseButton Button, TShi
 		  int X, int Y)
 {
 	isOnChartButtonPresssed = false;
-	isChartMoving = false;
+	if (Chart1->Left < 0) {
+		Chart1->Left = 0;
+	}
+
+	if (Chart1->Top < 0) {
+        Chart1->Top = 0;
+	}
+
+	if (Chart1->Top > Form1->Height - Chart1->Height)
+	{
+		Chart1->Top = Form1->Height - Chart1->Height;
+	}
+
+	if (Chart1->Left > Form1->Width - Chart1->Width)
+	{
+		Chart1->Left = Form1->Width - Chart1->Width;
+    }
 }
 //---------------------------------------------------------------------------
-bool TForm1::isOnChartBorder(int X, int Y)
+void TForm1::isOnChartBorder(int X, int Y)
 {
-	const bool isLeft= X < 3;
-	const bool isRight = X > Chart1->Width - 3;
-	const bool isTop = Y < 3;
-	const bool isBottom = Y > Chart1->Height - 3;
-
-	return isLeft || isRight || isTop || isBottom;	//TODO change
+	isLeft = isRight = isTop = isBottom = false;
+	isLeft= X < 3;
+	isRight = X > Chart1->Width - 3;
+	isTop = Y < 3;
+	isBottom = Y > Chart1->Height - 3;
 }
 
 void __fastcall TForm1::Chart1MouseMove(TObject *Sender, TShiftState Shift, int X,
-          int Y)
+		  int Y)
 {
-	const int right = Chart1->Left + Chart1->Width;
-//	const int bottom = Chart1->Top + Chart1->Height;
-//	const bool isLeft= X > Chart1->Left - 2 && X < Chart1->Left + 2;
-//	const bool isRight = X > right - 2 && X < right + 2;
-//	const bool isTop = Y > Chart1->Top - 2 && Y < Chart1->Top + 2;
-//	const bool isBottom = Y > right - 2 && Y < right + 2;
+	if (isOnChartButtonPresssed) {
+		const TPoint changing(lastChartMousePoint.X - Mouse->CursorPos.X, lastChartMousePoint.Y - Mouse->CursorPos.Y);
+		if (isLeft)
+		{
+			Chart1->Width += changing.X;
+			Chart1->Left -= changing.X;
 
-	const bool isLeft= X < 3;
-	const bool isRight = X > Chart1->Width - 3;
-	const bool isTop = Y < 3;
-	const bool isBottom = Y > Chart1->Height - 3;
+			if (isTop)
+			{
+				Chart1->Height += changing.Y;
+				Chart1->Top -= changing.Y;
+			} else if (isBottom) {
+				Chart1->Height -= changing.Y;
+			}
+		} else if (isRight) {
+			Chart1->Width -= changing.X;
 
+			if (isTop)
+			{
+				Chart1->Height += changing.Y;
+				Chart1->Top -= changing.Y;
+			} else if (isBottom) {
+				Chart1->Height -= changing.Y;
+			}
+		} else if (isBottom) {
+           Chart1->Height -= changing.Y;
+		} else if (isTop) {
+			Chart1->Height += changing.Y;
+			Chart1->Top -= changing.Y;
+		} else {
+			Chart1->Left -= changing.X;
+			Chart1->Top -= changing.Y;
+		}
+
+		lastChartMousePoint = Mouse->CursorPos;
+	} else {
+       changeCursor(X, Y);
+	}
+}
+//---------------------------------------------------------------------------
+void TForm1::changeCursor(int X, int Y)
+{
+	isOnChartBorder(X, Y);
 	if (isLeft)
 	{
 		if (isTop)
 		{
 			Chart1->OriginalCursor = crSizeNWSE;
-//			Form1->Cursor = crSizeNWSE;
 		} else if (isBottom) {
 			Chart1->OriginalCursor = crSizeNESW;
-//			Form1->Cursor = crSizeNESW;
 		} else {
 			Chart1->OriginalCursor = crSizeWE;
-//			Form1->Cursor = crSizeWE;
 		}
 	} else if (isRight) {
 		if (isTop)
 		{
 			Chart1->OriginalCursor = crSizeNESW;
-//			Form1->Cursor = crSizeNESW;
 		} else if (isBottom) {
 			Chart1->OriginalCursor = crSizeNWSE;;
-//			Form1->Cursor = crSizeNWSE;
 		} else {
 			Chart1->OriginalCursor = crSizeWE;
-//			Form1->Cursor = crSizeWE;
-			if (isOnChartButtonPresssed) {
-				const TPoint changing(Mouse->CursorPos.X - lastChartMousePoint.X, Mouse->CursorPos.Y - lastChartMousePoint.Y);
-				lastChartMousePoint = Mouse->CursorPos;
-				Chart1->Width += changing.X;
-			}
 		}
 	} else if (isBottom || isTop) {
 		Chart1->OriginalCursor = crSizeNS;
-//		Form1->Cursor = crSizeNS;
 	} else {
 		Chart1->OriginalCursor = crDefault;
-		Form1->Cursor = crDefault;
-		if (isOnChartButtonPresssed && ! isChartMoving) {
-			const TPoint changing(Mouse->CursorPos.X - lastChartMousePoint.X, Mouse->CursorPos.Y - lastChartMousePoint.Y);
-			lastChartMousePoint = Mouse->CursorPos;
-			Chart1->Left += changing.X;
-			Chart1->Top += changing.Y;
-		}
-	}
+    }
 }
 //---------------------------------------------------------------------------
+
+

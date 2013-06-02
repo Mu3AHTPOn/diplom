@@ -65,15 +65,11 @@ __published:	// IDE-managed Components
 	TBarSeries *Series1;
 	void __fastcall InputDataStringGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FormCreate(TObject *Sender);
-	void __fastcall InputDataStringGridSelectCell(TObject *Sender, int ACol, int ARow,
-          bool &CanSelect);
 	void __fastcall Memo1Change(TObject *Sender);
 	void __fastcall Memo1KeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall Memo1MouseEnter(TObject *Sender);
 	void __fastcall MMCloseAppClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
-	void __fastcall ParamsValidate(TObject *Sender, int ACol, int ARow, const UnicodeString KeyName,
-          const UnicodeString KeyValue);
 	void __fastcall N5Click(TObject *Sender);
 	void __fastcall N8Click(TObject *Sender);
 	void __fastcall SpeedButton1Click(TObject *Sender);
@@ -105,28 +101,29 @@ private:	// User declarations
 	void initGrid();
 	void drawFixedColNames(int ACol, int ARow, TRect &Rect);
 	void setRowHeight(UnicodeString &str);
-	void setColWidth(UnicodeString &str);
+	void setColWidth(UnicodeString &str, int col = 0);
 	void saveProject();
 	void loadProject();
 	void newProject();
 	bool closeProject();
 	bool showSaveDialog();
 	bool isDataValid();
-	bool isOnChartBorder(int X, int Y);
+	void isOnChartBorder(int X, int Y);
+	void changeCursor(int X, int Y);
 
 	int getCriteriaCount();
 	int getObjectsCount();
-	TGridCoord activeCell;
 	int fixedCols, fixedRows;
 	UnicodeString lastParam;
-	const wregex gridRegex;
+	const wregex gridRegex, floatGridRegex;
 	ProjectManager &projectManager;
 	bool isOnChartButtonPresssed;
-	bool isChartMoving;
 	TPoint lastChartMousePoint;
+	bool isLeft, isRight, isTop, isBottom;
+	vector<UnicodeString> *colNames, *rowNames;
+	vector<double> *criteriaEstimates;
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
-	vector<UnicodeString> *colNames, *rowNames;
 	UnicodeString *projectName;
 };
 //---------------------------------------------------------------------------

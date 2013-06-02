@@ -1,6 +1,7 @@
 //---------------------------------------------------------------------------
 
 #pragma hdrstop
+#pragma once
 
 #include "matrix.h"
 #include <math.h>
@@ -229,44 +230,24 @@ void Matrix<T>::initMatrix(T value)
 }
 
 template<typename T>
-Matrix<T>& Matrix<T>::normalize()
+Matrix<T>& Matrix<T>::normalizeToOne()
 {
-//	T max(matrix[0][0]), min(max);
-	double *lengths = new double[getWidth()];
-//	for (int i = 0; i < getHeight(); ++i)
-//	{
-//		for (int j = 0; j < getWidth(); ++j)
-//		{
-//			const T value = matrix[i][j];
-//
-//			averages[j] += value;
-//
-////			if (value > max)
-////			{
-////				max = value;
-////			}
-////
-////			if (value < min)
-////			{
-////				min = value;
-////			}
-////		}
-//	}
+	double *sums = new double[getWidth()];
 
 	for (int j = 0; j < getWidth(); ++j)
 	{
-		lengths[j] = getLength(j);
+		sums[j] = getSum(j);
 	}
 
     for (int i = 0; i < getHeight(); ++i)
 	{
 		for (int j = 0; j < getWidth(); ++j)
 		{
-			matrix[i][j] /= lengths[j];
+			matrix[i][j] /= sums[j];
 		}
 	}
 
-    delete [] lengths;
+    delete [] sums;
     return *this;
 }
 
@@ -280,4 +261,16 @@ double Matrix<T>::getLength(int col)
 	}
 
     return sqrt(sum);
+}
+
+template<typename T>
+T Matrix<T>::getSum(int col)
+{
+	double sum(0);
+	for (int i = 0; i < getHeight(); ++i)
+	{
+        sum += matrix[i][col];
+	}
+
+    return sum;
 }
