@@ -139,6 +139,7 @@ void __fastcall TEvalCriteriaWeightsForm::NextButtonClick(TObject *Sender)
 	}
 
 	++step;
+	StepLabel->Caption = StepLabel->Caption.SubString(1, StepLabel->Caption.Length() - 1) + IntToStr(step + 1);
 	CriteriaEstimates->Col = step + 1;
 	CriteriaEstimates->FixedCols = step + 1;
 	CriteriaEstimates->SetFocus();
@@ -211,6 +212,7 @@ void __fastcall TEvalCriteriaWeightsForm::BackButtonClick(TObject *Sender)
 {
 	if (step > 0) {
 		--step;
+		StepLabel->Caption = StepLabel->Caption.SubString(1, StepLabel->Caption.Length() - 1) + IntToStr(step + 1);
 		CriteriaEstimates->FixedCols = step + 1;
 		for (int i = step; i < colNames->size(); ++i)
 		{

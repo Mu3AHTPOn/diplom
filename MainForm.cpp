@@ -120,26 +120,13 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 
 int TForm1::getCriteriaCount()
 {
-	int i(fixedCols);
-	while (InputDataStringGrid->Cells[i][fixedRows] != L"")
-	{
-		++i;
-	}
-
-	return i - fixedCols;
+	return colNames->size();
 
 }
-
+//--------------------------------------------------------------------------
 int TForm1::getObjectsCount()
 {
-	const int criteriaEstimates = 1;
-	int i(fixedRows + criteriaEstimates);
-	while (InputDataStringGrid->Cells[fixedCols][i] != L"")
-	{
-		++i;
-	}
-
-	return i - fixedRows - criteriaEstimates;
+	return rowNames->size();
 
 }
 //---------------------------------------------------------------------------
@@ -296,7 +283,7 @@ void TForm1::evalWS()
 	Matrix<double> objectEstimates(objectCount, criteriaCount);
 
 	for (int i = 0; i < criteriaCount; ++i) {
-		criteriaEstimates[i][0] = InputDataStringGrid->Cells[i+fixedCols][fixedRows].ToInt();
+		criteriaEstimates[i][0] = InputDataStringGrid->Cells[i+fixedCols][fixedRows].ToDouble();
 	}
 
  	//fill objectEstimates
@@ -603,6 +590,14 @@ bool TForm1::closeProject()
 		return false;
 	}
 
+	for (int i = 0; i < getCriteriaCount(); ++i)              //очистка табицы
+	{
+		for (int j = 0; j < getObjectsCount(); ++j)
+		{
+            InputDataStringGrid->Cells[i][j] = L"";
+        }
+    }
+
 	colNames->clear();
 	rowNames->clear();
 	(*projectName) = L"Новый проект";
@@ -783,11 +778,12 @@ void __fastcall TForm1::Chart1MouseUp(TObject *Sender, TMouseButton Button, TShi
 //---------------------------------------------------------------------------
 void TForm1::isOnChartBorder(int X, int Y)
 {
+	const int offset = 5;
 	isLeft = isRight = isTop = isBottom = false;
-	isLeft= X < 3;
-	isRight = X > Chart1->Width - 3;
-	isTop = Y < 3;
-	isBottom = Y > Chart1->Height - 3;
+	isLeft= X < offset;
+	isRight = X > Chart1->Width - offset;
+	isTop = Y < offset;
+	isBottom = Y > Chart1->Height - offset;
 }
 
 void __fastcall TForm1::Chart1MouseMove(TObject *Sender, TShiftState Shift, int X,

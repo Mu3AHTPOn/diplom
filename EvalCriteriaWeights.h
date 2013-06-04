@@ -25,7 +25,7 @@ __published:	// IDE-managed Components
 	TStringGrid *CriteriaEstimates;
 	TButton *BackButton;
 	TButton *NextButton;
-	TLabel *Label2;
+	TLabel *StepLabel;
 	void __fastcall CriteriaEstimatesDrawCell(TObject *Sender, int ACol, int ARow, TRect &Rect,
           TGridDrawState State);
 	void __fastcall CriteriaEstimatesSetEditText(TObject *Sender, int ACol, int ARow,
