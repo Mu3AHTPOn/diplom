@@ -603,6 +603,8 @@ bool TForm1::closeProject()
 	(*projectName) = L"Новый проект";
 	InputDataStringGrid->Visible = false;
 	projectManager.setIsProjectOpen(false);
+	Chart1->Series[0]->Clear();
+    ResultRichEdit->Clear();
 	return true;
 }
 //--------------------------------------------------------------------------
