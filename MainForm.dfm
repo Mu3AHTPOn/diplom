@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   Caption = 'Form1'
   ClientHeight = 541
-  ClientWidth = 884
+  ClientWidth = 1054
   Color = clBtnFace
   Constraints.MinHeight = 600
   Constraints.MinWidth = 900
@@ -18,16 +18,17 @@ object Form1: TForm1
   OnClose = FormClose
   OnCreate = FormCreate
   DesignSize = (
-    884
+    1054
     541)
   PixelsPerInch = 96
   TextHeight = 13
   object InputDataStringGrid: TStringGrid
     Left = 0
-    Top = 27
-    Width = 1119
-    Height = 367
-    Anchors = [akLeft, akTop, akBottom]
+    Top = 30
+    Width = 1054
+    Height = 314
+    Align = alTop
+    Anchors = [akLeft, akTop, akRight, akBottom]
     BevelWidth = 5
     DefaultColWidth = 24
     Font.Charset = DEFAULT_CHARSET
@@ -43,21 +44,103 @@ object Form1: TForm1
     OnDrawCell = InputDataStringGridDrawCell
     OnKeyDown = InputDataStringGridKeyDown
     OnSetEditText = InputDataStringGridSetEditText
+    ExplicitTop = 33
   end
-  object ToolBar2: TToolBar
+  object ResultRichEdit: TRichEdit
+    Left = 0
+    Top = 379
+    Width = 1054
+    Height = 162
+    Align = alBottom
+    Alignment = taCenter
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    PopupMenu = ResultsPopupMenu
+    ReadOnly = True
+    ScrollBars = ssBoth
+    TabOrder = 1
+    OnKeyDown = Memo1KeyDown
+    OnMouseEnter = Memo1MouseEnter
+    ExplicitWidth = 1152
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 348
+    Width = 1054
+    Height = 31
+    Align = alBottom
+    Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Times New Roman'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 2
+    ExplicitTop = 423
+    ExplicitWidth = 1152
+  end
+  object Chart1: TChart
+    Left = 742
+    Top = 52
+    Width = 289
+    Height = 290
+    AllowPanning = pmNone
+    Legend.Alignment = laBottom
+    Legend.CheckBoxesStyle = cbsRadio
+    Legend.TextStyle = ltsPlain
+    Legend.Visible = False
+    Title.Font.Height = -13
+    Title.Font.Style = [fsBold]
+    Title.Text.Strings = (
+      #1056#1077#1079#1091#1083#1100#1090#1072#1090' '#1074#1099#1095#1080#1089#1083#1077#1085#1080#1081)
+    LeftAxis.Automatic = False
+    LeftAxis.AutomaticMaximum = False
+    LeftAxis.Maximum = 1.000000000000000000
+    Panning.MouseWheel = pmwNone
+    View3D = False
+    Zoom.Allow = False
+    Constraints.MinHeight = 200
+    Constraints.MinWidth = 200
+    TabOrder = 3
+    Anchors = []
+    OnMouseDown = Chart1MouseDown
+    OnMouseMove = Chart1MouseMove
+    OnMouseUp = Chart1MouseUp
+    ExplicitLeft = 824
+    ColorPaletteIndex = 13
+    object Series1: TBarSeries
+      ColorEachPoint = True
+      Marks.Arrow.Visible = True
+      Marks.Callout.Brush.Color = clBlack
+      Marks.Callout.Arrow.Visible = True
+      Marks.Visible = False
+      XValues.Name = 'X'
+      XValues.Order = loAscending
+      YValues.Name = 'Bar'
+      YValues.Order = loNone
+      Data = {0000000000}
+    end
+  end
+  object Panel2: TPanel
     Left = 0
     Top = 0
-    Width = 884
-    Height = 29
-    ButtonHeight = 21
-    Caption = 'ToolBar2'
-    TabOrder = 1
+    Width = 1054
+    Height = 30
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 4
     object NewProjectButton: TSpeedButton
       Left = 0
       Top = 0
-      Width = 23
-      Height = 21
+      Width = 30
+      Height = 30
       Hint = #1053#1086#1074#1099#1081' '#1087#1088#1086#1077#1082#1090
+      Align = alLeft
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000F8F8F8C6C6C6
@@ -88,13 +171,15 @@ object Form1: TForm1
       ParentShowHint = False
       ShowHint = True
       OnClick = NewProjectButtonClick
+      ExplicitHeight = 36
     end
     object SpeedButton3: TSpeedButton
-      Left = 23
+      Left = 30
       Top = 0
-      Width = 23
-      Height = 21
+      Width = 34
+      Height = 30
       Hint = #1054#1090#1082#1088#1099#1090#1100' '#1087#1088#1086#1077#1082#1090
+      Align = alLeft
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FEFEFEE2E2E2
@@ -125,13 +210,16 @@ object Form1: TForm1
       ParentShowHint = False
       ShowHint = True
       OnClick = SpeedButton3Click
+      ExplicitLeft = 35
+      ExplicitHeight = 34
     end
     object SpeedButton2: TSpeedButton
-      Left = 46
+      Left = 64
       Top = 0
-      Width = 23
-      Height = 21
+      Width = 34
+      Height = 30
       Hint = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1087#1088#1086#1077#1082#1090
+      Align = alLeft
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FBFBFBD0D0D0
@@ -162,13 +250,16 @@ object Form1: TForm1
       ParentShowHint = False
       ShowHint = True
       OnClick = SpeedButton2Click
+      ExplicitLeft = 65
+      ExplicitHeight = 34
     end
     object SpeedButton5: TSpeedButton
-      Left = 69
+      Left = 98
       Top = 0
-      Width = 23
-      Height = 21
+      Width = 34
+      Height = 30
       Hint = #1047#1072#1082#1088#1099#1090#1100' '#1087#1088#1086#1077#1082#1090
+      Align = alLeft
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -199,27 +290,16 @@ object Form1: TForm1
       ParentShowHint = False
       ShowHint = True
       OnClick = SpeedButton5Click
-    end
-    object MethodComboBox: TComboBox
-      Left = 92
-      Top = 0
-      Width = 181
-      Height = 21
-      Hint = #1042#1099#1073#1086#1088' '#1084#1077#1090#1086#1076#1072' '#1088#1072#1089#1095#1105#1090#1072
-      Style = csDropDownList
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 0
-      Items.Strings = (
-        #1052#1077#1090#1086#1076' '#1072#1085#1072#1083#1080#1079#1072' '#1080#1077#1088#1072#1088#1093#1080#1081
-        #1052#1077#1090#1086#1076' '#1074#1079#1074#1077#1096#1077#1085#1085#1086#1081' '#1089#1091#1084#1084#1099' '#1084#1077#1089#1090)
+      ExplicitLeft = 105
+      ExplicitHeight = 34
     end
     object SpeedButton1: TSpeedButton
-      Left = 273
+      Left = 313
       Top = 0
-      Width = 23
-      Height = 21
+      Width = 34
+      Height = 30
       Hint = #1056#1072#1089#1095#1105#1090
+      Align = alLeft
       Glyph.Data = {
         36030000424D3603000000000000360000002800000010000000100000000100
         18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
@@ -250,77 +330,31 @@ object Form1: TForm1
       ParentShowHint = False
       ShowHint = True
       OnClick = SpeedButton1Click
+      ExplicitLeft = 384
+      ExplicitHeight = 88
     end
-  end
-  object ResultRichEdit: TRichEdit
-    Left = 0
-    Top = 414
-    Width = 884
-    Height = 130
-    Anchors = [akLeft, akRight, akBottom]
-    Font.Charset = RUSSIAN_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    PopupMenu = ResultsPopupMenu
-    ReadOnly = True
-    ScrollBars = ssBoth
-    TabOrder = 2
-    OnKeyDown = Memo1KeyDown
-    OnMouseEnter = Memo1MouseEnter
-  end
-  object Panel1: TPanel
-    Left = 0
-    Top = 390
-    Width = 884
-    Height = 25
-    Anchors = [akLeft, akRight, akBottom]
-    Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'Times New Roman'
-    Font.Style = [fsBold]
-    ParentFont = False
-    TabOrder = 3
-  end
-  object Chart1: TChart
-    Left = 575
-    Top = 48
-    Width = 289
-    Height = 290
-    AllowPanning = pmNone
-    Legend.Alignment = laBottom
-    Legend.CheckBoxesStyle = cbsRadio
-    Legend.TextStyle = ltsPlain
-    Legend.Visible = False
-    Title.Font.Height = -13
-    Title.Text.Strings = (
-      #1056#1077#1079#1091#1083#1100#1090#1072#1090' '#1074#1099#1095#1080#1089#1083#1077#1085#1080#1081)
-    Panning.MouseWheel = pmwNone
-    View3D = False
-    Zoom.Allow = False
-    Constraints.MinHeight = 200
-    Constraints.MinWidth = 200
-    TabOrder = 4
-    Anchors = []
-    OnMouseDown = Chart1MouseDown
-    OnMouseMove = Chart1MouseMove
-    OnMouseUp = Chart1MouseUp
-    ColorPaletteIndex = 13
-    object Series1: TBarSeries
-      ColorEachPoint = True
-      Marks.Arrow.Visible = True
-      Marks.Callout.Brush.Color = clBlack
-      Marks.Callout.Arrow.Visible = True
-      Marks.Visible = True
-      XValues.Name = 'X'
-      XValues.Order = loAscending
-      YValues.Name = 'Bar'
-      YValues.Order = loNone
-      Data = {0000000000}
+    object MethodComboBox: TComboBox
+      Left = 132
+      Top = 0
+      Width = 181
+      Height = 27
+      Hint = #1042#1099#1073#1086#1088' '#1084#1077#1090#1086#1076#1072' '#1088#1072#1089#1095#1105#1090#1072
+      Align = alLeft
+      Style = csDropDownList
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      Items.Strings = (
+        #1052#1077#1090#1086#1076' '#1072#1085#1072#1083#1080#1079#1072' '#1080#1077#1088#1072#1088#1093#1080#1081
+        #1052#1077#1090#1086#1076' '#1074#1079#1074#1077#1096#1077#1085#1085#1086#1081' '#1089#1091#1084#1084#1099' '#1084#1077#1089#1090)
+      ExplicitLeft = 142
+      ExplicitTop = 3
     end
   end
   object MainMenu1: TMainMenu
@@ -377,8 +411,8 @@ object Form1: TForm1
     end
   end
   object ResultsPopupMenu: TPopupMenu
-    Left = 792
-    Top = 368
+    Left = 584
+    Top = 464
     object N5: TMenuItem
       Caption = #1054#1095#1080#1089#1090#1080#1090#1100
       OnClick = N5Click

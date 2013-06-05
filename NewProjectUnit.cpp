@@ -35,6 +35,8 @@ void __fastcall TNewProjectForm::FormCreate(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TNewProjectForm::RowsListBoxClick(TObject *Sender)
 {
+//	const int n = RowNamesListBox->Count
+//	RowNamesListBox->ItemRect()
 	showEditText(RowNamesListBox);
 }
 //---------------------------------------------------------------------------
@@ -98,21 +100,6 @@ void TNewProjectForm::removeCurrentItem(TListBox *list)
 	}
 
 	listEdit->Visible = false;
-}
-//---------------------------------------------------------------------------
-void TNewProjectForm::setColNamesArray(vector<UnicodeString> *inVector)
-{
-	this->colNames = inVector;
-}
-
-void TNewProjectForm::setRowNamesArray(vector<UnicodeString> *inVector)
-{
-	this->rowNames = inVector;
-}
-//---------------------------------------------------------------------------
-void TNewProjectForm::setProjectName(UnicodeString *projectName)
-{
-	this->projectName = projectName;
 }
 //---------------------------------------------------------------------------
 void TNewProjectForm::addItem(TListBox *list, bool inEnd)
@@ -245,7 +232,6 @@ void __fastcall TNewProjectForm::NextButtonClick(TObject *Sender)
 
 	if (MethodComboBox->ItemIndex == 0)
 	{
-		EvalCriteriaWeightsForm->setColNamesArray(colNames);
 		Hide();
 		bool isBack(false);
 		EvalCriteriaWeightsForm->setBackPointer(&isBack);
@@ -257,13 +243,18 @@ void __fastcall TNewProjectForm::NextButtonClick(TObject *Sender)
 		}
 	} else
 	{
-		if (MessageDlg(L"Желаете ли вы рассчитать важность критериев с помощью метода анализа ииерархий?",
-						mtConfirmation,
-						mbYesNo,
-						0,
-						mbYes) == mrYes)
+//			MessageDlg(L"Желаете ли вы рассчитать важность критериев с помощью метода анализа ииерархий?",
+//						mtConfirmation,
+//						mbYesNo,
+//						0,
+//						mbYes) == mrYes)
+		if (Application->MessageBoxW(L"Желаете ли вы рассчитать важность критериев с помощью метода анализа ииерархий?",
+									L"Подтвердить?",
+									MB_YESNO| MB_ICONQUESTION
+					)
+				 == IDYES)
+
 		{
-			EvalCriteriaWeightsForm->setColNamesArray(colNames);
 			Hide();
 			bool isBack(false);
 			EvalCriteriaWeightsForm->setBackPointer(&isBack);
@@ -332,6 +323,7 @@ void __fastcall TNewProjectForm::Button1Click(TObject *Sender)
     Close();
 }
 //---------------------------------------------------------------------------
+
 
 
 

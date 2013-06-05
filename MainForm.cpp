@@ -28,24 +28,18 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 	UIManager::getInstance()->addForm(Form1);
 	Form1->Hide();
 	NewProjectForm = new TNewProjectForm(this);
-	colNames = new vector<UnicodeString>();
-	rowNames = new vector<UnicodeString>();
 	criteriaEstimates = new vector<double>();
-	projectName = new UnicodeString(L"Новый проект");
 	bool isClose(false), isOpen(false);
-	NewProjectForm->setRowNamesArray(rowNames);
-	NewProjectForm->setColNamesArray(colNames);
-	NewProjectForm->setProjectName(projectName);
+	Project & currentProject = projectManager.getCurrentProject();
 
 	EvalCriteriaWeightsForm = new TEvalCriteriaWeightsForm(this);
-	EvalCriteriaWeightsForm->setColNamesArray(colNames);
-	EvalCriteriaWeightsForm->setCriteriaEstimatesArray(criteriaEstimates);
 
 	InputDataStringGrid->Visible = false;
-	Form1->Caption = (*projectName);
+	Form1->Caption = currentProject.getName();
 
-	const int AHP = Canvas->TextWidth((*MethodComboBox->Items)[0]);
-	const int WS = Canvas->TextWidth((*MethodComboBox->Items)[1]);
+	MethodComboBox->Canvas->Font->Size = MethodComboBox->Font->Size;
+	const int AHP = MethodComboBox->Canvas->TextWidth((*MethodComboBox->Items)[0]);
+	const int WS = MethodComboBox->Canvas->TextWidth((*MethodComboBox->Items)[1]);
 
 	MethodComboBox->Width = AHP > WS ? AHP + 30 : WS + 30;
 }
@@ -97,8 +91,8 @@ void __fastcall TForm1::InputDataStringGridKeyDown(TObject *Sender, WORD &Key, T
 
 void TForm1::initGrid()
 {
-	InputDataStringGrid->ColCount = colNames->size() + fixedCols;
-	InputDataStringGrid->RowCount = rowNames->size() + fixedRows + 1;
+	InputDataStringGrid->ColCount = getCriteriaCount() + fixedCols;
+	InputDataStringGrid->RowCount = getAlternativesCount() + fixedRows + 1;
 }
 
 void __fastcall TForm1::FormCreate(TObject *Sender)
@@ -120,13 +114,13 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 
 int TForm1::getCriteriaCount()
 {
-	return colNames->size();
+	return projectManager.getCurrentProject().getCriteriaCount();
 
 }
 //--------------------------------------------------------------------------
-int TForm1::getObjectsCount()
+int TForm1::getAlternativesCount()
 {
-	return rowNames->size();
+	return projectManager.getCurrentProject().getAlternativesCount();
 
 }
 //---------------------------------------------------------------------------
@@ -154,7 +148,7 @@ void __fastcall TForm1::Memo1MouseEnter(TObject *Sender)
 
 void __fastcall TForm1::MMCloseAppClick(TObject *Sender)
 {
-	if (closeProject())
+	if (projectManager.closeProject())
 	{
 		UIManager::getInstance()->closeApp(this);
 	}
@@ -163,7 +157,7 @@ void __fastcall TForm1::MMCloseAppClick(TObject *Sender)
 
 void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 {
-	if (! closeProject())
+	if (! projectManager.closeProject())
 	{
 		Action = caNone;
 		return;
@@ -210,7 +204,7 @@ void TForm1::evalAHP()
 //каждого критерия в частности
 try {
 	const int criteriaCount = getCriteriaCount();
-	const int objectCount = getObjectsCount();
+	const int alternativesCount = getAlternativesCount();
 
 	Matrix<double> criteriaEstimates(criteriaCount);
 
@@ -219,14 +213,14 @@ try {
 
 	for (int i = 0; i < criteriaCount; ++i) {
 		criteriaEstimates[i][0] = InputDataStringGrid->Cells[i+fixedCols][fixedRows].ToDouble();
-		objectEstimates[i] = *(new Matrix<int>(objectCount));
+		objectEstimates[i] = *(new Matrix<int>(alternativesCount));
 	}
 
 
 	//fill objectEstimates
 	for (int i = 0; i < criteriaCount; ++i) {
 		Matrix<int> &curr = objectEstimates[i];
-		for (int j = 0; j < objectCount; ++j) {
+		for (int j = 0; j < alternativesCount; ++j) {
 			curr[j][0] = InputDataStringGrid->Cells[i + fixedCols][j + fixedRows + 1].ToInt();
 		}
 
@@ -244,13 +238,13 @@ try {
 	UnicodeString resultStr = L"(";
 
 	for (int i = 0; i < result.getHeight() - 1; ++i) {
-		resultStr += Format(L"%.3f, ", new TVarRec(result[i][0]), 1);
+		resultStr += Format(L"%.3f; ", new TVarRec(result[i][0]), 1);
 	}
 
 	resultStr += Format(L"%.3f)", new TVarRec(result[result.getHeight() - 1][0]), 1);
 
 	UnicodeString methodCaption = L"Метод анализа иерархий";
-	UnicodeString resultCaption = L"Расчитанный рейтинг";
+	UnicodeString resultCaption = L"Приоритеты альтернатив";
 	ResultRichEdit->Lines->Add(methodCaption);
 	ResultRichEdit->Lines->Add(resultCaption);
 //	ResultRichEdit->SelStart= methodCaption.Length();
@@ -277,10 +271,10 @@ try {
 void TForm1::evalWS()
 {
 	const int criteriaCount = getCriteriaCount();
-	const int objectCount = getObjectsCount();
+	const int alternativesCount = getAlternativesCount();
 
 	Matrix<double> criteriaEstimates(criteriaCount);
-	Matrix<double> objectEstimates(objectCount, criteriaCount);
+	Matrix<double> objectEstimates(alternativesCount, criteriaCount);
 
 	for (int i = 0; i < criteriaCount; ++i) {
 		criteriaEstimates[i][0] = InputDataStringGrid->Cells[i+fixedCols][fixedRows].ToDouble();
@@ -289,7 +283,7 @@ void TForm1::evalWS()
  	//fill objectEstimates
 	TStringGrid *test = InputDataStringGrid;
 	for (int i = 0; i < criteriaCount; ++i) {
-		for (int j = 0; j < objectCount; ++j) {
+		for (int j = 0; j < alternativesCount; ++j) {
 			objectEstimates[j][i] = InputDataStringGrid->Cells[i + fixedCols][j + fixedRows + 1].ToInt();
 		}
 	}
@@ -299,13 +293,13 @@ void TForm1::evalWS()
 	UnicodeString resultStr = L"(";
 
 	for (int i = 0; i < result.getHeight() - 1; ++i) {
-		resultStr += Format(L"%.3f, ", new TVarRec(result[i][0]), 1);
+		resultStr += Format(L"%.3f; ", new TVarRec(result[i][0]), 1);
 	}
 
 	resultStr += Format(L"%.3f)", new TVarRec(result[result.getHeight() - 1][0]), 1);
 
 	UnicodeString methodCaption = L"Метод взвешенной суммы мест";
-	UnicodeString resultCaption = L"Расчитанный рейтинг";
+	UnicodeString resultCaption = L"Приоритеты альтернатив";
 	ResultRichEdit->Lines->Add(methodCaption);
 	ResultRichEdit->Lines->Add(resultCaption);
 	ResultRichEdit->Lines->Add(resultStr);
@@ -322,10 +316,15 @@ void TForm1::showResultAtChart(Matrix<double> &result)
 {
 	Chart1->Series[0]->Clear();
 
+	double max(0);
+	vector<UnicodeString> & alternativeNames = projectManager.getCurrentProject().getAlternativeNames();
 	for (int i = 0; i < result.getHeight(); ++i)
 	{
-		Chart1->Series[0]->Add(result[i][0], rowNames->at(i));
+		max = result[i][0] > max ? result[i][0] : max;
+		Chart1->Series[0]->Add(result[i][0], alternativeNames[i]);
 	}
+
+	Chart1->Axes->Left->Maximum = max * 1.2;
 
 }
 //---------------------------------------------------------------------------
@@ -353,10 +352,11 @@ void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 	const int cols = InputDataStringGrid->ColCount;
 	const int rows = InputDataStringGrid->RowCount;
 	TPoint cursorPoint = InputDataStringGrid->ScreenToClient(Mouse->CursorPos);
+	vector<UnicodeString> &criteriaNames =  projectManager.getCurrentProject().getCriteriaNames();
 	for (int i = fixedCols; i < cols; i++) {
 		TRect rect(InputDataStringGrid->CellRect(i, 0));
 		if (rect.Contains(cursorPoint)) {
-			UnicodeString *newName = &colNames->at(i - 1);
+			UnicodeString *newName = &criteriaNames[i - 1];
 			TsetCollRowNameForm *form = new TsetCollRowNameForm(this);
 			form->setResultStr(newName);
 			try {
@@ -373,10 +373,11 @@ void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 		}
 	}
 
+	vector<UnicodeString> &alternativeNames =  projectManager.getCurrentProject().getAlternativeNames();
 	for (int i = fixedRows + 1; i < rows; i++) {                              // +1 - строка важности критериев
 		TRect rect(InputDataStringGrid->CellRect(0, i));
 		if (rect.Contains(cursorPoint)) {
-			UnicodeString *newName = &rowNames->at(i - 2);
+			UnicodeString *newName = &alternativeNames[i - 2];
 			TsetCollRowNameForm *form = new TsetCollRowNameForm(this);
 			form->setResultStr(newName);
 			try {
@@ -399,6 +400,9 @@ void TForm1::drawFixedColNames(int ACol, int ARow, TRect &Rect)
 		return;
 	}
 
+	vector<UnicodeString> &criteriaNames =  projectManager.getCurrentProject().getCriteriaNames();
+	vector<UnicodeString> &alternativeNames =  projectManager.getCurrentProject().getAlternativeNames();
+
 	if (ARow == 1) {
 		UnicodeString name = L"Важность критериев";
 		setColWidth(name);
@@ -407,13 +411,13 @@ void TForm1::drawFixedColNames(int ACol, int ARow, TRect &Rect)
 	}
 
 	if (ACol == 0) {
-		UnicodeString &name = rowNames->at(ARow - 2);
+		UnicodeString &name = alternativeNames[ARow - 2];
 		setColWidth(name);
 		InputDataStringGrid->Canvas->TextRect(Rect, name);
 	}
 
 	if (ARow == 0) {
-		UnicodeString &name = colNames->at(ACol- 1);
+		UnicodeString &name = criteriaNames[ACol- 1];
         setRowHeight(name);
 
 		InputDataStringGrid->Canvas->Font->Orientation = 90 * 10;
@@ -425,6 +429,7 @@ void TForm1::drawFixedColNames(int ACol, int ARow, TRect &Rect)
 void TForm1::setRowHeight(UnicodeString &str)
 {
 	int rowHeight = InputDataStringGrid->RowHeights[0];
+	InputDataStringGrid->Canvas->Font->Size = InputDataStringGrid->Font->Size;
 	int newRowHeight= InputDataStringGrid->Canvas->TextWidth(str) + 6 + 6;
 	InputDataStringGrid->RowHeights[0] = rowHeight > newRowHeight ? rowHeight : newRowHeight;
 }
@@ -433,6 +438,7 @@ void TForm1::setRowHeight(UnicodeString &str)
 void TForm1::setColWidth(UnicodeString &str, int col)
 {
 	int columnWidth = InputDataStringGrid->ColWidths[col];
+	InputDataStringGrid->Canvas->Font->Size = InputDataStringGrid->Font->Size;
 	int newColumnWidth = InputDataStringGrid->Canvas->TextWidth(str) + 6 + 6 + InputDataStringGrid->GridLineWidth;
 	InputDataStringGrid->ColWidths[col] = columnWidth > newColumnWidth ? columnWidth : newColumnWidth;
 }
@@ -611,11 +617,11 @@ bool TForm1::closeProject()
 //return false if user click on cancel
 bool TForm1::showSaveDialog()
 {
-    if (projectManager.isProjectOpen() && ! projectManager.isSavedCurrentPreject()) {
-       const int dialogResult = MessageDlg(L"Сохранить текущий проект?", mtConfirmation, mbYesNoCancel, 0);
-		if (dialogResult == mrYes) {
+	if (projectManager.isProjectOpen() && ! projectManager.isSavedCurrentPreject()) {
+	   const int dialogResult = Application->MessageBoxW(L"Сохранить текущий проект?", L"Сохранить проект?",  MB_YESNOCANCEL | MB_ICONQUESTION | MB_DEFBUTTON3);
+		if (dialogResult == IDYES) {
 		   saveProject();
-		} else if (dialogResult == mrCancel) {
+		} else if (dialogResult == IDCANCEL) {
 			return false;
 		}
 	}
@@ -635,7 +641,8 @@ bool TForm1::isDataValid()
 			const bool isValid = j == 1 ? regex_match(val.w_str(), floatGridRegex) : regex_match(val.w_str(), gridRegex);
 			if (! isValid)
 			{
-				MessageDlg(L"Введены неверные данные (вводить можно только целые числа)", mtError, TMsgDlgButtons() << mbOK, 0);
+				Application->MessageBoxW(L"Введены неверные данные (вводить можно только целые числа)", L"Ошибка",  MB_OK| MB_ICONERROR);
+//				MessageDlg(L"Введены неверные данные (вводить можно только целые числа)", mtError, TMsgDlgButtons() << mbOK, 0);
 				InputDataStringGrid->Col = i;
 				InputDataStringGrid->Row = j;
 				return false;
@@ -708,7 +715,7 @@ void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
     NewProjectForm->ShowModal();
 	initGrid();
 	InputDataStringGrid->Refresh();
-	Form1->Caption = (*projectName);
+	Form1->Caption = projectManager.getCurrentProject().getName();
 
 	if (criteriaEstimates->size() > 0) {
 		for (int i = 0; i < criteriaEstimates->size(); ++i)
@@ -731,7 +738,8 @@ void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol
 		InputDataStringGrid->Cells[ACol][ARow] = str.SubString(1, str.Length() - 1);
 	} else if (ARow != 1 && StrToInt(Value) < 1)
 	{
-		MessageDlg(L"Оценки не должны быть меньше 1", mtError, TMsgDlgButtons() << mbOK, 0);
+		Application->MessageBoxW(L"Оценки не должны быть меньше 1", L"Ошибка",  MB_OK| MB_ICONERROR);
+//		MessageDlg(L"Оценки не должны быть меньше 1", mtError, TMsgDlgButtons() << mbOK, 0);
 		InputDataStringGrid->Col = ACol;
 		InputDataStringGrid->Row = ARow;
 		InputDataStringGrid->Cells[ACol][ARow] = L"";

@@ -37,11 +37,6 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesDrawCell(TObject *Sen
 //    }
 }
 
-void TEvalCriteriaWeightsForm::setColNamesArray(vector<UnicodeString> *inVector)
-{
-	this->colNames = inVector;
-	userEstimates = new int * [inVector->size()];
-}
 //---------------------------------------------------------------------------
 void TEvalCriteriaWeightsForm::drawFixedColNames(int ACol, int ARow, TRect &Rect)
 {
@@ -95,16 +90,11 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSetEditText(TObject *
 			CriteriaEstimates->Cells[ACol][ARow] = str.SubString(1, str.Length() - 1);
 		} else if (StrToInt(Value) < 1)
 		{
-			MessageDlg(L"ќценки не должны быть меньше 1", mtError, TMsgDlgButtons() << mbOK, 0);
+			Application->MessageBoxW(L"ќценки не должны быть меньше 1", L"ќшибка",  MB_OK| MB_ICONERROR);
 			CriteriaEstimates->Col = ACol;
 			CriteriaEstimates->Row = ARow;
 			CriteriaEstimates->Cells[ACol][ARow] = L"";
 		}
-}
-//---------------------------------------------------------------------------
-void TEvalCriteriaWeightsForm::setCriteriaEstimatesArray(vector<double> *inVector)
-{
-	criteriaEstimates = inVector;
 }
 //---------------------------------------------------------------------------
 void __fastcall TEvalCriteriaWeightsForm::FormShow(TObject *Sender)

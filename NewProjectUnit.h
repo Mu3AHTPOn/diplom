@@ -69,9 +69,6 @@ private:	// User declarations
 	UnicodeString *projectName;
 public:		// User declarations
 	__fastcall TNewProjectForm(TComponent* Owner);
-	void setColNamesArray(vector<UnicodeString> *inVector);
-	void setRowNamesArray(vector<UnicodeString> *inVector);
-	void setProjectName(UnicodeString *projectName);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TNewProjectForm *NewProjectForm;

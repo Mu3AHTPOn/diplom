@@ -16,9 +16,15 @@ ProjectManager& ProjectManager::getInstance()
 	return (*instance);
 }
 
-ProjectManager::ProjectManager(): isSavedCurrentProject(false) ,isOpenProject(false)
+ProjectManager::ProjectManager(): isSavedCurrentProject(false), isOpenProject(false), currentProject()
 {
 
+}
+
+ProjectManager::~ProjectManager()
+{
+	delete [] instance;
+	delete [] currentProject;
 }
 
 void ProjectManager::setIsCurrentProjectSaved(bool isSaved)
@@ -39,4 +45,9 @@ void ProjectManager::setIsProjectOpen(bool isOpen)
 bool ProjectManager::isProjectOpen()
 {
 	return isOpenProject;
+}
+
+Project & ProjectManager::getCurrentProject()
+{
+    return *currentProject;
 }

@@ -45,16 +45,9 @@ __published:	// IDE-managed Components
 	TMenuItem *N9;
 	TMenuItem *N10;
 	TStringGrid *InputDataStringGrid;
-	TToolBar *ToolBar2;
 	TRichEdit *ResultRichEdit;
 	TMenuItem *MMCloseApp;
 	TPanel *Panel1;
-	TSpeedButton *SpeedButton1;
-	TSpeedButton *SpeedButton2;
-	TSpeedButton *SpeedButton3;
-	TSpeedButton *NewProjectButton;
-	TSpeedButton *SpeedButton5;
-	TComboBox *MethodComboBox;
 	TPopupMenu *ResultsPopupMenu;
 	TMenuItem *N5;
 	TOpenDialog *OpenDialog1;
@@ -63,6 +56,13 @@ __published:	// IDE-managed Components
 	TMenuItem *MMSaveProject;
 	TChart *Chart1;
 	TBarSeries *Series1;
+	TPanel *Panel2;
+	TSpeedButton *NewProjectButton;
+	TSpeedButton *SpeedButton3;
+	TSpeedButton *SpeedButton2;
+	TSpeedButton *SpeedButton5;
+	TComboBox *MethodComboBox;
+	TSpeedButton *SpeedButton1;
 	void __fastcall InputDataStringGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall Memo1Change(TObject *Sender);
@@ -102,17 +102,13 @@ private:	// User declarations
 	void drawFixedColNames(int ACol, int ARow, TRect &Rect);
 	void setRowHeight(UnicodeString &str);
 	void setColWidth(UnicodeString &str, int col = 0);
-	void saveProject();
-	void loadProject();
-	void newProject();
-	bool closeProject();
 	bool showSaveDialog();
 	bool isDataValid();
 	void isOnChartBorder(int X, int Y);
 	void changeCursor(int X, int Y);
+	inline int getCriteriaCount();
+	inline int getAlternativesCount();
 
-	int getCriteriaCount();
-	int getObjectsCount();
 	int fixedCols, fixedRows;
 	UnicodeString lastParam;
 	const wregex gridRegex, floatGridRegex;
@@ -120,11 +116,9 @@ private:	// User declarations
 	bool isOnChartButtonPresssed;
 	TPoint lastChartMousePoint;
 	bool isLeft, isRight, isTop, isBottom;
-	vector<UnicodeString> *colNames, *rowNames;
 	vector<double> *criteriaEstimates;
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
-	UnicodeString *projectName;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;

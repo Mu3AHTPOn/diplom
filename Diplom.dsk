@@ -6,38 +6,60 @@ File_3=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include
 File_4=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.ComCtrls.hpp',0,1,2133,1,2158,0,0,,
 File_5=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.UITypes.hpp',0,1,69,1,94,0,0,,
 File_6=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp',0,1,561,1,586,0,0,,
-File_7=TSourceModule,'F:\diplom\ProjectManager.cpp',0,1,10,78,19,0,0,,
-File_8=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\SystemTypes.h',0,1,110,5,132,0,0,,
-File_9=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.Classes.hpp',0,1,31,37,53,0,0,,
-File_10=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Dialogs.hpp',0,74,1394,175,1416,0,0,,
-File_11=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\VCLTee.TeEngine.hpp',0,1,2568,1,2590,0,0,,
-File_12=TSourceModule,'F:\diplom\UIManager.cpp',0,1,1,1,47,0,0,,
-File_13=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysmac.h',0,1,573,23,595,0,0,,
-File_14=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\Data.DBXJSON.hpp',0,1,124,1,146,0,0,,
+File_7=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\SystemTypes.h',0,1,110,5,132,0,0,,
+File_8=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.Classes.hpp',0,1,31,37,53,0,0,,
+File_9=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Dialogs.hpp',0,74,1394,175,1416,0,0,,
+File_10=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\VCLTee.TeEngine.hpp',0,1,2568,1,2590,0,0,,
+File_11=TSourceModule,'F:\diplom\UIManager.cpp',0,1,1,1,47,0,0,,
+File_12=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\sysmac.h',0,1,573,23,595,0,0,,
+File_13=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\Data.DBXJSON.hpp',0,1,124,1,146,0,0,,
 
 [Modules]
-Module0=F:\diplom\EvalCriteriaWeights.cpp
-Module1=F:\diplom\MainForm.cpp
-Module2=F:\diplom\NewProjectUnit.cpp
-Module3=F:\diplom\ahpsolver.cpp
-Module4=F:\diplom\ahpsolver.h
+Module0=F:\diplom\MainForm.cpp
+Module1=F:\diplom\EvalCriteriaWeights.cpp
+Module2=F:\diplom\Project.cpp
+Module3=F:\diplom\ProjectManager.cpp
+Module4=F:\diplom\NewProjectUnit.cpp
 Module5=F:\diplom\matrix.cpp
-Module6=F:\diplom\eigensolver.cpp
-Module7=F:\diplom\eigensolver.h
-Count=8
+Module6=F:\diplom\setColRowNameFormUnit.cpp
+Module7=F:\diplom\ahpsolver.cpp
+Module8=F:\diplom\ahpsolver.h
+Module9=F:\diplom\eigensolver.cpp
+Module10=F:\diplom\eigensolver.h
+Count=11
 EditWindowCount=1
-
-[F:\diplom\EvalCriteriaWeights.cpp]
-ModuleType=TSourceModule
-FormState=1
-FormOnTop=0
 
 [F:\diplom\MainForm.cpp]
 ModuleType=TSourceModule
 FormState=1
 FormOnTop=0
 
+[F:\diplom\EvalCriteriaWeights.cpp]
+ModuleType=TSourceModule
+FormState=1
+FormOnTop=0
+
+[F:\diplom\Project.cpp]
+ModuleType=TSourceModule
+FormState=0
+FormOnTop=0
+
+[F:\diplom\ProjectManager.cpp]
+ModuleType=TSourceModule
+FormState=0
+FormOnTop=0
+
 [F:\diplom\NewProjectUnit.cpp]
+ModuleType=TSourceModule
+FormState=1
+FormOnTop=0
+
+[F:\diplom\matrix.cpp]
+ModuleType=TSourceModule
+FormState=0
+FormOnTop=0
+
+[F:\diplom\setColRowNameFormUnit.cpp]
 ModuleType=TSourceModule
 FormState=1
 FormOnTop=0
@@ -48,11 +70,6 @@ FormState=0
 FormOnTop=0
 
 [F:\diplom\ahpsolver.h]
-ModuleType=TSourceModule
-FormState=0
-FormOnTop=0
-
-[F:\diplom\matrix.cpp]
 ModuleType=TSourceModule
 FormState=0
 FormOnTop=0
@@ -68,8 +85,8 @@ FormState=0
 FormOnTop=0
 
 [EditWindow0]
-ViewCount=8
-CurrentEditView=F:\diplom\EvalCriteriaWeights.cpp
+ViewCount=11
+CurrentEditView=F:\diplom\MainForm.cpp
 View0=0
 View1=1
 View2=2
@@ -78,6 +95,9 @@ View4=4
 View5=5
 View6=6
 View7=7
+View8=8
+View9=9
+View10=10
 PercentageSizes=1
 Create=1
 Visible=1
@@ -97,47 +117,76 @@ TopPanelSize=0
 LeftPanelSize=1896
 LeftPanelClients=PropertyInspector,DockSite3
 LeftPanelData=00000800010100000000611000000000000001680700000000000001000000005C0E000009000000446F636B536974653301000000001E1D00001100000050726F7065727479496E73706563746F72FFFFFFFF
-RightPanelSize=2000
-RightPanelClients=DockSite2,DockSite4
-RightPanelData=00000800010100000000611000000000000001D00700000000000001000000004412000009000000446F636B536974653201000000001E1D000009000000446F636B5369746534FFFFFFFF
+RightPanelSize=0
 BottomPanelSize=1528
 BottomPanelClients=DockSite1,MessageView
 BottomPanelData=0000080001020100000009000000446F636B5369746531724500000000000002F8050000000000000100000000724500000F0000004D65737361676556696577466F726DFFFFFFFF
 BottomMiddlePanelSize=0
 BottomMiddlePanelClients=DockSite0,GraphDrawingModel
 BottomMiddelPanelData=0000080001020200000009000000446F636B536974653010000000477261706844726177696E6756696577961D00000000000002F206000000000000FFFFFFFF
+TabDockRightClients=DockSite2=0,DockSite4=1
 
 [View0]
 CustomEditViewType=TEditView
 Module=F:\diplom\MainForm.cpp
-CursorX=94
-CursorY=299
-TopLine=266
+CursorX=1
+CursorY=448
+TopLine=423
 LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\MainForm.cpp
 
 [View1]
 CustomEditViewType=TEditView
+Module=F:\diplom\ProjectManager.cpp
+CursorX=27
+CursorY=52
+TopLine=19
+LeftCol=1
+Bookmarks=
+EditViewName=F:\diplom\ProjectManager.h
+
+[View2]
+CustomEditViewType=TEditView
 Module=F:\diplom\EvalCriteriaWeights.cpp
-CursorX=110
-CursorY=142
-TopLine=125
+CursorX=44
+CursorY=125
+TopLine=100
 LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\EvalCriteriaWeights.cpp
 
-[View2]
+[View3]
 CustomEditViewType=TEditView
 Module=F:\diplom\NewProjectUnit.cpp
-CursorX=40
-CursorY=264
-TopLine=236
+CursorX=10
+CursorY=257
+TopLine=231
 LeftCol=1
 Bookmarks=
-EditViewName=Borland.FormDesignerView
+EditViewName=F:\diplom\NewProjectUnit.cpp
 
-[View3]
+[View4]
+CustomEditViewType=TEditView
+Module=F:\diplom\Project.cpp
+CursorX=23
+CursorY=26
+TopLine=1
+LeftCol=1
+Bookmarks=
+EditViewName=F:\diplom\Project.cpp
+
+[View5]
+CustomEditViewType=TEditView
+Module=F:\diplom\setColRowNameFormUnit.cpp
+CursorX=46
+CursorY=28
+TopLine=1
+LeftCol=1
+Bookmarks=
+EditViewName=F:\diplom\setColRowNameFormUnit.cpp
+
+[View6]
 CustomEditViewType=TEditView
 Module=F:\diplom\matrix.cpp
 CursorX=13
@@ -147,7 +196,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\matrix.cpp
 
-[View4]
+[View7]
 CustomEditViewType=TEditView
 Module=F:\diplom\ahpsolver.cpp
 CursorX=32
@@ -157,7 +206,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\ahpsolver.cpp
 
-[View5]
+[View8]
 CustomEditViewType=TEditView
 Module=F:\diplom\ahpsolver.h
 CursorX=17
@@ -167,7 +216,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\ahpsolver.h
 
-[View6]
+[View9]
 CustomEditViewType=TEditView
 Module=F:\diplom\eigensolver.cpp
 CursorX=1
@@ -177,7 +226,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\eigensolver.cpp
 
-[View7]
+[View10]
 CustomEditViewType=TEditView
 Module=F:\diplom\eigensolver.h
 CursorX=1
@@ -206,20 +255,22 @@ State=0
 Left=0
 Top=0
 Width=3823
-Height=1181
+Height=1114
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=3823
-ClientHeight=1181
+ClientHeight=1114
 TBDockHeight=210
 LRDockWidth=13599
 Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=2
-Breakpoint0='F:\diplom\MainForm.cpp',798,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint1='F:\diplom\MainForm.cpp',731,'',0,1,'',1,0,0,'',1,'','','',0,''
+Count=4
+Breakpoint0='F:\diplom\MainForm.cpp',817,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint1='F:\diplom\MainForm.cpp',749,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint2='F:\diplom\MainForm.cpp',327,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint3='F:\diplom\MainForm.cpp',44,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -259,11 +310,11 @@ State=0
 Left=0
 Top=0
 Width=2000
-Height=4314
+Height=7190
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=4314
+ClientHeight=7190
 TBDockHeight=5895
 LRDockWidth=2349
 Dockable=1
@@ -296,12 +347,12 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=2000
-Height=2638
+Width=1917
+Height=6676
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=2000
-ClientHeight=2638
+ClientWidth=1917
+ClientHeight=6676
 TBDockHeight=7152
 LRDockWidth=2000
 Dockable=1
@@ -321,16 +372,11 @@ MaxLeft=-1
 MaxTop=-1
 ClientWidth=1896
 ClientHeight=3667
-TBDockHeight=9029
+TBDockHeight=7048
 LRDockWidth=1896
 Dockable=1
 StayOnTop=0
 SplitPos=111
-
-[PropInspDesignerSelection]
-ArrangeBy=Name
-SelectedItem=Caption,
-ExpandedItems=Anchors=0,Constraints=0,Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0
 
 [TFileExplorerForm]
 PercentageSizes=1
@@ -338,8 +384,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=-1536
-Top=-102
+Left=-1810
+Top=-19
 Width=2844
 Height=6210
 MaxLeft=-1
@@ -357,8 +403,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=-1728
-Top=-102
+Left=-8
+Top=341
 Width=276
 Height=362
 MaxLeft=-1
@@ -382,11 +428,11 @@ State=0
 Left=0
 Top=0
 Width=3823
-Height=1181
+Height=1114
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=3823
-ClientHeight=1181
+ClientHeight=1114
 TBDockHeight=410
 LRDockWidth=4948
 Dockable=1
@@ -401,11 +447,11 @@ State=0
 Left=0
 Top=0
 Width=3823
-Height=1181
+Height=1114
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=3823
-ClientHeight=1181
+ClientHeight=1114
 TBDockHeight=210
 LRDockWidth=7406
 Dockable=1
@@ -424,11 +470,11 @@ State=0
 Left=0
 Top=0
 Width=3823
-Height=1181
+Height=1114
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=3823
-ClientHeight=1181
+ClientHeight=1114
 TBDockHeight=1533
 LRDockWidth=3479
 Dockable=1
@@ -443,11 +489,11 @@ State=0
 Left=0
 Top=0
 Width=3823
-Height=1181
+Height=1114
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=3823
-ClientHeight=1181
+ClientHeight=1114
 TBDockHeight=2057
 LRDockWidth=3479
 Dockable=1
@@ -462,11 +508,11 @@ State=0
 Left=0
 Top=0
 Width=2339
-Height=1238
+Height=1000
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2339
-ClientHeight=1238
+ClientHeight=1000
 TBDockHeight=2314
 LRDockWidth=2823
 Dockable=1
@@ -526,12 +572,12 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=2000
-Height=8790
+Width=1917
+Height=6438
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=2000
-ClientHeight=8790
+ClientWidth=1917
+ClientHeight=6438
 TBDockHeight=4876
 LRDockWidth=7151
 Dockable=1
@@ -543,8 +589,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=0
-Top=0
+Left=367
+Top=840
 Width=2859
 Height=3210
 MaxLeft=-1
@@ -583,12 +629,12 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=2000
-Height=8790
+Width=1917
+Height=6438
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=2000
-ClientHeight=8790
+ClientWidth=1917
+ClientHeight=6438
 TBDockHeight=4876
 LRDockWidth=5307
 Dockable=1
@@ -601,7 +647,7 @@ Visible=0
 Docked=1
 State=0
 Left=-182
-Top=-102
+Top=-100
 Width=1844
 Height=3143
 MaxLeft=-1
@@ -660,11 +706,11 @@ State=0
 Left=0
 Top=0
 Width=3823
-Height=1181
+Height=1114
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=3823
-ClientHeight=1181
+ClientHeight=1114
 TBDockHeight=1543
 LRDockWidth=8745
 Dockable=1
@@ -922,14 +968,14 @@ Visible=0
 Docked=1
 State=0
 Left=0
-Top=0
+Top=23
 Width=3823
-Height=1419
+Height=1352
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=3823
-ClientHeight=1419
-TBDockHeight=1419
+ClientHeight=1352
+TBDockHeight=1352
 LRDockWidth=3823
 Dockable=1
 StayOnTop=0
@@ -938,22 +984,22 @@ ActiveTabID=DebugLogView
 TabDockClients=DebugLogView,BreakpointWindow,ThreadStatusWindow,CallStackWindow,WatchWindow,LocalVarsWindow
 
 [DockSite2]
-HostDockSite=DockRightPanel
+HostDockSite=RightTabDock
 DockSiteType=1
 PercentageSizes=1
 Create=1
-Visible=1
+Visible=0
 Docked=1
 State=0
-Left=0
-Top=23
+Left=4
+Top=24
 Width=2000
-Height=4552
+Height=7429
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2000
-ClientHeight=4552
-TBDockHeight=9029
+ClientHeight=7429
+TBDockHeight=7048
 LRDockWidth=2000
 Dockable=1
 StayOnTop=0
@@ -977,7 +1023,7 @@ MaxLeft=-1
 MaxTop=-1
 ClientWidth=1896
 ClientHeight=3524
-TBDockHeight=9029
+TBDockHeight=7048
 LRDockWidth=1896
 Dockable=1
 StayOnTop=0
@@ -986,22 +1032,22 @@ ActiveTabID=StructureView
 TabDockClients=StructureView,ClassBrowserTool
 
 [DockSite4]
-HostDockSite=DockRightPanel
+HostDockSite=RightTabDock
 DockSiteType=1
 PercentageSizes=1
 Create=1
-Visible=1
+Visible=0
 Docked=1
 State=0
 Left=0
-Top=528
+Top=0
 Width=2000
-Height=2638
+Height=7048
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=2000
-ClientHeight=2638
-TBDockHeight=9029
+ClientWidth=1917
+ClientHeight=6676
+TBDockHeight=7048
 LRDockWidth=2000
 Dockable=1
 StayOnTop=0

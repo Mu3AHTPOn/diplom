@@ -47,8 +47,6 @@ private:	// User declarations
 
 public:		// User declarations
 	__fastcall TEvalCriteriaWeightsForm(TComponent* Owner);
-	void setCriteriaEstimatesArray(vector<double> *inVector);
-	void setColNamesArray(vector<UnicodeString> *inVector);
 	void setBackPointer(bool *back);
 };
 //---------------------------------------------------------------------------
