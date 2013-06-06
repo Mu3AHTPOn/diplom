@@ -12,31 +12,47 @@ Project::Project(): name(L"Новый проект")
 
 Project::~Project()
 {
-	criteriaNames.clear();
-	alternativeNames.clear();
+
 }
 
 int Project::getCriteriaCount()
 {
-    return criteriaNames.size();
+	return criteriaNames.size();
 }
 
 int Project::getAlternativesCount()
 {
-    return alternativeNames.size();
+	return alternativeEstimates.size();
 }
 
-void Project::setName(UnicodeString & name)
+const UnicodeString & Project::getName()
+{
+    return name;
+}
+
+void Project::setName(UnicodeString name)
 {
     this->name = name;
 }
 
-vector<UnicodeString> & Project::getAlternativeNames()
+vector<UnicodeString> Project::getAlternativeNames()
 {
-    return alternativeNames;
+	vector<UnicodeString> names(getAlternativesCount());
+	for (int i = 0; i < getAlternativesCount(); ++i)
+	{
+		names.push_back(alternativeEstimates[i].getName());
+	}
+
+	return names;
 }
 
 vector<UnicodeString> & Project::getCriteriaNames()
 {
 	return criteriaNames;
 }
+
+vector<AlternativeEstimates> & Project::getAlternativeEstimates()
+{
+	return alternativeEstimates;
+}
+

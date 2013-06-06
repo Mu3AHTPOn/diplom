@@ -10,6 +10,7 @@
 #include <Vcl.Buttons.hpp>
 
 #include <vector>
+#include "ProjectManager.cpp"
 
 using std::vector;
 //---------------------------------------------------------------------------
@@ -65,8 +66,6 @@ private:	// User declarations
 	void onListKeyPress(System::WideChar &Key);
 	void onListExit();
 
-	vector<UnicodeString> *colNames, *rowNames;
-	UnicodeString *projectName;
 public:		// User declarations
 	__fastcall TNewProjectForm(TComponent* Owner);
 };

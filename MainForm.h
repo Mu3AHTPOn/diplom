@@ -108,6 +108,12 @@ private:	// User declarations
 	void changeCursor(int X, int Y);
 	inline int getCriteriaCount();
 	inline int getAlternativesCount();
+	void showCurrentProject();
+
+	void newProject();
+	void loadProject();
+	void saveProject();
+	bool closeProject();
 
 	int fixedCols, fixedRows;
 	UnicodeString lastParam;

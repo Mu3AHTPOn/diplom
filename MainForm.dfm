@@ -65,7 +65,6 @@ object Form1: TForm1
     TabOrder = 1
     OnKeyDown = Memo1KeyDown
     OnMouseEnter = Memo1MouseEnter
-    ExplicitWidth = 1152
   end
   object Panel1: TPanel
     Left = 0
@@ -353,8 +352,6 @@ object Form1: TForm1
       Items.Strings = (
         #1052#1077#1090#1086#1076' '#1072#1085#1072#1083#1080#1079#1072' '#1080#1077#1088#1072#1088#1093#1080#1081
         #1052#1077#1090#1086#1076' '#1074#1079#1074#1077#1096#1077#1085#1085#1086#1081' '#1089#1091#1084#1084#1099' '#1084#1077#1089#1090)
-      ExplicitLeft = 142
-      ExplicitTop = 3
     end
   end
   object MainMenu1: TMainMenu

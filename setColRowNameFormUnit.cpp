@@ -5,7 +5,6 @@
 
 #include "setColRowNameFormUnit.h"
 //---------------------------------------------------------------------------
-#pragma package(smart_init)
 #pragma resource "*.dfm"
 TsetCollRowNameForm *setCollRowNameForm;
 //---------------------------------------------------------------------------

@@ -218,19 +218,23 @@ void __fastcall TNewProjectForm::NextButtonClick(TObject *Sender)
 		return;
 	}
 
-	colNames->clear();
+	ProjectManager &pm = ProjectManager::getInstance();
+	Project &project = pm.newProject();
+
+	vector<UnicodeString> &criteriaNames = project.getCriteriaNames();
 	for (int i = 0; i < colCount; i++) {
-		colNames->push_back(ColNamesListBox->Items->Strings[i]);
+		criteriaNames.push_back(ColNamesListBox->Items->Strings[i]);
 	}
 
-	rowNames->clear();
+	vector<AlternativeEstimates> &alternativeEstimates = project.getAlternativeEstimates();
 	for (int i = 0; i < rowCount; i++) {
-		rowNames->push_back(RowNamesListBox->Items->Strings[i]);
+		AlternativeEstimates a(RowNamesListBox->Items->Strings[i]);
+		alternativeEstimates.push_back(a);
 	}
 
-	(*projectName) = ProjectName->Text;
+	project.setName(ProjectName->Text);
 
-	if (MethodComboBox->ItemIndex == 0)
+	if (MethodComboBox->ItemIndex == 1)
 	{
 		Hide();
 		bool isBack(false);
@@ -304,18 +308,18 @@ void __fastcall TNewProjectForm::ColNamesListBoxKeyDown(TObject *Sender, WORD &K
 
 void __fastcall TNewProjectForm::FormShow(TObject *Sender)
 {
-	ProjectName->Text = (*projectName);
-
-	ColNamesListBox->Items->Clear();
-	vector<UnicodeString>::iterator iter;
-	for (iter = colNames->begin(); iter != colNames->end(); ++iter) {
-		ColNamesListBox->Items->Add(*iter);
-	}
-
-	RowNamesListBox->Items->Clear();
-	for (iter = rowNames->begin(); iter != rowNames->end(); ++iter) {
-		RowNamesListBox->Items->Add(*iter);
-	}
+//	ProjectName->Text = (*projectName);
+//
+//	ColNamesListBox->Items->Clear();
+//	vector<UnicodeString>::iterator iter;
+//	for (iter = colNames->begin(); iter != colNames->end(); ++iter) {
+//		ColNamesListBox->Items->Add(*iter);
+//	}
+//
+//	RowNamesListBox->Items->Clear();
+//	for (iter = rowNames->begin(); iter != rowNames->end(); ++iter) {
+//		RowNamesListBox->Items->Add(*iter);
+//	}
 }
 //---------------------------------------------------------------------------
 void __fastcall TNewProjectForm::Button1Click(TObject *Sender)

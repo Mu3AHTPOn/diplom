@@ -11,7 +11,6 @@
 #include "UIManager.cpp"
 #include "setColRowNameFormUnit.cpp"
 #include "NewProjectUnit.cpp"
-#include <DBXJSON.hpp>
 //---------------------------------------------------------------------------
 
 #pragma resource "*.dfm"
@@ -30,12 +29,11 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 	NewProjectForm = new TNewProjectForm(this);
 	criteriaEstimates = new vector<double>();
 	bool isClose(false), isOpen(false);
-	Project & currentProject = projectManager.getCurrentProject();
+//	Project & currentProject = projectManager.getCurrentProject();
 
 	EvalCriteriaWeightsForm = new TEvalCriteriaWeightsForm(this);
 
 	InputDataStringGrid->Visible = false;
-	Form1->Caption = currentProject.getName();
 
 	MethodComboBox->Canvas->Font->Size = MethodComboBox->Font->Size;
 	const int AHP = MethodComboBox->Canvas->TextWidth((*MethodComboBox->Items)[0]);
@@ -103,8 +101,6 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 	fixedCols = InputDataStringGrid->FixedCols;
 	fixedRows = InputDataStringGrid->FixedRows;
 
-	initGrid();
-
 //	InputDataStringGrid->Col = 1;
 //	InputDataStringGrid->Row = 1;
 }
@@ -148,7 +144,7 @@ void __fastcall TForm1::Memo1MouseEnter(TObject *Sender)
 
 void __fastcall TForm1::MMCloseAppClick(TObject *Sender)
 {
-	if (projectManager.closeProject())
+	if (closeProject())
 	{
 		UIManager::getInstance()->closeApp(this);
 	}
@@ -157,7 +153,7 @@ void __fastcall TForm1::MMCloseAppClick(TObject *Sender)
 
 void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 {
-	if (! projectManager.closeProject())
+	if (! closeProject())
 	{
 		Action = caNone;
 		return;
@@ -188,7 +184,7 @@ void __fastcall TForm1::N8Click(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
 {
-	if (isDataValid()) {
+	if (projectManager.isProjectOpen() && isDataValid()) {
 		if (MethodComboBox->ItemIndex == 0) {
 		   evalAHP();
 		} else
@@ -317,7 +313,7 @@ void TForm1::showResultAtChart(Matrix<double> &result)
 	Chart1->Series[0]->Clear();
 
 	double max(0);
-	vector<UnicodeString> & alternativeNames = projectManager.getCurrentProject().getAlternativeNames();
+	vector<UnicodeString> alternativeNames = projectManager.getCurrentProject().getAlternativeNames();
 	for (int i = 0; i < result.getHeight(); ++i)
 	{
 		max = result[i][0] > max ? result[i][0] : max;
@@ -373,7 +369,7 @@ void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 		}
 	}
 
-	vector<UnicodeString> &alternativeNames =  projectManager.getCurrentProject().getAlternativeNames();
+	vector<UnicodeString> alternativeNames =  projectManager.getCurrentProject().getAlternativeNames();
 	for (int i = fixedRows + 1; i < rows; i++) {                              // +1 - строка важности критериев
 		TRect rect(InputDataStringGrid->CellRect(0, i));
 		if (rect.Contains(cursorPoint)) {
@@ -401,7 +397,7 @@ void TForm1::drawFixedColNames(int ACol, int ARow, TRect &Rect)
 	}
 
 	vector<UnicodeString> &criteriaNames =  projectManager.getCurrentProject().getCriteriaNames();
-	vector<UnicodeString> &alternativeNames =  projectManager.getCurrentProject().getAlternativeNames();
+	vector<UnicodeString> alternativeNames =  projectManager.getCurrentProject().getAlternativeNames();
 
 	if (ARow == 1) {
 		UnicodeString name = L"¬ажность критериев";
@@ -448,47 +444,7 @@ void TForm1::saveProject()
 {
     if (SaveDialog1->Execute(this->Handle))
 	{
-		UnicodeString fileName = SaveDialog1->FileName;
-		TFileStream *fs = new TFileStream(fileName, fmCreate);
-		try {
-			TJSONObject *js = new TJSONObject();
-			TJSONArray *colNamesJSON = new TJSONArray();
-			TJSONArray *rowNamesJSON = new TJSONArray();
-			vector<UnicodeString>::iterator iter;
-			for (iter = colNames->begin(); iter != colNames->end(); ++iter) {
-				colNamesJSON->Add(*iter);
-			}
-
-			js->AddPair(L"colNames", colNamesJSON);
-
-			for (iter = rowNames->begin(); iter != rowNames->end(); ++iter) {
-				rowNamesJSON->Add(*iter);
-			}
-
-			js->AddPair(L"rowNames", rowNamesJSON);
-
-			TJSONArray *tableData = new TJSONArray();
-			for (int i = fixedCols; i < InputDataStringGrid->ColCount; i++) {
-				TJSONArray *rowData = new TJSONArray();
-				for (int j = fixedRows; j < InputDataStringGrid->RowCount; j++) {
-					rowData->Add(InputDataStringGrid->Cells[i][j]);
-				}
-
-				tableData->AddElement(rowData);
-			}
-
-			js->AddPair(L"tableData", tableData);
-			js->AddPair(L"projectName", *projectName);
-			UnicodeString projectJSON = js->ToString();
-
-			fs->Write(projectJSON.BytesOf(), projectJSON.Length());
-			js->Free();
-
-			projectManager.setIsCurrentProjectSaved(true);
-
-		} __finally {
-			fs->Free();
-		}
+		projectManager.saveProject(SaveDialog1->FileName);
 	}
 }
 //--------------------------------------------------------------------------
@@ -500,57 +456,9 @@ void TForm1::loadProject()
     }
 
 	if (OpenDialog1->Execute(this->Handle)) {
-	UnicodeString fileName = OpenDialog1->FileName;
-	TFileStream *fs = new TFileStream(fileName, fmOpenRead);
-	try {
-		int n = fs->Size;
-		char *chars = new char[n+1];
+		projectManager.loadProject(OpenDialog1->FileName);
 
-		fs->Read(chars, n);
-		chars[n] = '\0';
-		UnicodeString str(chars);
-
-		TJSONObject *js = (TJSONObject*) TJSONObject::ParseJSONValue(str);
-		TJSONArray *colNamesJSON = (TJSONArray*) js->Get(L"colNames")->JsonValue;
-		TJSONArray *rowNamesJSON = (TJSONArray*) js->Get(L"rowNames")->JsonValue;
-
-		colNames->clear();
-		for (int i = 0; i < colNamesJSON->Size(); ++i) {
-			colNames->push_back(colNamesJSON->Get(i)->Value());
-		}
-
-		rowNames->clear();
-		for (int i = 0; i < rowNamesJSON->Size(); ++i) {
-			rowNames->push_back(rowNamesJSON->Get(i)->Value());
-		}
-
-		initGrid();
-		InputDataStringGrid->Visible = true;
-		InputDataStringGrid->FixedCols = 1;			//bug
-
-		TJSONArray *tableData = (TJSONArray*) js->Get(L"tableData")->JsonValue;
-		for (int i = 0; i < tableData->Size(); i++) {
-			TJSONArray *rowData = (TJSONArray*) tableData->Get(i);
-			for (int j = 0; j < rowData->Size(); j++) {
-				UnicodeString str(rowData->Get(j)->Value());
-				InputDataStringGrid->Cells[i + fixedCols][j + fixedRows] = str;
-				setColWidth(str, i + fixedCols);
-			}
-		}
-
-		(*projectName) = js->Get(L"projectName")->JsonValue->Value();
-		Form1->Caption = (*projectName);
-
-		delete [] chars;
-		js->Free();
-		InputDataStringGrid->Refresh();
-
-        projectManager.setIsProjectOpen(true);
-		projectManager.setIsCurrentProjectSaved(true);
-		InputDataStringGrid->SetFocus();
-	} __finally {
-		fs->Free();
-		}
+        showCurrentProject();
 	}
 }
 //--------------------------------------------------------------------------
@@ -562,11 +470,11 @@ void TForm1::newProject()
 	}
 
 	NewProjectForm->ShowModal();
-	if (colNames->size() > 0 && rowNames->size() > 0) {
+	if (getCriteriaCount() > 0 && getAlternativesCount() > 0) {
 	   projectManager.setIsProjectOpen(true);
 		initGrid();
 		InputDataStringGrid->Refresh();
-		Form1->Caption = (*projectName);
+		Form1->Caption = projectManager.getCurrentProject().getName();
 		for (int i = 0; i < InputDataStringGrid->ColCount; i++) {
 			for (int j = 0; j < InputDataStringGrid->RowCount; j++) {
 					InputDataStringGrid->Cells[i][j] = L"";
@@ -585,7 +493,7 @@ void TForm1::newProject()
 			InputDataStringGrid->Cells[i + 1][1] = str;
 			setColWidth(str, i + 1);
         }
-    }
+	}
 }
 //--------------------------------------------------------------------------
 // return false if project doesn't close
@@ -596,17 +504,20 @@ bool TForm1::closeProject()
 		return false;
 	}
 
+	if (! projectManager.isProjectOpen())
+	{
+        return true;
+    }
+
 	for (int i = 0; i < getCriteriaCount(); ++i)              //очистка табицы
 	{
-		for (int j = 0; j < getObjectsCount(); ++j)
+		for (int j = 0; j < getAlternativesCount(); ++j)
 		{
             InputDataStringGrid->Cells[i][j] = L"";
         }
     }
 
-	colNames->clear();
-	rowNames->clear();
-	(*projectName) = L"Ќовый проект";
+	projectManager.closeProject();
 	InputDataStringGrid->Visible = false;
 	projectManager.setIsProjectOpen(false);
 	Chart1->Series[0]->Clear();
@@ -868,5 +779,26 @@ void TForm1::changeCursor(int X, int Y)
     }
 }
 //---------------------------------------------------------------------------
+void TForm1::showCurrentProject()
+{
+ 	initGrid();
+	InputDataStringGrid->Visible = true;
+	InputDataStringGrid->FixedCols = 1;			//bug
 
+	//fill grid
 
+	vector<AlternativeEstimates> &alternativeEstimates = projectManager.getCurrentProject().getAlternativeEstimates();
+	for (int i = 0; i < getAlternativesCount(); ++i)
+	{
+		vector<double> &estimates = alternativeEstimates[i].getEstimates();
+		for (int j = 0; j < getCriteriaCount() ; ++j)
+		{
+			UnicodeString str(FloatToStr(estimates[j]));
+			InputDataStringGrid->Cells[j + fixedCols][i + fixedRows + 1] = str;
+			setColWidth(str, j + fixedCols);
+		}
+	}
+
+	Form1->Caption = projectManager.getCurrentProject().getName();
+	InputDataStringGrid->SetFocus();
+}

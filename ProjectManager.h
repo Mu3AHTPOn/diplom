@@ -5,6 +5,7 @@
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
+#include <DBXJSON.hpp>
 #include <map>
 #include "Project.cpp"
 
@@ -20,9 +21,9 @@ public:
 	static ProjectManager& getInstance();
 	inline Project & getCurrentProject();
 	Project & newProject();
-	Project & loadProject();
-	void saveProject();
-	bool closeProject();
+	Project & loadProject(UnicodeString fileName);
+	void saveProject(UnicodeString fileName);
+	void closeProject();
 protected:
 	ProjectManager();
 	~ProjectManager();
