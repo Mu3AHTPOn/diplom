@@ -66,6 +66,8 @@ private:	// User declarations
 	void onListKeyPress(System::WideChar &Key);
 	void onListExit();
 
+	Project *currentProject;
+
 public:		// User declarations
 	__fastcall TNewProjectForm(TComponent* Owner);
 };

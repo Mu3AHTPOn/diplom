@@ -13,6 +13,8 @@
 #include "boost/regex.hpp"
 #include "ahpsolver.cpp"
 #include "matrix.cpp"
+#include "Project.cpp"
+#include "ProjectManager.cpp"
 //---------------------------------------------------------------------------
 
 using std::vector;
@@ -26,6 +28,9 @@ __published:	// IDE-managed Components
 	TButton *BackButton;
 	TButton *NextButton;
 	TLabel *StepLabel;
+	TLabel *ConsistencLabel;
+	TStringGrid *PairWiseGrid;
+	TLabel *Label2;
 	void __fastcall CriteriaEstimatesDrawCell(TObject *Sender, int ACol, int ARow, TRect &Rect,
           TGridDrawState State);
 	void __fastcall CriteriaEstimatesSetEditText(TObject *Sender, int ACol, int ARow,
@@ -38,12 +43,11 @@ private:	// User declarations
 	void setRowHeight(UnicodeString &str);
 	void setColWidth(UnicodeString &str);
 
-	vector<UnicodeString> *colNames;
-	vector<double> *criteriaEstimates;
+	vector<UnicodeString> *gridNames;
 	const wregex gridRegex;
-	int **userEstimates;
 	int step;
 	bool *isBack;
+	Project *currentProject;
 
 public:		// User declarations
 	__fastcall TEvalCriteriaWeightsForm(TComponent* Owner);

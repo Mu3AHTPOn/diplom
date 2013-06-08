@@ -2,8 +2,8 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   Left = 0
   Top = 0
   Caption = #1042#1099#1095#1080#1089#1083#1077#1085#1080#1077' '#1074#1077#1089#1086#1074#1099#1093' '#1082#1086#1101#1092#1092#1080#1094#1080#1077#1085#1090#1086#1074' '#1082#1088#1080#1090#1077#1088#1080#1077#1074
-  ClientHeight = 161
-  ClientWidth = 570
+  ClientHeight = 395
+  ClientWidth = 617
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -29,11 +29,25 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
     Height = 13
     Caption = #1064#1072#1075' 1'
   end
+  object ConsistencLabel: TLabel
+    Left = 181
+    Top = 324
+    Width = 47
+    Height = 13
+    Caption = '-'
+  end
+  object Label2: TLabel
+    Left = 45
+    Top = 324
+    Width = 130
+    Height = 13
+    Caption = #1048#1085#1076#1077#1082#1089' '#1089#1086#1075#1083#1072#1089#1086#1074#1072#1085#1085#1086#1089#1090#1080':'
+  end
   object CriteriaEstimates: TStringGrid
-    Left = 72
-    Top = 56
-    Width = 449
-    Height = 57
+    Left = 357
+    Top = 64
+    Width = 223
+    Height = 201
     ColCount = 2
     DefaultColWidth = 24
     RowCount = 2
@@ -43,8 +57,8 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
     OnSetEditText = CriteriaEstimatesSetEditText
   end
   object BackButton: TButton
-    Left = 192
-    Top = 119
+    Left = 201
+    Top = 351
     Width = 75
     Height = 25
     Caption = #1053#1072#1079#1072#1076
@@ -52,12 +66,25 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
     OnClick = BackButtonClick
   end
   object NextButton: TButton
-    Left = 304
-    Top = 119
+    Left = 313
+    Top = 351
     Width = 75
     Height = 25
     Caption = #1044#1072#1083#1077#1077
     TabOrder = 2
     OnClick = NextButtonClick
+  end
+  object PairWiseGrid: TStringGrid
+    Left = 45
+    Top = 64
+    Width = 223
+    Height = 201
+    ColCount = 2
+    DefaultColWidth = 24
+    RowCount = 2
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs]
+    TabOrder = 3
+    OnDrawCell = CriteriaEstimatesDrawCell
+    OnSetEditText = CriteriaEstimatesSetEditText
   end
 end

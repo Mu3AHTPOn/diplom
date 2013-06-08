@@ -1,5 +1,5 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\vector',0,1,1083,1,1106,0,0,,
+File_0=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\vector',0,1,441,1,464,0,0,,
 File_1=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\xmemory',0,1,1,1,28,0,0,,
 File_2=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\memory',0,1,117,1,140,0,0,,
 File_3=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\ustring.h',0,1,183,1,208,0,0,,
@@ -17,11 +17,11 @@ File_14=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\includ
 
 [Modules]
 Module0=F:\diplom\Project.cpp
-Module1=F:\diplom\AlternativeEstimates.cpp
-Module2=F:\diplom\NewProjectUnit.cpp
-Module3=F:\diplom\EvalCriteriaWeights.cpp
-Module4=F:\diplom\ProjectManager.cpp
-Module5=F:\diplom\MainForm.cpp
+Module1=F:\diplom\MainForm.cpp
+Module2=F:\diplom\EvalCriteriaWeights.cpp
+Module3=F:\diplom\ProjectManager.cpp
+Module4=F:\diplom\NewProjectUnit.cpp
+Module5=F:\diplom\AlternativeEstimates.cpp
 Module6=F:\diplom\setColRowNameFormUnit.cpp
 Module7=F:\diplom\matrix.cpp
 Module8=F:\diplom\ahpsolver.cpp
@@ -36,12 +36,7 @@ ModuleType=TSourceModule
 FormState=0
 FormOnTop=0
 
-[F:\diplom\AlternativeEstimates.cpp]
-ModuleType=TSourceModule
-FormState=0
-FormOnTop=0
-
-[F:\diplom\NewProjectUnit.cpp]
+[F:\diplom\MainForm.cpp]
 ModuleType=TSourceModule
 FormState=1
 FormOnTop=0
@@ -56,9 +51,14 @@ ModuleType=TSourceModule
 FormState=0
 FormOnTop=0
 
-[F:\diplom\MainForm.cpp]
+[F:\diplom\NewProjectUnit.cpp]
 ModuleType=TSourceModule
 FormState=1
+FormOnTop=0
+
+[F:\diplom\AlternativeEstimates.cpp]
+ModuleType=TSourceModule
+FormState=0
 FormOnTop=0
 
 [F:\diplom\setColRowNameFormUnit.cpp]
@@ -140,7 +140,7 @@ CustomEditViewType=TEditView
 Module=F:\diplom\MainForm.cpp
 CursorX=1
 CursorY=459
-TopLine=436
+TopLine=445
 LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\MainForm.cpp
@@ -148,8 +148,8 @@ EditViewName=F:\diplom\MainForm.cpp
 [View1]
 CustomEditViewType=TEditView
 Module=F:\diplom\ProjectManager.cpp
-CursorX=13
-CursorY=165
+CursorX=1
+CursorY=156
 TopLine=140
 LeftCol=1
 Bookmarks=
@@ -163,7 +163,7 @@ CursorY=102
 TopLine=97
 LeftCol=1
 Bookmarks=
-EditViewName=F:\diplom\EvalCriteriaWeights.cpp
+EditViewName=F:\diplom\EvalCriteriaWeights.h
 
 [View3]
 CustomEditViewType=TEditView
@@ -180,7 +180,7 @@ CustomEditViewType=TEditView
 Module=F:\diplom\Project.cpp
 CursorX=1
 CursorY=14
-TopLine=10
+TopLine=1
 LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\Project.cpp
@@ -289,8 +289,8 @@ StayOnTop=0
 Count=4
 Breakpoint0='F:\diplom\MainForm.cpp',728,'',0,1,'',1,0,0,'',1,'','','',0,''
 Breakpoint1='F:\diplom\MainForm.cpp',323,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint2='F:\diplom\NewProjectUnit.cpp',224,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint3='F:\diplom\NewProjectUnit.cpp',235,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint2='F:\diplom\Project.cpp',14,'',0,1,'',1,0,0,'',1,'','','',0,''
+Breakpoint3='F:\diplom\ProjectManager.cpp',156,'',0,1,'',1,0,0,'',1,'','','',0,''
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -397,11 +397,6 @@ LRDockWidth=1896
 Dockable=1
 StayOnTop=0
 SplitPos=111
-
-[PropInspDesignerSelection]
-ArrangeBy=Name
-SelectedItem=Items,
-ExpandedItems=StyleElements=0,Touch=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0
 
 [TFileExplorerForm]
 PercentageSizes=1

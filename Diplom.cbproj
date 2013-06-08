@@ -141,10 +141,6 @@
             <DependentOn>ahpsolver.h</DependentOn>
             <BuildOrder>5</BuildOrder>
         </CppCompile>
-        <CppCompile Include="AlternativeEstimates.cpp">
-            <DependentOn>AlternativeEstimates.h</DependentOn>
-            <BuildOrder>14</BuildOrder>
-        </CppCompile>
         <CppCompile Include="Diplom.cpp">
             <BuildOrder>0</BuildOrder>
         </CppCompile>
@@ -154,6 +150,10 @@
         <CppCompile Include="eigensolver.cpp">
             <DependentOn>eigensolver.h</DependentOn>
             <BuildOrder>4</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="Estimates.cpp">
+            <DependentOn>Estimates.h</DependentOn>
+            <BuildOrder>14</BuildOrder>
         </CppCompile>
         <CppCompile Include="EvalCriteriaWeights.cpp">
             <Form>EvalCriteriaWeightsForm</Form>

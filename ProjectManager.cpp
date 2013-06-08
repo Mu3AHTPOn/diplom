@@ -59,37 +59,32 @@ void ProjectManager::saveProject(UnicodeString fileName)
     TFileStream *fs = new TFileStream(fileName, fmCreate);
 	try {
 		TJSONObject *js = new TJSONObject();
-		TJSONArray *colNamesJSON = new TJSONArray();
-		TJSONArray *rowNamesJSON = new TJSONArray();
+		TJSONArray *criteriaNamesJSON = new TJSONArray();
 		const vector<UnicodeString> &criteriaNames = getCurrentProject().getCriteriaNames();
 		vector<UnicodeString>::const_iterator iter;
 		for (iter = criteriaNames.begin(); iter != criteriaNames.end(); ++iter) {
-			colNamesJSON->Add(*iter);
+			criteriaNamesJSON->Add(*iter);
 		}
 
-		js->AddPair(L"colNames", colNamesJSON);
+		js->AddPair(L"criteriaNames", criteriaNamesJSON);
 
-
-		const vector<UnicodeString> &alternativeNames = getCurrentProject().getAlternativeNames();
-		for (iter = alternativeNames.begin(); iter != alternativeNames.end(); ++iter) {
-			rowNamesJSON->Add(*iter);
-		}
-
-		js->AddPair(L"rowNames", rowNamesJSON);
-
-		vector<AlternativeEstimates> alternativeEstimates = getCurrentProject().getAlternativeEstimates();
+		vector<Estimates> alternativeEstimates = getCurrentProject().getAlternativeEstimates();
 		TJSONArray *tableData = new TJSONArray();
 		for (int i = 0; i < alternativeEstimates.size(); i++) {
+			TJSONObject *alternativeEstimatesJSON = new TJSONObject();
+			alternativeEstimatesJSON->AddPair("name", alternativeEstimates[i].getName());
 			TJSONArray *rowData = new TJSONArray();
+
 			const vector<double> &estimates = alternativeEstimates[i].getEstimates();
 			for (int j = 0; j < estimates.size(); j++) {
 				rowData->Add(FloatToStr(estimates[j]));
 			}
 
-			tableData->AddElement(rowData);
+			alternativeEstimatesJSON->AddPair("data", rowData);
+			tableData->AddElement(alternativeEstimatesJSON);
 		}
 
-		js->AddPair(L"tableData", tableData);
+		js->AddPair(L"alternativeEstimates", tableData);
 		js->AddPair(L"projectName", getCurrentProject().getName());
 		UnicodeString projectJSON = js->ToString();
 
@@ -115,8 +110,8 @@ Project & ProjectManager::loadProject(UnicodeString fileName)
 		UnicodeString str(chars);
 
 		TJSONObject *js = (TJSONObject*) TJSONObject::ParseJSONValue(str);
-		TJSONArray *colNamesJSON = (TJSONArray*) js->Get(L"colNames")->JsonValue;
-		TJSONArray *rowNamesJSON = (TJSONArray*) js->Get(L"rowNames")->JsonValue;
+		TJSONArray *colNamesJSON = (TJSONArray*) js->Get(L"criteriaNames")->JsonValue;
+		TJSONArray *alternativeEstimatesJSON = (TJSONArray*) js->Get(L"alternativeEstimates")->JsonValue;
 
 		closeProject();
 		currentProject = new Project();
@@ -125,18 +120,18 @@ Project & ProjectManager::loadProject(UnicodeString fileName)
 			criteriaNames.push_back(colNamesJSON->Get(i)->Value());
 		}
 
-		vector<AlternativeEstimates> &alternativeEstimates = getCurrentProject().getAlternativeEstimates();
-		for (int i = 0; i < rowNamesJSON->Size(); ++i) {
-			alternativeEstimates.push_back(AlternativeEstimates(rowNamesJSON->Get(i)->Value()));
-		}
+		vector<Estimates> &alternativeEstimates = getCurrentProject().getAlternativeEstimates();
+		for (int i = 0; i < alternativeEstimatesJSON->Size(); ++i) {
+			TJSONObject *alternativeJSON = (TJSONObject*) alternativeEstimatesJSON->Get(i);
+			UnicodeString name = alternativeJSON->Get(L"name")->JsonValue->Value();
+			alternativeEstimates.push_back(Estimates(name));
 
-		TJSONArray *tableData = (TJSONArray*) js->Get(L"tableData")->JsonValue;
-		for (int i = 0; i < tableData->Size(); i++) {
-			TJSONArray *rowData = (TJSONArray*) tableData->Get(i);
+			TJSONArray *estimatesJSON = (TJSONArray*) alternativeJSON->Get(L"data")->JsonValue;
 			vector<double> &estimates = alternativeEstimates[i].getEstimates();
-			for (int j = 0; j < rowData->Size(); j++) {
-				estimates.push_back(StrToFloat(rowData->Get(j)->Value()));
-			}
+			for (int j = 0; j < estimatesJSON->Size(); ++j) {
+				UnicodeString str = estimatesJSON->Get(j)->Value();
+				estimates.push_back(str.Length() > 0 ? StrToFloat(str) : 0);
+            }
 		}
 
 		getCurrentProject().setName(js->Get(L"projectName")->JsonValue->Value());
@@ -153,7 +148,8 @@ Project & ProjectManager::loadProject(UnicodeString fileName)
 }
 
 void ProjectManager::closeProject() {
-	delete [] currentProject;
+	delete currentProject;
+	currentProject = NULL;
 	setIsProjectOpen(false);
 	setIsCurrentProjectSaved(false);
 }

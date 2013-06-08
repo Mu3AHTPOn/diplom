@@ -3,6 +3,8 @@
 #pragma hdrstop
 
 #include "Project.h"
+
+#pragma once
 //---------------------------------------------------------------------------
 
 Project::Project(): name(L"Новый проект")
@@ -51,8 +53,13 @@ vector<UnicodeString> & Project::getCriteriaNames()
 	return criteriaNames;
 }
 
-vector<AlternativeEstimates> & Project::getAlternativeEstimates()
+vector<Estimates> & Project::getAlternativeEstimates()
 {
 	return alternativeEstimates;
+}
+
+Estimates& Project::getCriteriaEstimates()
+{
+	return criteriaEstimates;
 }
 

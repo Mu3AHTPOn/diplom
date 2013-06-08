@@ -397,7 +397,7 @@ void TForm1::drawFixedColNames(int ACol, int ARow, TRect &Rect)
 	}
 
 	vector<UnicodeString> &criteriaNames =  projectManager.getCurrentProject().getCriteriaNames();
-	vector<UnicodeString> alternativeNames =  projectManager.getCurrentProject().getAlternativeNames();
+	vector<Estimates> &alternativeEstimates =  projectManager.getCurrentProject().getAlternativeEstimates();
 
 	if (ARow == 1) {
 		UnicodeString name = L"¬ажность критериев";
@@ -407,7 +407,7 @@ void TForm1::drawFixedColNames(int ACol, int ARow, TRect &Rect)
 	}
 
 	if (ACol == 0) {
-		UnicodeString &name = alternativeNames[ARow - 2];
+		UnicodeString name = alternativeEstimates[ARow - 2].getName();
 		setColWidth(name);
 		InputDataStringGrid->Canvas->TextRect(Rect, name);
 	}
@@ -469,6 +469,7 @@ void TForm1::newProject()
         return;
 	}
 
+   	projectManager.newProject();
 	NewProjectForm->ShowModal();
 	if (getCriteriaCount() > 0 && getAlternativesCount() > 0) {
 	   projectManager.setIsProjectOpen(true);
@@ -623,8 +624,16 @@ void __fastcall TForm1::MMSaveProjectClick(TObject *Sender)
 
 void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
 {
-    NewProjectForm->ShowModal();
+	NewProjectForm->ShowModal();
 	initGrid();
+
+	for (int i = 0; i < getAlternativesCount(); ++i) {
+        vector<double> &estimates = projectManager.getCurrentProject().getAlternativeEstimates()[i].getEstimates();
+		for (int j = 0; j < getCriteriaCount(); ++j) {
+			InputDataStringGrid->Cells[j + fixedCols][i + fixedRows + 1] = FloatToStr(estimates[j]);
+        }
+    }
+
 	InputDataStringGrid->Refresh();
 	Form1->Caption = projectManager.getCurrentProject().getName();
 
@@ -635,7 +644,9 @@ void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
 			InputDataStringGrid->Cells[i + 1][1] = str;
 			setColWidth(str, i + 1);
         }
-    }
+	}
+
+	projectManager.setIsCurrentProjectSaved(false);
 }
 //---------------------------------------------------------------------------
 
@@ -647,19 +658,28 @@ void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol
 	{
 		UnicodeString str = InputDataStringGrid->Cells[ACol][ARow];
 		InputDataStringGrid->Cells[ACol][ARow] = str.SubString(1, str.Length() - 1);
-	} else if (ARow != 1 && StrToInt(Value) < 1)
-	{
-		Application->MessageBoxW(L"ќценки не должны быть меньше 1", L"ќшибка",  MB_OK| MB_ICONERROR);
-//		MessageDlg(L"ќценки не должны быть меньше 1", mtError, TMsgDlgButtons() << mbOK, 0);
-		InputDataStringGrid->Col = ACol;
-		InputDataStringGrid->Row = ARow;
-		InputDataStringGrid->Cells[ACol][ARow] = L"";
+	} else {
+		if (ARow != 1)
+		{
+			if (StrToInt(Value) < 1) {
+				Application->MessageBoxW(L"ќценки не должны быть меньше 1", L"ќшибка",  MB_OK| MB_ICONERROR);
+		//		MessageDlg(L"ќценки не должны быть меньше 1", mtError, TMsgDlgButtons() << mbOK, 0);
+				InputDataStringGrid->Col = ACol;
+				InputDataStringGrid->Row = ARow;
+				InputDataStringGrid->Cells[ACol][ARow] = L"";
+			} else {
+				projectManager.getCurrentProject().getAlternativeEstimates()[ARow - fixedRows - 1].getEstimates()[ACol - fixedCols] = StrToFloat(Value);
+			}
+		} else {
+			//TODO save criteria weights
+		}
 	}
 
 	if (ARow != 0) {
 		UnicodeString str(Value);
 		setColWidth(str, ACol);
-    }
+	}
+
 	projectManager.setIsCurrentProjectSaved(false);
 }
 //---------------------------------------------------------------------------
@@ -787,7 +807,7 @@ void TForm1::showCurrentProject()
 
 	//fill grid
 
-	vector<AlternativeEstimates> &alternativeEstimates = projectManager.getCurrentProject().getAlternativeEstimates();
+	vector<Estimates> &alternativeEstimates = projectManager.getCurrentProject().getAlternativeEstimates();
 	for (int i = 0; i < getAlternativesCount(); ++i)
 	{
 		vector<double> &estimates = alternativeEstimates[i].getEstimates();

@@ -91,6 +91,15 @@ void TNewProjectForm::removeCurrentItem(TListBox *list)
 	int i = list->ItemIndex;
 	if (i != -1) {
 		list->Items->Delete(i);
+
+		if (list == RowNamesListBox) {
+			vector<Estimates> &vector = currentProject->getAlternativeEstimates();
+			vector.erase(vector.begin() + i);
+		} else {
+			vector<UnicodeString> &vector = currentProject->getCriteriaNames();
+			vector.erase(vector.begin() + i);
+		}
+
 		if (i > list->Count - 1) {
 			list->ItemIndex = list->Count - 1;
 		} else
@@ -107,7 +116,25 @@ void TNewProjectForm::addItem(TListBox *list, bool inEnd)
 	onListExit();
 
 	int index = inEnd ? -1 : list->ItemIndex;
-	list->Items->Insert(index, "¬ведите название");
+	UnicodeString defVal("¬ведите название");
+	list->Items->Insert(index, defVal);
+
+	if (list == RowNamesListBox) {
+		vector<Estimates> &vector = currentProject->getAlternativeEstimates();
+		if (index < 0) {
+			vector.push_back(Estimates(defVal));
+		} else {
+			vector.insert(vector.begin() + index, Estimates(defVal));
+        }
+	} else {
+		vector<UnicodeString> &vector = currentProject->getCriteriaNames();
+		if (index < 0) {
+            vector.push_back(defVal);
+		} else {
+			vector.insert(vector.begin() + index, defVal);
+		}
+	}
+
 	if (index == -1) {
 		list->ItemIndex = list->Count - 1;
 	} else {
@@ -151,8 +178,6 @@ void TNewProjectForm::onListKeyPress(System::WideChar &Key)
 		list->SetFocus();
 		listEdit->Text = L"";
 	}
-
-//	list->Items->Strings[list->ItemIndex] = listEdit->Text;
 }
 //---------------------------------------------------------------------------
 void TNewProjectForm::onListKeyDown(TListBox* list, WORD &Key, TShiftState Shift)
@@ -170,6 +195,13 @@ void TNewProjectForm::onListExit()
 	TListBox *list = (TListBox*) listEdit->Parent;
 	if (list->Count > 0 && listEdit->Text != L"") {
 		list->Items->Strings[list->ItemIndex] = listEdit->Text;
+
+        if (list == RowNamesListBox) {
+			currentProject->getAlternativeEstimates()[list->ItemIndex].setName(listEdit->Text);
+		} else {
+			currentProject->getCriteriaNames()[list->ItemIndex] = listEdit->Text;
+		}
+
 		listEdit->Visible = false;
 		listEdit->Text = L"";
 	}
@@ -218,21 +250,24 @@ void __fastcall TNewProjectForm::NextButtonClick(TObject *Sender)
 		return;
 	}
 
-	ProjectManager &pm = ProjectManager::getInstance();
-	Project &project = pm.newProject();
-
-	vector<UnicodeString> &criteriaNames = project.getCriteriaNames();
-	for (int i = 0; i < colCount; i++) {
-		criteriaNames.push_back(ColNamesListBox->Items->Strings[i]);
+//	ProjectManager &pm = ProjectManager::getInstance();
+//	Project &project = pm.newProject();
+//
+//	vector<UnicodeString> &criteriaNames = project.getCriteriaNames();
+//	for (int i = 0; i < colCount; i++) {
+//		criteriaNames.push_back(ColNamesListBox->Items->Strings[i]);
+//	}
+//
+	vector<Estimates> &alternativeEstimates = currentProject->getAlternativeEstimates();
+	for (int i = 0; i < alternativeEstimates.size(); i++) {
+		vector<double> &estimates = alternativeEstimates[i].getEstimates();
+		for (int j = 0; j <colCount; ++j)
+		{
+            estimates.push_back(0);
+        }
 	}
 
-	vector<AlternativeEstimates> &alternativeEstimates = project.getAlternativeEstimates();
-	for (int i = 0; i < rowCount; i++) {
-		AlternativeEstimates a(RowNamesListBox->Items->Strings[i]);
-		alternativeEstimates.push_back(a);
-	}
-
-	project.setName(ProjectName->Text);
+	currentProject->setName(ProjectName->Text);
 
 	if (MethodComboBox->ItemIndex == 1)
 	{
@@ -308,18 +343,32 @@ void __fastcall TNewProjectForm::ColNamesListBoxKeyDown(TObject *Sender, WORD &K
 
 void __fastcall TNewProjectForm::FormShow(TObject *Sender)
 {
-//	ProjectName->Text = (*projectName);
-//
-//	ColNamesListBox->Items->Clear();
-//	vector<UnicodeString>::iterator iter;
-//	for (iter = colNames->begin(); iter != colNames->end(); ++iter) {
-//		ColNamesListBox->Items->Add(*iter);
-//	}
-//
-//	RowNamesListBox->Items->Clear();
-//	for (iter = rowNames->begin(); iter != rowNames->end(); ++iter) {
-//		RowNamesListBox->Items->Add(*iter);
-//	}
+	currentProject = &ProjectManager::getInstance().getCurrentProject();
+	if (currentProject != NULL) {
+		ProjectName->Text = currentProject->getName();
+
+		ColNamesListBox->Items->Clear();
+		RowNamesListBox->Items->Clear();
+
+		{
+			vector<UnicodeString>::const_iterator iter = currentProject->getCriteriaNames().begin();
+			vector<UnicodeString>::const_iterator endIter = currentProject->getCriteriaNames().end();
+			while (iter != endIter) {
+				ColNamesListBox->Items->Add(*iter);
+				++iter;
+			}
+		}
+
+		{
+			vector<Estimates>::const_iterator iter = currentProject->getAlternativeEstimates().begin();
+			vector<Estimates>::const_iterator endIter = currentProject->getAlternativeEstimates().end();
+
+			while (iter != endIter) {
+				RowNamesListBox->Items->Add(iter->getName());
+				++iter;
+			}
+		}
+	}
 }
 //---------------------------------------------------------------------------
 void __fastcall TNewProjectForm::Button1Click(TObject *Sender)

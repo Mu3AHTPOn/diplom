@@ -44,15 +44,15 @@ void TEvalCriteriaWeightsForm::drawFixedColNames(int ACol, int ARow, TRect &Rect
 		return;
 	}
 
-	if (ARow == 1) {
-		UnicodeString name = L"Важность критериев";
+	if (ACol == 0) {
+		UnicodeString &name = gridNames->at(ARow- 1);
 		setColWidth(name);
 		CriteriaEstimates->Canvas->TextRect(Rect, name);
 		return;
 	}
 
 	if (ARow == 0) {
-		UnicodeString &name = colNames->at(ACol- 1);
+		UnicodeString &name = gridNames->at(ACol- 1);
         setRowHeight(name);
 
 		CriteriaEstimates->Canvas->Font->Orientation = 90 * 10;
@@ -99,6 +99,7 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSetEditText(TObject *
 //---------------------------------------------------------------------------
 void __fastcall TEvalCriteriaWeightsForm::FormShow(TObject *Sender)
 {
+	currentProject = &ProjectManager::getInstance().getCurrentProject();
 	CriteriaEstimates->ColCount = colNames->size() + 1;
 	UnicodeString str = UnicodeString(L"Важность критериев");
 	setColWidth(str);
@@ -218,4 +219,5 @@ void TEvalCriteriaWeightsForm::setBackPointer(bool *back)
 {
     isBack = back;
 }
+
 

@@ -7,7 +7,7 @@
 #include <vcl.h>
 #include <vector>
 #include "matrix.cpp"
-#include "AlternativeEstimates.cpp"
+#include "Estimates.cpp"
 
 using std::vector;
 
@@ -21,11 +21,13 @@ class Project {
 		void setName(UnicodeString name);
 		inline vector<UnicodeString> getAlternativeNames();
 		inline vector<UnicodeString> & getCriteriaNames();
-		inline vector<AlternativeEstimates> & getAlternativeEstimates();
+		inline vector<Estimates> & getAlternativeEstimates();
+		inline Estimates &getCriteriaEstimates();
 
 	private:
 		vector<UnicodeString> criteriaNames;
 		UnicodeString name;
-		vector<AlternativeEstimates> alternativeEstimates;
+		vector<Estimates> alternativeEstimates;
+		Estimates criteriaEstimates;
 };
 #endif
