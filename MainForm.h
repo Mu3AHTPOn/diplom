@@ -92,6 +92,7 @@ __published:	// IDE-managed Components
 	void __fastcall Chart1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
 	void __fastcall Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift,
           int X, int Y);
+	void __fastcall MethodComboBoxSelect(TObject *Sender);
 
 
 private:	// User declarations

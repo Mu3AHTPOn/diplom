@@ -93,11 +93,9 @@ void TNewProjectForm::removeCurrentItem(TListBox *list)
 		list->Items->Delete(i);
 
 		if (list == RowNamesListBox) {
-			vector<Estimates> &vector = currentProject->getAlternativeEstimates();
-			vector.erase(vector.begin() + i);
+			currentProject->removeEstimate(i, Project::ALTERNATIVE);
 		} else {
-			vector<UnicodeString> &vector = currentProject->getCriteriaNames();
-			vector.erase(vector.begin() + i);
+			currentProject->removeEstimate(i, Project::CRITERIA);
 		}
 
 		if (i > list->Count - 1) {
@@ -120,19 +118,9 @@ void TNewProjectForm::addItem(TListBox *list, bool inEnd)
 	list->Items->Insert(index, defVal);
 
 	if (list == RowNamesListBox) {
-		vector<Estimates> &vector = currentProject->getAlternativeEstimates();
-		if (index < 0) {
-			vector.push_back(Estimates(defVal));
-		} else {
-			vector.insert(vector.begin() + index, Estimates(defVal));
-        }
+		currentProject->addEstimate(index, defVal, Project::ALTERNATIVE);
 	} else {
-		vector<UnicodeString> &vector = currentProject->getCriteriaNames();
-		if (index < 0) {
-            vector.push_back(defVal);
-		} else {
-			vector.insert(vector.begin() + index, defVal);
-		}
+		currentProject->addEstimate(index, defVal, Project::CRITERIA);
 	}
 
 	if (index == -1) {
@@ -346,6 +334,7 @@ void __fastcall TNewProjectForm::FormShow(TObject *Sender)
 	currentProject = &ProjectManager::getInstance().getCurrentProject();
 	if (currentProject != NULL) {
 		ProjectName->Text = currentProject->getName();
+        MethodComboBox->ItemIndex = currentProject->getMethod();
 
 		ColNamesListBox->Items->Clear();
 		RowNamesListBox->Items->Clear();
@@ -379,4 +368,10 @@ void __fastcall TNewProjectForm::Button1Click(TObject *Sender)
 
 
 
+
+void __fastcall TNewProjectForm::MethodComboBoxSelect(TObject *Sender)
+{
+	currentProject->setMethod(MethodComboBox->ItemIndex);
+}
+//---------------------------------------------------------------------------
 

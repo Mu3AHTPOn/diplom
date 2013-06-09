@@ -234,10 +234,10 @@ try {
 	UnicodeString resultStr = L"(";
 
 	for (int i = 0; i < result.getHeight() - 1; ++i) {
-		resultStr += Format(L"%.3f; ", new TVarRec(result[i][0]), 1);
+		resultStr += Format(L"%.3f; ", &TVarRec(result[i][0]), 1);
 	}
 
-	resultStr += Format(L"%.3f)", new TVarRec(result[result.getHeight() - 1][0]), 1);
+	resultStr += Format(L"%.3f)", &TVarRec(result[result.getHeight() - 1][0]), 1);
 
 	UnicodeString methodCaption = L"Метод анализа иерархий";
 	UnicodeString resultCaption = L"Приоритеты альтернатив";
@@ -369,17 +369,18 @@ void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 		}
 	}
 
-	vector<UnicodeString> alternativeNames =  projectManager.getCurrentProject().getAlternativeNames();
 	for (int i = fixedRows + 1; i < rows; i++) {                              // +1 - строка важности критериев
 		TRect rect(InputDataStringGrid->CellRect(0, i));
 		if (rect.Contains(cursorPoint)) {
-			UnicodeString *newName = &alternativeNames[i - 2];
+			UnicodeString *newName = new UnicodeString();
 			TsetCollRowNameForm *form = new TsetCollRowNameForm(this);
 			form->setResultStr(newName);
 			try {
 			  form->ShowModal();
 			  if (newName != L"") {
 				  setRowHeight(*newName);
+				  projectManager.getCurrentProject().getAlternativeEstimates()[i - 2].setName(*newName);
+				  delete newName;
 				  InputDataStringGrid->Refresh();
 			  }
 			} __finally {
@@ -820,5 +821,12 @@ void TForm1::showCurrentProject()
 	}
 
 	Form1->Caption = projectManager.getCurrentProject().getName();
+	MethodComboBox->ItemIndex = projectManager.getCurrentProject().getMethod();
 	InputDataStringGrid->SetFocus();
 }
+void __fastcall TForm1::MethodComboBoxSelect(TObject *Sender)
+{
+	projectManager.getCurrentProject().setMethod(MethodComboBox->ItemIndex);
+}
+//---------------------------------------------------------------------------
+

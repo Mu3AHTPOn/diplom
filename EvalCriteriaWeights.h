@@ -38,12 +38,19 @@ __published:	// IDE-managed Components
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall NextButtonClick(TObject *Sender);
 	void __fastcall BackButtonClick(TObject *Sender);
+	void __fastcall CriteriaEstimatesGetEditText(TObject *Sender, int ACol, int ARow,
+          UnicodeString &Value);
 private:	// User declarations
-	void drawFixedColNames(int ACol, int ARow, TRect &Rect);
-	void setRowHeight(UnicodeString &str);
-	void setColWidth(UnicodeString &str);
+	void drawFixedColNames(TObject *Sender, int ACol, int ARow, TRect &Rect);
+	void setRowHeight(TObject *Sender, UnicodeString &str);
+	void setColWidth(TObject *Sender, UnicodeString &str, int col = 0);
+	void setData();
+	bool isDataFilled();
+	void eval();
 
 	vector<UnicodeString> *gridNames;
+	vector<UnicodeString> alternativeNames;
+	vector< vector<int> > *rates;
 	const wregex gridRegex;
 	int step;
 	bool *isBack;

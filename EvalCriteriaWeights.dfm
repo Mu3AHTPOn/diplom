@@ -1,9 +1,10 @@
 object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   Left = 0
   Top = 0
-  Caption = #1042#1099#1095#1080#1089#1083#1077#1085#1080#1077' '#1074#1077#1089#1086#1074#1099#1093' '#1082#1086#1101#1092#1092#1080#1094#1080#1077#1085#1090#1086#1074' '#1082#1088#1080#1090#1077#1088#1080#1077#1074
-  ClientHeight = 395
-  ClientWidth = 617
+  BorderIcons = [biSystemMenu]
+  Caption = #1042#1099#1095#1080#1089#1083#1077#1085#1080#1077' '#1074#1077#1089#1086#1074#1099#1093' '#1082#1086#1101#1092#1092#1080#1094#1080#1077#1085#1090#1086#1074
+  ClientHeight = 484
+  ClientWidth = 698
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -30,35 +31,36 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
     Caption = #1064#1072#1075' 1'
   end
   object ConsistencLabel: TLabel
-    Left = 181
-    Top = 324
-    Width = 47
+    Left = 144
+    Top = 389
+    Width = 4
     Height = 13
     Caption = '-'
   end
   object Label2: TLabel
-    Left = 45
-    Top = 324
+    Left = 8
+    Top = 389
     Width = 130
     Height = 13
     Caption = #1048#1085#1076#1077#1082#1089' '#1089#1086#1075#1083#1072#1089#1086#1074#1072#1085#1085#1086#1089#1090#1080':'
   end
   object CriteriaEstimates: TStringGrid
-    Left = 357
-    Top = 64
-    Width = 223
-    Height = 201
+    Left = 361
+    Top = 72
+    Width = 328
+    Height = 289
     ColCount = 2
     DefaultColWidth = 24
     RowCount = 2
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs]
     TabOrder = 0
     OnDrawCell = CriteriaEstimatesDrawCell
+    OnGetEditText = CriteriaEstimatesGetEditText
     OnSetEditText = CriteriaEstimatesSetEditText
   end
   object BackButton: TButton
-    Left = 201
-    Top = 351
+    Left = 249
+    Top = 423
     Width = 75
     Height = 25
     Caption = #1053#1072#1079#1072#1076
@@ -66,8 +68,8 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
     OnClick = BackButtonClick
   end
   object NextButton: TButton
-    Left = 313
-    Top = 351
+    Left = 361
+    Top = 423
     Width = 75
     Height = 25
     Caption = #1044#1072#1083#1077#1077
@@ -75,14 +77,14 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
     OnClick = NextButtonClick
   end
   object PairWiseGrid: TStringGrid
-    Left = 45
+    Left = 8
     Top = 64
-    Width = 223
-    Height = 201
+    Width = 316
+    Height = 297
     ColCount = 2
     DefaultColWidth = 24
     RowCount = 2
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs]
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goTabs]
     TabOrder = 3
     OnDrawCell = CriteriaEstimatesDrawCell
     OnSetEditText = CriteriaEstimatesSetEditText

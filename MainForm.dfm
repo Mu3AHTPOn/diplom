@@ -26,7 +26,7 @@ object Form1: TForm1
     Left = 0
     Top = 30
     Width = 1054
-    Height = 314
+    Height = 323
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelWidth = 5
@@ -44,7 +44,6 @@ object Form1: TForm1
     OnDrawCell = InputDataStringGridDrawCell
     OnKeyDown = InputDataStringGridKeyDown
     OnSetEditText = InputDataStringGridSetEditText
-    ExplicitTop = 33
   end
   object ResultRichEdit: TRichEdit
     Left = 0
@@ -80,8 +79,6 @@ object Form1: TForm1
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 2
-    ExplicitTop = 423
-    ExplicitWidth = 1152
   end
   object Chart1: TChart
     Left = 742
@@ -110,7 +107,6 @@ object Form1: TForm1
     OnMouseDown = Chart1MouseDown
     OnMouseMove = Chart1MouseMove
     OnMouseUp = Chart1MouseUp
-    ExplicitLeft = 824
     ColorPaletteIndex = 13
     object Series1: TBarSeries
       ColorEachPoint = True
@@ -349,9 +345,10 @@ object Form1: TForm1
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
+      OnSelect = MethodComboBoxSelect
       Items.Strings = (
-        #1052#1077#1090#1086#1076' '#1072#1085#1072#1083#1080#1079#1072' '#1080#1077#1088#1072#1088#1093#1080#1081
-        #1052#1077#1090#1086#1076' '#1074#1079#1074#1077#1096#1077#1085#1085#1086#1081' '#1089#1091#1084#1084#1099' '#1084#1077#1089#1090)
+        #1052#1077#1090#1086#1076' '#1074#1079#1074#1077#1096#1077#1085#1085#1086#1081' '#1089#1091#1084#1084#1099' '#1084#1077#1089#1090
+        #1052#1077#1090#1086#1076' '#1072#1085#1072#1083#1080#1079#1072' '#1080#1077#1088#1072#1088#1093#1080#1081)
     end
   end
   object MainMenu1: TMainMenu
