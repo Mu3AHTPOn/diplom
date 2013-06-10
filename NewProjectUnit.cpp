@@ -185,7 +185,7 @@ void TNewProjectForm::onListExit()
 		list->Items->Strings[list->ItemIndex] = listEdit->Text;
 
         if (list == RowNamesListBox) {
-			currentProject->getAlternativeEstimates()[list->ItemIndex].setName(listEdit->Text);
+			currentProject->getAlternativeNames()[list->ItemIndex] = listEdit->Text;
 		} else {
 			currentProject->getCriteriaNames()[list->ItemIndex] = listEdit->Text;
 		}
@@ -238,26 +238,9 @@ void __fastcall TNewProjectForm::NextButtonClick(TObject *Sender)
 		return;
 	}
 
-//	ProjectManager &pm = ProjectManager::getInstance();
-//	Project &project = pm.newProject();
-//
-//	vector<UnicodeString> &criteriaNames = project.getCriteriaNames();
-//	for (int i = 0; i < colCount; i++) {
-//		criteriaNames.push_back(ColNamesListBox->Items->Strings[i]);
-//	}
-//
-	vector<Estimates> &alternativeEstimates = currentProject->getAlternativeEstimates();
-	for (int i = 0; i < alternativeEstimates.size(); i++) {
-		vector<double> &estimates = alternativeEstimates[i].getEstimates();
-		for (int j = 0; j <colCount; ++j)
-		{
-            estimates.push_back(0);
-        }
-	}
-
 	currentProject->setName(ProjectName->Text);
 
-	if (MethodComboBox->ItemIndex == 1)
+	if (MethodComboBox->ItemIndex == MathMethods::AHP)
 	{
 		Hide();
 		bool isBack(false);
@@ -270,11 +253,6 @@ void __fastcall TNewProjectForm::NextButtonClick(TObject *Sender)
 		}
 	} else
 	{
-//			MessageDlg(L"Желаете ли вы рассчитать важность критериев с помощью метода анализа ииерархий?",
-//						mtConfirmation,
-//						mbYesNo,
-//						0,
-//						mbYes) == mrYes)
 		if (Application->MessageBoxW(L"Желаете ли вы рассчитать важность критериев с помощью метода анализа ииерархий?",
 									L"Подтвердить?",
 									MB_YESNO| MB_ICONQUESTION
@@ -349,11 +327,11 @@ void __fastcall TNewProjectForm::FormShow(TObject *Sender)
 		}
 
 		{
-			vector<Estimates>::const_iterator iter = currentProject->getAlternativeEstimates().begin();
-			vector<Estimates>::const_iterator endIter = currentProject->getAlternativeEstimates().end();
+			vector<UnicodeString>::const_iterator iter = currentProject->getAlternativeNames().begin();
+			vector<UnicodeString>::const_iterator endIter = currentProject->getAlternativeNames().end();
 
 			while (iter != endIter) {
-				RowNamesListBox->Items->Add(iter->getName());
+				RowNamesListBox->Items->Add(*iter);
 				++iter;
 			}
 		}

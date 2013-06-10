@@ -23,11 +23,10 @@ using boost::wregex;
 class TEvalCriteriaWeightsForm : public TForm
 {
 __published:	// IDE-managed Components
-	TLabel *Label1;
+	TLabel *ExplanationLabel;
 	TStringGrid *CriteriaEstimates;
 	TButton *BackButton;
 	TButton *NextButton;
-	TLabel *StepLabel;
 	TLabel *ConsistencLabel;
 	TStringGrid *PairWiseGrid;
 	TLabel *Label2;
@@ -40,6 +39,8 @@ __published:	// IDE-managed Components
 	void __fastcall BackButtonClick(TObject *Sender);
 	void __fastcall CriteriaEstimatesGetEditText(TObject *Sender, int ACol, int ARow,
           UnicodeString &Value);
+	void __fastcall CriteriaEstimatesSelectCell(TObject *Sender, int ACol, int ARow,
+          bool &CanSelect);
 private:	// User declarations
 	void drawFixedColNames(TObject *Sender, int ACol, int ARow, TRect &Rect);
 	void setRowHeight(TObject *Sender, UnicodeString &str);
@@ -51,6 +52,9 @@ private:	// User declarations
 	vector<UnicodeString> *gridNames;
 	vector<UnicodeString> alternativeNames;
 	vector< vector<int> > *rates;
+	double consistency;
+	const double maxConsistency;
+	vector<double> *priorities;
 	const wregex gridRegex;
 	int step;
 	bool *isBack;

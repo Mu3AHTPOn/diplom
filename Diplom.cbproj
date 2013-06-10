@@ -167,6 +167,9 @@
             <DependentOn>MainForm.h</DependentOn>
             <BuildOrder>2</BuildOrder>
         </CppCompile>
+        <None Include="MathMethods.h">
+            <BuildOrder>15</BuildOrder>
+        </None>
         <CppCompile Include="matrix.cpp">
             <DependentOn>matrix.h</DependentOn>
             <BuildOrder>3</BuildOrder>

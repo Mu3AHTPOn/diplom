@@ -19,8 +19,8 @@ class Project {
 		inline int getAlternativesCount();
 		inline const UnicodeString & getName();
 		void setName(UnicodeString name);
-		inline vector<UnicodeString> getAlternativeNames();
-		inline vector<UnicodeString> & getCriteriaNames();
+		inline vector<UnicodeString> &getAlternativeNames();
+		inline vector<UnicodeString> &getCriteriaNames();
 		inline vector<Estimates> & getAlternativeEstimates();
 		inline Estimates &getCriteriaEstimates();
 		inline int getMethod();
@@ -34,6 +34,7 @@ class Project {
 
 	private:
 		vector<UnicodeString> criteriaNames;
+		vector<UnicodeString> alternativeNames;
 		UnicodeString name;
 		vector<Estimates> alternativeEstimates;
 		Estimates criteriaEstimates;

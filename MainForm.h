@@ -25,6 +25,7 @@
 #include <VCLTee.Series.hpp>
 #include <vector>
 #include "ProjectManager.cpp"
+#include "MathMethods.h"
 
 using std::vector;
 using boost::wregex;

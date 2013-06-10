@@ -4,7 +4,6 @@
 #include <Clipbrd.hpp>
 #include <limits>
 
-
 #pragma hdrstop
 
 #include "MainForm.h"
@@ -173,11 +172,10 @@ void __fastcall TForm1::N5Click(TObject *Sender)
 void __fastcall TForm1::N8Click(TObject *Sender)
 {
 	if (isDataValid()) {
-		if (MethodComboBox->ItemIndex == 0) {
+		if (MethodComboBox->ItemIndex == MathMethods::WS) {
+		   evalWS();
+		} else {
 		   evalAHP();
-		} else
-		{
-			evalWS();
 		}
 	}
 }
@@ -185,11 +183,11 @@ void __fastcall TForm1::N8Click(TObject *Sender)
 void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
 {
 	if (projectManager.isProjectOpen() && isDataValid()) {
-		if (MethodComboBox->ItemIndex == 0) {
-		   evalAHP();
+		if (MethodComboBox->ItemIndex == MathMethods::WS) {
+		    evalWS();
 		} else
 		{
-			evalWS();
+			evalAHP();
 		}
     }
 }
@@ -201,27 +199,36 @@ void TForm1::evalAHP()
 try {
 	const int criteriaCount = getCriteriaCount();
 	const int alternativesCount = getAlternativesCount();
+	Project &currentProject = projectManager.getCurrentProject();
 
 	Matrix<double> criteriaEstimates(criteriaCount);
 
-	Matrix<int> *objectEstimates = new Matrix<int>[criteriaCount];
-	AHPSolver<int> *ahpObjects = new AHPSolver<int>[criteriaCount];
+	Matrix<double> *objectEstimates = new Matrix<double>[criteriaCount];
+	AHPSolver<double> *ahpObjects = new AHPSolver<double>[criteriaCount];
 
+	vector<double> &priorities = currentProject.getCriteriaEstimates().getPriorities();
+	vector<Estimates> &alternativeEstimates = currentProject.getAlternativeEstimates();
 	for (int i = 0; i < criteriaCount; ++i) {
-		criteriaEstimates[i][0] = InputDataStringGrid->Cells[i+fixedCols][fixedRows].ToDouble();
-		objectEstimates[i] = *(new Matrix<int>(alternativesCount));
+		criteriaEstimates[i][0] = priorities[i];
+		objectEstimates[i] = *(new Matrix<double>(alternativesCount));
+		for (int j = 0; j < alternativesCount; ++j) {
+			(objectEstimates[i])[j][0] = alternativeEstimates[i].getPriorities()[j];
+		}
+
+		ahpObjects[i] = *(new AHPSolver<double>(objectEstimates[i]));
 	}
 
 
 	//fill objectEstimates
-	for (int i = 0; i < criteriaCount; ++i) {
-		Matrix<int> &curr = objectEstimates[i];
-		for (int j = 0; j < alternativesCount; ++j) {
-			curr[j][0] = InputDataStringGrid->Cells[i + fixedCols][j + fixedRows + 1].ToInt();
-		}
-
-		ahpObjects[i] = *(new AHPSolver<int>(curr));
-	}
+//	vector<double> &priorities = currentProject.getCriteriaEstimates().getPriorities();
+//	for (int i = 0; i < criteriaCount; ++i) {
+//
+//		for (int j = 0; j < alternativesCount; ++j) {
+//			curr[j][0] = priorities[j];
+//		}
+//
+//		ahpObjects[i] = *(new AHPSolver<int>(curr));
+//	}
 
 	Matrix<double> integrEstimate(ahpObjects[0].getMaxEigenVectors());
 	for(int i = 1; i < criteriaCount; ++i)
@@ -339,7 +346,7 @@ void __fastcall TForm1::InputDataStringGridDrawCell(TObject *Sender, int ACol, i
 		InputDataStringGrid->Canvas->FillRect(InputDataStringGrid->CellRect(ACol, ARow));
 		UnicodeString str = ACol == 0 ? UnicodeString(L"Важность критериев") : InputDataStringGrid->Cells[ACol][ARow];
 		InputDataStringGrid->Canvas->TextOut(Rect.Left + 2, Rect.Top + 4, str);
-    }
+	}
 }
 //---------------------------------------------------------------------------
 
@@ -357,7 +364,7 @@ void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 			form->setResultStr(newName);
 			try {
 			  form->ShowModal();
-			  if (newName != L"") {
+			  if (! newName->IsEmpty()) {
 				  setColWidth(*newName);
 				  InputDataStringGrid->Refresh();
 				  projectManager.setIsCurrentProjectSaved(false);
@@ -377,9 +384,9 @@ void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 			form->setResultStr(newName);
 			try {
 			  form->ShowModal();
-			  if (newName != L"") {
+			  if (! newName->IsEmpty()) {
 				  setRowHeight(*newName);
-				  projectManager.getCurrentProject().getAlternativeEstimates()[i - 2].setName(*newName);
+				  projectManager.getCurrentProject().getAlternativeNames()[i - 2] = *newName;
 				  delete newName;
 				  InputDataStringGrid->Refresh();
 			  }
@@ -397,8 +404,8 @@ void TForm1::drawFixedColNames(int ACol, int ARow, TRect &Rect)
 		return;
 	}
 
-	vector<UnicodeString> &criteriaNames =  projectManager.getCurrentProject().getCriteriaNames();
-	vector<Estimates> &alternativeEstimates =  projectManager.getCurrentProject().getAlternativeEstimates();
+	vector<UnicodeString> &criteriaNames = projectManager.getCurrentProject().getCriteriaNames();
+	vector<UnicodeString> &alternativeNames = projectManager.getCurrentProject().getAlternativeNames();
 
 	if (ARow == 1) {
 		UnicodeString name = L"Важность критериев";
@@ -408,7 +415,7 @@ void TForm1::drawFixedColNames(int ACol, int ARow, TRect &Rect)
 	}
 
 	if (ACol == 0) {
-		UnicodeString name = alternativeEstimates[ARow - 2].getName();
+		UnicodeString name = alternativeNames[ARow - 2];
 		setColWidth(name);
 		InputDataStringGrid->Canvas->TextRect(Rect, name);
 	}
@@ -457,9 +464,16 @@ void TForm1::loadProject()
     }
 
 	if (OpenDialog1->Execute(this->Handle)) {
-		projectManager.loadProject(OpenDialog1->FileName);
-
-        showCurrentProject();
+		try {
+			projectManager.loadProject(OpenDialog1->FileName);
+			showCurrentProject();
+		} catch (...) {
+			Application->MessageBoxW(
+				L"Файл проекта повреждён!",
+				L"Ошибка!",
+				MB_OK| MB_ICONERROR
+		   );
+		}
 	}
 }
 //--------------------------------------------------------------------------
@@ -475,8 +489,10 @@ void TForm1::newProject()
 	if (getCriteriaCount() > 0 && getAlternativesCount() > 0) {
 	   projectManager.setIsProjectOpen(true);
 		initGrid();
+
 		InputDataStringGrid->Refresh();
 		Form1->Caption = projectManager.getCurrentProject().getName();
+		MethodComboBox->ItemIndex = projectManager.getCurrentProject().getMethod();
 		for (int i = 0; i < InputDataStringGrid->ColCount; i++) {
 			for (int j = 0; j < InputDataStringGrid->RowCount; j++) {
 					InputDataStringGrid->Cells[i][j] = L"";
@@ -491,7 +507,7 @@ void TForm1::newProject()
 	if (criteriaEstimates->size() > 0) {
 		for (int i = 0; i < criteriaEstimates->size(); ++i)
 		{
-			UnicodeString str(Format(L"%.2f", new TVarRec(criteriaEstimates->at(i)), 1));
+			UnicodeString str(Format(L"%.2f", &TVarRec(criteriaEstimates->at(i)), 1));
 			InputDataStringGrid->Cells[i + 1][1] = str;
 			setColWidth(str, i + 1);
         }
@@ -531,7 +547,11 @@ bool TForm1::closeProject()
 bool TForm1::showSaveDialog()
 {
 	if (projectManager.isProjectOpen() && ! projectManager.isSavedCurrentPreject()) {
-	   const int dialogResult = Application->MessageBoxW(L"Сохранить текущий проект?", L"Сохранить проект?",  MB_YESNOCANCEL | MB_ICONQUESTION | MB_DEFBUTTON3);
+	   const int dialogResult = Application->MessageBoxW(
+									L"Сохранить текущий проект?",
+									L"Сохранить проект?",
+									MB_YESNOCANCEL | MB_ICONQUESTION | MB_DEFBUTTON3
+							   );
 		if (dialogResult == IDYES) {
 		   saveProject();
 		} else if (dialogResult == IDCANCEL) {
@@ -551,11 +571,19 @@ bool TForm1::isDataValid()
 		for (int j = fixedRows ; j < rows; ++j)
 		{
 			const UnicodeString &val = InputDataStringGrid->Cells[i][j];
-			const bool isValid = j == 1 ? regex_match(val.w_str(), floatGridRegex) : regex_match(val.w_str(), gridRegex);
+			const bool allowFloat = projectManager.getCurrentProject().getMethod() == MathMethods::AHP;
+			const bool isValid = allowFloat || j == 1 ?
+						regex_match(val.w_str(), floatGridRegex) :
+						regex_match(val.w_str(), gridRegex);
+
 			if (! isValid)
 			{
-				Application->MessageBoxW(L"Введены неверные данные (вводить можно только целые числа)", L"Ошибка",  MB_OK| MB_ICONERROR);
-//				MessageDlg(L"Введены неверные данные (вводить можно только целые числа)", mtError, TMsgDlgButtons() << mbOK, 0);
+				Application->MessageBoxW(
+					L"Введены неверные данные (вводить можно только целые числа)",
+					L"Ошибка",
+					MB_OK| MB_ICONERROR
+				);
+
 				InputDataStringGrid->Col = i;
 				InputDataStringGrid->Row = j;
 				return false;
@@ -627,9 +655,10 @@ void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
 {
 	NewProjectForm->ShowModal();
 	initGrid();
+	MethodComboBox->ItemIndex = projectManager.getCurrentProject().getMethod();
 
 	for (int i = 0; i < getAlternativesCount(); ++i) {
-        vector<double> &estimates = projectManager.getCurrentProject().getAlternativeEstimates()[i].getEstimates();
+        vector<double> &estimates = projectManager.getCurrentProject().getAlternativeEstimates()[i].getPriorities();
 		for (int j = 0; j < getCriteriaCount(); ++j) {
 			InputDataStringGrid->Cells[j + fixedCols][i + fixedRows + 1] = FloatToStr(estimates[j]);
         }
@@ -641,7 +670,7 @@ void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
 	if (criteriaEstimates->size() > 0) {
 		for (int i = 0; i < criteriaEstimates->size(); ++i)
 		{
-			UnicodeString str(Format(L"%.2f", new TVarRec(criteriaEstimates->at(i)), 1));
+			UnicodeString str(Format(L"%.2f", &TVarRec(criteriaEstimates->at(i)), 1));
 			InputDataStringGrid->Cells[i + 1][1] = str;
 			setColWidth(str, i + 1);
         }
@@ -654,25 +683,33 @@ void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
 void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol,
 		  int ARow, const UnicodeString Value)
 {
-	const bool isValid = ARow == 1 ? regex_match(Value.w_str(), floatGridRegex) : regex_match(Value.w_str(), gridRegex);
+	Project &currentProject = projectManager.getCurrentProject();
+	const bool isAHP = currentProject.getMethod() == MathMethods::AHP;
+	const bool isValid = isAHP || ARow == 1 ? regex_match(Value.w_str(), floatGridRegex) : regex_match(Value.w_str(), gridRegex);
 	if (! isValid)
 	{
 		UnicodeString str = InputDataStringGrid->Cells[ACol][ARow];
 		InputDataStringGrid->Cells[ACol][ARow] = str.SubString(1, str.Length() - 1);
 	} else {
-		if (ARow != 1)
-		{
-			if (StrToInt(Value) < 1) {
-				Application->MessageBoxW(L"Оценки не должны быть меньше 1", L"Ошибка",  MB_OK| MB_ICONERROR);
-		//		MessageDlg(L"Оценки не должны быть меньше 1", mtError, TMsgDlgButtons() << mbOK, 0);
-				InputDataStringGrid->Col = ACol;
-				InputDataStringGrid->Row = ARow;
-				InputDataStringGrid->Cells[ACol][ARow] = L"";
+		if (! Value.IsEmpty()) {
+			if (ARow != 1)
+			{
+				if (! isAHP && StrToInt(Value) < 1) {
+					Application->MessageBoxW(
+						L"Оценки не должны быть меньше 1",
+						L"Ошибка",
+						MB_OK| MB_ICONERROR
+					);
+
+					InputDataStringGrid->Col = ACol;
+					InputDataStringGrid->Row = ARow;
+					InputDataStringGrid->Cells[ACol][ARow] = L"";
+				} else {
+					currentProject.getAlternativeEstimates()[ARow - fixedRows - 1].getPriorities()[ACol - fixedCols] = StrToFloat(Value);
+				}
 			} else {
-				projectManager.getCurrentProject().getAlternativeEstimates()[ARow - fixedRows - 1].getEstimates()[ACol - fixedCols] = StrToFloat(Value);
+				currentProject.getCriteriaEstimates().getPriorities()[ACol - fixedCols] = StrToFloat(Value);
 			}
-		} else {
-			//TODO save criteria weights
 		}
 	}
 
@@ -808,17 +845,26 @@ void TForm1::showCurrentProject()
 
 	//fill grid
 
-	vector<Estimates> &alternativeEstimates = projectManager.getCurrentProject().getAlternativeEstimates();
-	for (int i = 0; i < getAlternativesCount(); ++i)
+	Project &currentProject = projectManager.getCurrentProject();
+	vector<Estimates> &alternativeEstimates = currentProject.getAlternativeEstimates();
+	for (int i = 0; i < alternativeEstimates.size(); ++i)
 	{
-		vector<double> &estimates = alternativeEstimates[i].getEstimates();
-		for (int j = 0; j < getCriteriaCount() ; ++j)
+		vector<double> &priorities = alternativeEstimates[i].getPriorities();
+		for (int j = 0; j < priorities.size() ; ++j)
 		{
-			UnicodeString str(FloatToStr(estimates[j]));
-			InputDataStringGrid->Cells[j + fixedCols][i + fixedRows + 1] = str;
-			setColWidth(str, j + fixedCols);
+			UnicodeString str(Format(L"%.2f", &TVarRec(priorities[j]), 1));
+			InputDataStringGrid->Cells[i + fixedCols][j + fixedRows + 1] = str;
+			setColWidth(str, i + fixedCols);
 		}
 	}
+
+	vector<double> &criteriaPriorities = currentProject.getCriteriaEstimates().getPriorities();
+	for (int i = 0; i < criteriaPriorities.size(); ++i)
+	{
+		UnicodeString str(Format(L"%.2f", &TVarRec(criteriaPriorities[i]), 1));
+		InputDataStringGrid->Cells[i + fixedCols][fixedRows ] = str;
+		setColWidth(str, i + fixedCols);
+    }
 
 	Form1->Caption = projectManager.getCurrentProject().getName();
 	MethodComboBox->ItemIndex = projectManager.getCurrentProject().getMethod();

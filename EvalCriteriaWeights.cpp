@@ -9,7 +9,8 @@
 TEvalCriteriaWeightsForm *EvalCriteriaWeightsForm;
 //---------------------------------------------------------------------------
 __fastcall TEvalCriteriaWeightsForm::TEvalCriteriaWeightsForm(TComponent* Owner)
-	: TForm(Owner), gridRegex(L"[\\d]+"), step(0)
+	: TForm(Owner), gridRegex(L"[\\d]+"), step(0), consistency(0.0),
+	  maxConsistency(0.1)
 {
 	EvalCriteriaWeightsForm = this;
 }
@@ -129,6 +130,20 @@ void __fastcall TEvalCriteriaWeightsForm::FormShow(TObject *Sender)
 
 void __fastcall TEvalCriteriaWeightsForm::NextButtonClick(TObject *Sender)
 {
+	if (consistency > maxConsistency) {
+		UnicodeString str = L"Коэффициент согласованности должен быть менее " +
+							FloatToStr(maxConsistency) +
+							L". Попробуйте согласовать оценки";
+
+		if (Application->MessageBoxW(
+				str.w_str(),
+				L"Внимание!",
+				MB_YESNO | MB_ICONERROR) == IDYES)
+	    {
+			return;
+        }
+    }
+
 	++step;
 
 	const int size(currentProject->getMethod() == 0 ? 1 : currentProject->getCriteriaCount() + 1);
@@ -193,14 +208,17 @@ void TEvalCriteriaWeightsForm::eval() {
 		sum += eigen[i][0];
 	}
 
-	vector<double> &estimates = currentProject->getCriteriaEstimates().getEstimates();
-	estimates.clear();
+	priorities->clear();
 	for (int i = 0; i < size; ++i)
 	{
-		estimates.push_back(eigen[i][0] / sum);
+		priorities->push_back(eigen[i][0] / sum);
 	}
 
-	ConsistencLabel->Caption = Format(L"%.2f", &TVarRec(ahpEstimates.evaluatePairwiseConsistency()), 1);
+	consistency = ahpEstimates.evaluatePairwiseConsistency();
+	ConsistencLabel->Caption = Format(L"%.2f", &TVarRec(consistency), 1);
+	if (consistency > 0.1) {
+		ConsistencLabel->Font->Color = clRed;
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesGetEditText(TObject *Sender,
@@ -217,17 +235,16 @@ void TEvalCriteriaWeightsForm::setData() {
 		gridNames = &currentProject->getCriteriaNames();
 		rates = &currentProject->getCriteriaEstimates().getRates();
 		size = currentProject->getCriteriaCount() + 1;
+		priorities = &currentProject->getCriteriaEstimates().getPriorities();
+		ExplanationLabel->Caption = L"Задайте относительную важность критериев";
 	} else {
 		vector<Estimates> &alternativeEstimates = currentProject->getAlternativeEstimates();
 		Estimates &estiamtes = alternativeEstimates[step - 1];
-		alternativeNames = vector<UnicodeString>();
-		for (int i = 0; i < alternativeEstimates.size(); ++i) {
-			alternativeNames.push_back(alternativeEstimates[i].getName());
-		}
-
-		gridNames = &alternativeNames;
+		priorities = &estiamtes.getPriorities();
+		gridNames = &currentProject->getAlternativeNames();
 		rates = &estiamtes.getRates();
-        size = currentProject->getAlternativesCount() + 1;
+		size = currentProject->getAlternativesCount() + 1;
+		ExplanationLabel->Caption = L"Задайте относительную важность альтернатив";
 	}
 
 	const int n = rates->size() - 1;
@@ -236,13 +253,22 @@ void TEvalCriteriaWeightsForm::setData() {
 	CriteriaEstimates->ColCount = size - 1;
 	CriteriaEstimates->RowCount = size;
 
+	CriteriaEstimates->Row = 1;
+	CriteriaEstimates->Col = 1;
+	CriteriaEstimates->Refresh();
+
 	PairWiseGrid->ColCount = size;
 	PairWiseGrid->RowCount = size;
+	PairWiseGrid->RowHeights[0] = 10;      //сбрасываем высоту первой строки
+	PairWiseGrid->Refresh();
+
+	ConsistencLabel->Font->Color = clBlack;
 
 	for (int i = 0 ; i < rates->size(); ++i) {
 		vector<int> &v = rates->at(i);
 		for (int j = 0; j < v.size(); ++j) {
 			PairWiseGrid->Cells[j + 1][i + 1] = L"";
+			const int val = v[j];
 			if (v[j] == 0) {
 				CriteriaEstimates->Cells[j + 1][i + 1] = L"";
 			} else {
@@ -260,3 +286,33 @@ void TEvalCriteriaWeightsForm::setData() {
         eval();
     }
 }
+
+void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *Sender,
+          int ACol, int ARow, bool &CanSelect)
+{
+	if (step == 0) {
+		if (ACol == 1) {
+			ExplanationLabel->Caption = L"Задайте относительную важность критериев";
+		} else {
+			ExplanationLabel->Caption = L"Задайте относительную важность критериев без учёта критерия \"" +
+			gridNames->at(ACol - 1) + L"\"";
+
+			if (ACol > 2) {
+				ExplanationLabel->Caption = ExplanationLabel->Caption + L" и предидущих";
+            }
+		}
+	} else {
+        if (ACol == 1) {
+			ExplanationLabel->Caption = L"Задайте относительную важность альтернатив";
+		} else {
+			ExplanationLabel->Caption = L"Задайте относительную важность альтернатив без учёта альтернативы \"" +
+			gridNames->at(ACol - 1) + L"\"";
+
+			if (ACol > 2) {
+				ExplanationLabel->Caption = ExplanationLabel->Caption + L" и предидущих";
+            }
+        }
+    }
+}
+//---------------------------------------------------------------------------
+

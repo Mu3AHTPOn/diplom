@@ -51,7 +51,6 @@ object Form1: TForm1
     Width = 1054
     Height = 162
     Align = alBottom
-    Alignment = taCenter
     Font.Charset = RUSSIAN_CHARSET
     Font.Color = clWindowText
     Font.Height = -16

@@ -11,6 +11,7 @@
 
 #include <vector>
 #include "ProjectManager.cpp"
+#include "MathMethods.h"
 
 using std::vector;
 //---------------------------------------------------------------------------

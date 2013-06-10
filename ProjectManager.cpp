@@ -17,49 +17,51 @@ ProjectManager& ProjectManager::getInstance()
 
 	return (*instance);
 }
-
+//---------------------------------------------------------------------------
 ProjectManager::ProjectManager(): isSavedCurrentProject(false), isOpenProject(false)
 {
 	currentProject = NULL;
 }
-
+//---------------------------------------------------------------------------
 ProjectManager::~ProjectManager()
 {
 	delete [] instance;
 	delete [] currentProject;
 }
-
+//---------------------------------------------------------------------------
 void ProjectManager::setIsCurrentProjectSaved(bool isSaved)
 {
 	isSavedCurrentProject = isSaved;
 }
-
+//---------------------------------------------------------------------------
 bool ProjectManager::isSavedCurrentPreject()
 {
 	return isSavedCurrentProject;
 }
-
+//---------------------------------------------------------------------------
 void ProjectManager::setIsProjectOpen(bool isOpen)
 {
 	isOpenProject = isOpen;
 }
-
+//---------------------------------------------------------------------------
 bool ProjectManager::isProjectOpen()
 {
 	return isOpenProject;
 }
-
+//---------------------------------------------------------------------------
 Project & ProjectManager::getCurrentProject()
 {
     return *currentProject;
 }
-
+//---------------------------------------------------------------------------
 void ProjectManager::saveProject(UnicodeString fileName)
 {
     TFileStream *fs = new TFileStream(fileName, fmCreate);
 	try {
 		TJSONObject *js = new TJSONObject();
 		TJSONArray *criteriaNamesJSON = new TJSONArray();
+		TJSONArray *alternativeNamesJSON = new TJSONArray();
+
 		const vector<UnicodeString> &criteriaNames = getCurrentProject().getCriteriaNames();
 		vector<UnicodeString>::const_iterator iter;
 		for (iter = criteriaNames.begin(); iter != criteriaNames.end(); ++iter) {
@@ -68,17 +70,24 @@ void ProjectManager::saveProject(UnicodeString fileName)
 
 		js->AddPair(L"criteriaNames", criteriaNamesJSON);
 
+		const vector<UnicodeString> &alternativeNames = getCurrentProject().getAlternativeNames();
+		for (iter = alternativeNames.begin(); iter != alternativeNames.end(); ++iter) {
+			alternativeNamesJSON->Add(*iter);
+		}
+
+		js->AddPair(L"alternativeNames", alternativeNamesJSON);
+
 		Estimates &criteriaEstimates = currentProject->getCriteriaEstimates();
 		vector< vector<int> > &rates = criteriaEstimates.getRates();
-		vector<double> &estimates = criteriaEstimates.getEstimates();
+		vector<double> &priorities = criteriaEstimates.getPriorities();
 
 		TJSONObject *crteriaEstimatesJSON = new TJSONObject();
 		TJSONArray *crteriaEstimatesArray = new TJSONArray();
-		for (int i = 0; i < estimates.size(); ++i) {
-			crteriaEstimatesArray->Add(FloatToStr(estimates[i]));
+		for (int i = 0; i < priorities.size(); ++i) {
+			crteriaEstimatesArray->Add(FloatToStr(priorities[i]));
 		}
 
-		crteriaEstimatesJSON->AddPair(L"estimates", crteriaEstimatesArray);
+		crteriaEstimatesJSON->AddPair(L"priorities", crteriaEstimatesArray);
 
 		TJSONArray *crteriaRatesTable = new TJSONArray();
 		for (int i = 0; i < rates.size(); ++i) {
@@ -98,15 +107,14 @@ void ProjectManager::saveProject(UnicodeString fileName)
 		TJSONArray *tableData = new TJSONArray();
 		for (int i = 0; i < alternativeEstimates.size(); i++) {
 			TJSONObject *alternativeEstimatesJSON = new TJSONObject();
-			alternativeEstimatesJSON->AddPair("name", alternativeEstimates[i].getName());
-			TJSONArray *rowData = new TJSONArray();
+			TJSONArray *prioritiesJSON = new TJSONArray();
 
-			const vector<double> &estimates = alternativeEstimates[i].getEstimates();
-			for (int j = 0; j < estimates.size(); j++) {
-				rowData->Add(FloatToStr(estimates[j]));
+			const vector<double> &priorities = alternativeEstimates[i].getPriorities();
+			for (int j = 0; j < priorities.size(); j++) {
+				prioritiesJSON->Add(FloatToStr(priorities[j]));
 			}
 
-			alternativeEstimatesJSON->AddPair("estimates", rowData);
+			alternativeEstimatesJSON->AddPair("priorities", prioritiesJSON);
 
 			vector< vector<int> > &rates = alternativeEstimates[i].getRates();
 			TJSONArray *alternativeRatesTable = new TJSONArray();
@@ -138,7 +146,7 @@ void ProjectManager::saveProject(UnicodeString fileName)
 		fs->Free();
 	}
 }
-
+//---------------------------------------------------------------------------
 Project & ProjectManager::loadProject(UnicodeString fileName)
 {
     TFileStream *fs = new TFileStream(fileName, fmOpenRead);
@@ -151,26 +159,31 @@ Project & ProjectManager::loadProject(UnicodeString fileName)
 		UnicodeString str(chars);
 
 		TJSONObject *js = (TJSONObject*) TJSONObject::ParseJSONValue(str);
-		TJSONArray *colNamesJSON = (TJSONArray*) js->Get(L"criteriaNames")->JsonValue;
-		TJSONObject *crteriaEstimatesJSON = (TJSONObject*) js->Get(L"criteriaEstimates")->JsonValue;
-		TJSONArray *crteriaEstimatesArray = (TJSONArray*) crteriaEstimatesJSON->Get(L"estimates")->JsonValue;
-		TJSONArray *crteriaRatesTable = (TJSONArray*) crteriaEstimatesJSON->Get(L"rates")->JsonValue;
-		TJSONArray *alternativeEstimatesJSON = (TJSONArray*) js->Get(L"alternativeEstimates")->JsonValue;
 
 		closeProject();
 		currentProject = new Project();
-		vector<UnicodeString> &criteriaNames = getCurrentProject().getCriteriaNames();
-		for (int i = 0; i < colNamesJSON->Size(); ++i) {
-			criteriaNames.push_back(colNamesJSON->Get(i)->Value());
+
+		TJSONArray *criteriaNamesJSON = (TJSONArray*) js->Get(L"criteriaNames")->JsonValue;
+		vector<UnicodeString> &criteriaNames= getCurrentProject().getCriteriaNames();
+		for (int i = 0; i < criteriaNamesJSON->Size(); ++i) {
+			criteriaNames.push_back(criteriaNamesJSON->Get(i)->Value());
 		}
 
+		TJSONArray *alternativeNamesJSON = (TJSONArray*) js->Get(L"alternativeNames")->JsonValue;
+		vector<UnicodeString> &alternativeNames = getCurrentProject().getAlternativeNames();
+		for (int i = 0; i < alternativeNamesJSON->Size(); ++i) {
+			alternativeNames.push_back(alternativeNamesJSON->Get(i)->Value());
+		}
+
+		TJSONObject *crteriaEstimatesJSON = (TJSONObject*) js->Get(L"criteriaEstimates")->JsonValue;
+		TJSONArray *crteriaEstimatesArray = (TJSONArray*) crteriaEstimatesJSON->Get(L"priorities")->JsonValue;
 		Estimates &criteriaEstimates = currentProject->getCriteriaEstimates();
-		vector<double> &estimates = criteriaEstimates.getEstimates();
-
+		vector<double> &priorities = criteriaEstimates.getPriorities();
 		for (int i = 0; i < crteriaEstimatesArray->Size(); ++i) {
-			estimates.push_back(StrToFloat(crteriaEstimatesArray->Get(i)->Value()));
+			priorities.push_back(StrToFloat(crteriaEstimatesArray->Get(i)->Value()));
 		}
 
+		TJSONArray *crteriaRatesTable = (TJSONArray*) crteriaEstimatesJSON->Get(L"rates")->JsonValue;
 		vector< vector<int> > &rates = criteriaEstimates.getRates();
 		for (int i = 0; i < crteriaRatesTable->Size(); ++i) {
 			vector<int> v;
@@ -183,18 +196,17 @@ Project & ProjectManager::loadProject(UnicodeString fileName)
 			rates.push_back(v);
 		}
 
-
+		TJSONArray *alternativeEstimatesJSON = (TJSONArray*) js->Get(L"alternativeEstimates")->JsonValue;
 		vector<Estimates> &alternativeEstimates = getCurrentProject().getAlternativeEstimates();
 		for (int i = 0; i < alternativeEstimatesJSON->Size(); ++i) {
 			TJSONObject *alternativeJSON = (TJSONObject*) alternativeEstimatesJSON->Get(i);
-			UnicodeString name = alternativeJSON->Get(L"name")->JsonValue->Value();
-			alternativeEstimates.push_back(Estimates(name));
+			alternativeEstimates.push_back(Estimates());
 
-			TJSONArray *estimatesJSON = (TJSONArray*) alternativeJSON->Get(L"estimates")->JsonValue;
-			vector<double> &estimates = alternativeEstimates[i].getEstimates();
-			for (int j = 0; j < estimatesJSON->Size(); ++j) {
-				UnicodeString str = estimatesJSON->Get(j)->Value();
-				estimates.push_back(str.Length() > 0 ? StrToFloat(str) : 0);
+			TJSONArray *prioritiesJSON = (TJSONArray*) alternativeJSON->Get(L"priorities")->JsonValue;
+			vector<double> &priorities = alternativeEstimates[i].getPriorities();
+			for (int j = 0; j < prioritiesJSON->Size(); ++j) {
+				UnicodeString str = prioritiesJSON->Get(j)->Value();
+				priorities.push_back(StrToFloat(str));
 			}
 
 			TJSONArray *alternativeRatesTable = (TJSONArray*) alternativeJSON->Get(L"rates")->JsonValue;
@@ -223,18 +235,21 @@ Project & ProjectManager::loadProject(UnicodeString fileName)
 	} __finally {
 		fs->Free();
 	}
-}
 
+	return getCurrentProject();
+}
+//---------------------------------------------------------------------------
 void ProjectManager::closeProject() {
 	delete currentProject;
 	currentProject = NULL;
 	setIsProjectOpen(false);
 	setIsCurrentProjectSaved(false);
 }
-
+//---------------------------------------------------------------------------
 Project & ProjectManager::newProject()
 {
 	closeProject();
 	currentProject = new Project();
 	return *currentProject;
 }
+//---------------------------------------------------------------------------

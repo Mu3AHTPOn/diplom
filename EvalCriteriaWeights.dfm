@@ -16,19 +16,11 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object Label1: TLabel
-    Left = 177
-    Top = 32
-    Width = 234
+  object ExplanationLabel: TLabel
+    Left = 56
+    Top = 24
+    Width = 60
     Height = 13
-    Caption = #1047#1072#1076#1072#1081#1090#1077' '#1086#1090#1085#1086#1089#1080#1090#1077#1083#1100#1085#1091#1102' '#1074#1072#1078#1085#1086#1089#1090#1100' '#1082#1088#1080#1090#1077#1088#1080#1077#1074
-  end
-  object StepLabel: TLabel
-    Left = 272
-    Top = 13
-    Width = 30
-    Height = 13
-    Caption = #1064#1072#1075' 1'
   end
   object ConsistencLabel: TLabel
     Left = 144
@@ -56,6 +48,7 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
     TabOrder = 0
     OnDrawCell = CriteriaEstimatesDrawCell
     OnGetEditText = CriteriaEstimatesGetEditText
+    OnSelectCell = CriteriaEstimatesSelectCell
     OnSetEditText = CriteriaEstimatesSetEditText
   end
   object BackButton: TButton
