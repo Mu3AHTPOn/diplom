@@ -25,8 +25,8 @@ ProjectManager::ProjectManager(): isSavedCurrentProject(false), isOpenProject(fa
 //---------------------------------------------------------------------------
 ProjectManager::~ProjectManager()
 {
-	delete [] instance;
-	delete [] currentProject;
+	delete instance;
+	delete currentProject;
 }
 //---------------------------------------------------------------------------
 void ProjectManager::setIsCurrentProjectSaved(bool isSaved)
@@ -240,16 +240,17 @@ Project & ProjectManager::loadProject(UnicodeString fileName)
 }
 //---------------------------------------------------------------------------
 void ProjectManager::closeProject() {
-	delete currentProject;
-	currentProject = NULL;
 	setIsProjectOpen(false);
 	setIsCurrentProjectSaved(false);
+	delete currentProject;
+	currentProject = NULL;
 }
 //---------------------------------------------------------------------------
 Project & ProjectManager::newProject()
 {
 	closeProject();
 	currentProject = new Project();
+    setIsProjectOpen(true);
 	return *currentProject;
 }
 //---------------------------------------------------------------------------

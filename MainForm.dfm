@@ -340,10 +340,12 @@ object Form1: TForm1
       Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = []
+      ItemIndex = 0
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
+      Text = #1052#1077#1090#1086#1076' '#1074#1079#1074#1077#1096#1077#1085#1085#1086#1081' '#1089#1091#1084#1084#1099' '#1084#1077#1089#1090
       OnSelect = MethodComboBoxSelect
       Items.Strings = (
         #1052#1077#1090#1086#1076' '#1074#1079#1074#1077#1096#1077#1085#1085#1086#1081' '#1089#1091#1084#1084#1099' '#1084#1077#1089#1090

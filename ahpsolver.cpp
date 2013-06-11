@@ -33,7 +33,6 @@ AHPSolver<T>::~AHPSolver()
     delete pairwiseComparation;
     delete maxEigenVector;
     delete maxEigenValue;
-    delete weights;
 }
 
 template<typename T>

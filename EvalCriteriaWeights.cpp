@@ -146,7 +146,8 @@ void __fastcall TEvalCriteriaWeightsForm::NextButtonClick(TObject *Sender)
 
 	++step;
 
-	const int size(currentProject->getMethod() == 0 ? 1 : currentProject->getCriteriaCount() + 1);
+	const int method = currentProject->getMethod();
+	const int size(method == MathMethods::WS ? 1 : currentProject->getCriteriaCount() + 1);
 	if (step == size)
 	{
 		Close();
@@ -178,7 +179,7 @@ bool TEvalCriteriaWeightsForm::isDataFilled() {
 	{
 		vector<int> &v = rates->at(i);
 		for (int j = 0; j < v.size(); ++j) {
-			if (CriteriaEstimates->Cells[j + 1][i + 1] == L"") {
+			if (CriteriaEstimates->Cells[j + 1][i + 1].IsEmpty()) {
 				return false;
 			}
 		}
@@ -214,6 +215,7 @@ void TEvalCriteriaWeightsForm::eval() {
 		priorities->push_back(eigen[i][0] / sum);
 	}
 
+	ConsistencLabel->Font->Color = clBlack;
 	consistency = ahpEstimates.evaluatePairwiseConsistency();
 	ConsistencLabel->Caption = Format(L"%.2f", &TVarRec(consistency), 1);
 	if (consistency > 0.1) {
@@ -284,7 +286,9 @@ void TEvalCriteriaWeightsForm::setData() {
 
 	if (isDataFilled()) {
         eval();
-    }
+	}
+
+	CriteriaEstimates->SetFocus();
 }
 
 void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *Sender,
@@ -313,6 +317,15 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *S
             }
         }
     }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TEvalCriteriaWeightsForm::FormHide(TObject *Sender)
+{
+	currentProject = NULL;
+	priorities = NULL;
+	rates = NULL;
+	gridNames = NULL;
 }
 //---------------------------------------------------------------------------
 

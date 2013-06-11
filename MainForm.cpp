@@ -26,7 +26,6 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 	UIManager::getInstance()->addForm(Form1);
 	Form1->Hide();
 	NewProjectForm = new TNewProjectForm(this);
-	criteriaEstimates = new vector<double>();
 	bool isClose(false), isOpen(false);
 //	Project & currentProject = projectManager.getCurrentProject();
 
@@ -171,7 +170,7 @@ void __fastcall TForm1::N5Click(TObject *Sender)
 
 void __fastcall TForm1::N8Click(TObject *Sender)
 {
-	if (isDataValid()) {
+	if (projectManager.isProjectOpen() && isDataValid()) {
 		if (MethodComboBox->ItemIndex == MathMethods::WS) {
 		   evalWS();
 		} else {
@@ -368,6 +367,7 @@ void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 				  setColWidth(*newName);
 				  InputDataStringGrid->Refresh();
 				  projectManager.setIsCurrentProjectSaved(false);
+				  delete newName;
 			  }
 			} __finally {
 			  form->Free();
@@ -450,7 +450,7 @@ void TForm1::setColWidth(UnicodeString &str, int col)
 
 void TForm1::saveProject()
 {
-    if (SaveDialog1->Execute(this->Handle))
+    if (projectManager.isProjectOpen() && SaveDialog1->Execute(this->Handle))
 	{
 		projectManager.saveProject(SaveDialog1->FileName);
 	}
@@ -486,32 +486,33 @@ void TForm1::newProject()
 
    	projectManager.newProject();
 	NewProjectForm->ShowModal();
-	if (getCriteriaCount() > 0 && getAlternativesCount() > 0) {
-	   projectManager.setIsProjectOpen(true);
-		initGrid();
-
-		InputDataStringGrid->Refresh();
-		Form1->Caption = projectManager.getCurrentProject().getName();
-		MethodComboBox->ItemIndex = projectManager.getCurrentProject().getMethod();
-		for (int i = 0; i < InputDataStringGrid->ColCount; i++) {
-			for (int j = 0; j < InputDataStringGrid->RowCount; j++) {
-					InputDataStringGrid->Cells[i][j] = L"";
-			}
-		}
-
-		InputDataStringGrid->Visible = true;
-		InputDataStringGrid->FixedCols = 1;			//bug
-		InputDataStringGrid->SetFocus();
-	}
-
-	if (criteriaEstimates->size() > 0) {
-		for (int i = 0; i < criteriaEstimates->size(); ++i)
-		{
-			UnicodeString str(Format(L"%.2f", &TVarRec(criteriaEstimates->at(i)), 1));
-			InputDataStringGrid->Cells[i + 1][1] = str;
-			setColWidth(str, i + 1);
-        }
-	}
+	showCurrentProject();
+//	if (getCriteriaCount() > 0 && getAlternativesCount() > 0) {
+//	   projectManager.setIsProjectOpen(true);
+//		initGrid();
+//
+//		InputDataStringGrid->Refresh();
+//		Form1->Caption = projectManager.getCurrentProject().getName();
+//		MethodComboBox->ItemIndex = projectManager.getCurrentProject().getMethod();
+//		for (int i = 0; i < InputDataStringGrid->ColCount; i++) {
+//			for (int j = 0; j < InputDataStringGrid->RowCount; j++) {
+//					InputDataStringGrid->Cells[i][j] = L"";
+//			}
+//		}
+//
+//		InputDataStringGrid->Visible = true;
+//		InputDataStringGrid->FixedCols = 1;			//bug
+//		InputDataStringGrid->SetFocus();
+//	}
+//
+//	if (criteriaEstimates->size() > 0) {
+//		for (int i = 0; i < criteriaEstimates->size(); ++i)
+//		{
+//			UnicodeString str(Format(L"%.2f", &TVarRec(criteriaEstimates->at(i)), 1));
+//			InputDataStringGrid->Cells[i + 1][1] = str;
+//			setColWidth(str, i + 1);
+//        }
+//	}
 }
 //--------------------------------------------------------------------------
 // return false if project doesn't close
@@ -527,19 +528,20 @@ bool TForm1::closeProject()
         return true;
     }
 
-	for (int i = 0; i < getCriteriaCount(); ++i)              //очистка табицы
+	for (int i = 0; i < getCriteriaCount() + 1; ++i)              //очистка табицы
 	{
-		for (int j = 0; j < getAlternativesCount(); ++j)
+		for (int j = 0; j < getAlternativesCount() + 1; ++j)
 		{
             InputDataStringGrid->Cells[i][j] = L"";
         }
     }
 
-	projectManager.closeProject();
 	InputDataStringGrid->Visible = false;
-	projectManager.setIsProjectOpen(false);
 	Chart1->Series[0]->Clear();
-    ResultRichEdit->Clear();
+	ResultRichEdit->Clear();
+	MethodComboBox->ItemIndex = 0;
+
+	projectManager.closeProject();
 	return true;
 }
 //--------------------------------------------------------------------------
@@ -571,6 +573,10 @@ bool TForm1::isDataValid()
 		for (int j = fixedRows ; j < rows; ++j)
 		{
 			const UnicodeString &val = InputDataStringGrid->Cells[i][j];
+			if (val.IsEmpty()) {
+                return false;
+			}
+
 			const bool allowFloat = projectManager.getCurrentProject().getMethod() == MathMethods::AHP;
 			const bool isValid = allowFloat || j == 1 ?
 						regex_match(val.w_str(), floatGridRegex) :
@@ -587,7 +593,17 @@ bool TForm1::isDataValid()
 				InputDataStringGrid->Col = i;
 				InputDataStringGrid->Row = j;
 				return false;
-			}
+			} else if (StrToFloat(val) < 0.000000001) {
+				Application->MessageBoxW(
+					L"¬ведены неверные данные (введите оценки больше 0)",
+					L"ќшибка",
+					MB_OK| MB_ICONERROR
+				);
+
+				InputDataStringGrid->Col = i;
+				InputDataStringGrid->Row = j;
+				return false;
+            }
 		}
 
 //		try {
@@ -654,27 +670,28 @@ void __fastcall TForm1::MMSaveProjectClick(TObject *Sender)
 void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
 {
 	NewProjectForm->ShowModal();
-	initGrid();
-	MethodComboBox->ItemIndex = projectManager.getCurrentProject().getMethod();
-
-	for (int i = 0; i < getAlternativesCount(); ++i) {
-        vector<double> &estimates = projectManager.getCurrentProject().getAlternativeEstimates()[i].getPriorities();
-		for (int j = 0; j < getCriteriaCount(); ++j) {
-			InputDataStringGrid->Cells[j + fixedCols][i + fixedRows + 1] = FloatToStr(estimates[j]);
-        }
-    }
-
-	InputDataStringGrid->Refresh();
-	Form1->Caption = projectManager.getCurrentProject().getName();
-
-	if (criteriaEstimates->size() > 0) {
-		for (int i = 0; i < criteriaEstimates->size(); ++i)
-		{
-			UnicodeString str(Format(L"%.2f", &TVarRec(criteriaEstimates->at(i)), 1));
-			InputDataStringGrid->Cells[i + 1][1] = str;
-			setColWidth(str, i + 1);
-        }
-	}
+	showCurrentProject();
+//	initGrid();
+//	MethodComboBox->ItemIndex = projectManager.getCurrentProject().getMethod();
+//
+//	for (int i = 0; i < getAlternativesCount(); ++i) {
+//        vector<double> &estimates = projectManager.getCurrentProject().getAlternativeEstimates()[i].getPriorities();
+//		for (int j = 0; j < getCriteriaCount(); ++j) {
+//			InputDataStringGrid->Cells[j + fixedCols][i + fixedRows + 1] = FloatToStr(estimates[j]);
+//        }
+//    }
+//
+//	InputDataStringGrid->Refresh();
+//	Form1->Caption = projectManager.getCurrentProject().getName();
+//
+//	if (criteriaEstimates->size() > 0) {
+//		for (int i = 0; i < criteriaEstimates->size(); ++i)
+//		{
+//			UnicodeString str(Format(L"%.2f", &TVarRec(criteriaEstimates->at(i)), 1));
+//			InputDataStringGrid->Cells[i + 1][1] = str;
+//			setColWidth(str, i + 1);
+//        }
+//	}
 
 	projectManager.setIsCurrentProjectSaved(false);
 }
@@ -852,18 +869,26 @@ void TForm1::showCurrentProject()
 		vector<double> &priorities = alternativeEstimates[i].getPriorities();
 		for (int j = 0; j < priorities.size() ; ++j)
 		{
-			UnicodeString str(Format(L"%.2f", &TVarRec(priorities[j]), 1));
-			InputDataStringGrid->Cells[i + fixedCols][j + fixedRows + 1] = str;
-			setColWidth(str, i + fixedCols);
+			if (priorities[j] != 0) {
+				UnicodeString str(Format(L"%.2f", &TVarRec(priorities[j]), 1));
+				InputDataStringGrid->Cells[i + fixedCols][j + fixedRows + 1] = str;
+				setColWidth(str, i + fixedCols);
+			} else {
+				InputDataStringGrid->Cells[i + fixedCols][j + fixedRows + 1] = L"";
+            }
 		}
 	}
 
 	vector<double> &criteriaPriorities = currentProject.getCriteriaEstimates().getPriorities();
 	for (int i = 0; i < criteriaPriorities.size(); ++i)
 	{
-		UnicodeString str(Format(L"%.2f", &TVarRec(criteriaPriorities[i]), 1));
-		InputDataStringGrid->Cells[i + fixedCols][fixedRows ] = str;
-		setColWidth(str, i + fixedCols);
+		if (criteriaPriorities[i] != 0) {
+			UnicodeString str(Format(L"%.2f", &TVarRec(criteriaPriorities[i]), 1));
+			InputDataStringGrid->Cells[i + fixedCols][fixedRows ] = str;
+			setColWidth(str, i + fixedCols);
+		} else {
+			InputDataStringGrid->Cells[i + fixedCols][fixedRows ] = L"";
+        }
     }
 
 	Form1->Caption = projectManager.getCurrentProject().getName();

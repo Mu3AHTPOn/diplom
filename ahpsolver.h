@@ -23,7 +23,6 @@ private:
     Matrix<double> *pairwiseComparation;
     Matrix<double> *maxEigenVector;
     double *maxEigenValue;
-    Matrix<double> *weights;
 };
 
 #endif // AHPSOLVER_H

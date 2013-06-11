@@ -124,7 +124,6 @@ private:	// User declarations
 	bool isOnChartButtonPresssed;
 	TPoint lastChartMousePoint;
 	bool isLeft, isRight, isTop, isBottom;
-	vector<double> *criteriaEstimates;
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
 };

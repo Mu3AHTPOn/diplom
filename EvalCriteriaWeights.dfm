@@ -13,13 +13,14 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
+  OnHide = FormHide
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object ExplanationLabel: TLabel
     Left = 56
     Top = 24
-    Width = 60
+    Width = 3
     Height = 13
   end
   object ConsistencLabel: TLabel

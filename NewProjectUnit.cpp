@@ -240,7 +240,7 @@ void __fastcall TNewProjectForm::NextButtonClick(TObject *Sender)
 
 	currentProject->setName(ProjectName->Text);
 
-	if (MethodComboBox->ItemIndex == MathMethods::AHP)
+	if (currentProject->getMethod() == MathMethods::AHP)
 	{
 		Hide();
 		bool isBack(false);
@@ -350,6 +350,12 @@ void __fastcall TNewProjectForm::Button1Click(TObject *Sender)
 void __fastcall TNewProjectForm::MethodComboBoxSelect(TObject *Sender)
 {
 	currentProject->setMethod(MethodComboBox->ItemIndex);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TNewProjectForm::FormHide(TObject *Sender)
+{
+	currentProject = NULL;
 }
 //---------------------------------------------------------------------------
 

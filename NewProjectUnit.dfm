@@ -15,6 +15,7 @@ object NewProjectForm: TNewProjectForm
   OldCreateOrder = False
   Position = poDesktopCenter
   OnCreate = FormCreate
+  OnHide = FormHide
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13

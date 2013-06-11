@@ -15,6 +15,7 @@
 #include "matrix.cpp"
 #include "Project.cpp"
 #include "ProjectManager.cpp"
+#include "MathMethods.h"
 //---------------------------------------------------------------------------
 
 using std::vector;
@@ -41,6 +42,7 @@ __published:	// IDE-managed Components
           UnicodeString &Value);
 	void __fastcall CriteriaEstimatesSelectCell(TObject *Sender, int ACol, int ARow,
           bool &CanSelect);
+	void __fastcall FormHide(TObject *Sender);
 private:	// User declarations
 	void drawFixedColNames(TObject *Sender, int ACol, int ARow, TRect &Rect);
 	void setRowHeight(TObject *Sender, UnicodeString &str);
@@ -50,7 +52,6 @@ private:	// User declarations
 	void eval();
 
 	vector<UnicodeString> *gridNames;
-	vector<UnicodeString> alternativeNames;
 	vector< vector<int> > *rates;
 	double consistency;
 	const double maxConsistency;

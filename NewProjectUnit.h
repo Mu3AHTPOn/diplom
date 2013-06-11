@@ -56,6 +56,7 @@ __published:	// IDE-managed Components
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall Button1Click(TObject *Sender);
 	void __fastcall MethodComboBoxSelect(TObject *Sender);
+	void __fastcall FormHide(TObject *Sender);
 
 private:	// User declarations
 	TEdit *listEdit;
