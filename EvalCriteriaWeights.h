@@ -31,6 +31,8 @@ __published:	// IDE-managed Components
 	TLabel *ConsistencLabel;
 	TStringGrid *PairWiseGrid;
 	TLabel *Label2;
+	TLabel *Label1;
+	TLabel *Label3;
 	void __fastcall CriteriaEstimatesDrawCell(TObject *Sender, int ACol, int ARow, TRect &Rect,
           TGridDrawState State);
 	void __fastcall CriteriaEstimatesSetEditText(TObject *Sender, int ACol, int ARow,

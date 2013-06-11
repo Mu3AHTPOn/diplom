@@ -12,7 +12,6 @@ using std::vector;
 class Estimates {
 	public:
 		Estimates() {}
-		~Estimates() {}
 		inline vector<double> & getPriorities();
 		inline vector< vector<int> > & getRates();
 

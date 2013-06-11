@@ -66,7 +66,6 @@ __published:	// IDE-managed Components
 	TSpeedButton *SpeedButton1;
 	void __fastcall InputDataStringGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FormCreate(TObject *Sender);
-	void __fastcall Memo1Change(TObject *Sender);
 	void __fastcall Memo1KeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall Memo1MouseEnter(TObject *Sender);
 	void __fastcall MMCloseAppClick(TObject *Sender);
@@ -111,6 +110,7 @@ private:	// User declarations
 	inline int getCriteriaCount();
 	inline int getAlternativesCount();
 	void showCurrentProject();
+	void showResult(Matrix<double> &result, UnicodeString method);
 
 	void newProject();
 	void loadProject();

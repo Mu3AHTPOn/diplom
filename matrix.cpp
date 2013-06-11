@@ -35,6 +35,20 @@ Matrix<T>::Matrix(Matrix<T> &rhs)
 }
 
 template<typename T>
+void Matrix<T>::initMatrix(T value)
+{
+    matrix = new T*[getHeight()];
+    for (int i = 0; i < getHeight(); ++i)
+    {
+        matrix[i] = new T[getWidth()];
+        for (int j = 0; j < getWidth(); ++j)
+        {
+            matrix[i][j] = value;
+        }
+    }
+}
+
+template<typename T>
 Matrix<T>::~Matrix()
 {
     for (int i = 0; i < height; ++i)
@@ -82,26 +96,21 @@ Matrix<T>& Matrix<T>::getColumn(const int index)
 }
 
 template<typename T>
-Matrix<T>& Matrix<T>::operator *(Matrix<T>& rhs) throw(MatrixException)
+Matrix<T>* Matrix<T>::operator *(Matrix<T>& rhs) throw(MatrixException)
 {
-    if (getWidth() != rhs.getHeight())
-    {
-
-    }
-
-    Matrix<T> *result = new Matrix<T>(getHeight(), rhs.getWidth());
-    for (int k(0); k < result->getHeight(); ++k)
+	Matrix<T> *result = new Matrix<T>(getHeight(), rhs.getWidth());
+	for (int k(0); k < result->getHeight(); ++k)
     {
         for (int l(0); l < result->getWidth(); ++l)
         {
             for (int j(0); j < rhs.getHeight(); ++j)
             {
-                (*result)[k][l] += matrix[k][j] * rhs[j][l];
+				(*result)[k][l] += matrix[k][j] * rhs[j][l];
             }
         }
     }
 
-    return *result;
+    return result;
 }
 
 template<typename T>
@@ -119,7 +128,7 @@ Matrix<T>& Matrix<T>::operator =(Matrix<T> &rhs)
     {
         for (int j = 0; j < getWidth(); ++j)
         {
-            (*this)[i][j] = rhs[i][j];
+            matrix[i][j] = rhs[i][j];
         }
     }
 
@@ -213,20 +222,6 @@ template<typename T>
 bool Matrix<T>::isQuadratic()
 {
     return width == height;
-}
-
-template<typename T>
-void Matrix<T>::initMatrix(T value)
-{
-    matrix = new T*[getHeight()];
-    for (int i = 0; i < getHeight(); ++i)
-    {
-        matrix[i] = new T[getWidth()];
-        for (int j = 0; j < getWidth(); ++j)
-        {
-            matrix[i][j] = value;
-        }
-    }
 }
 
 template<typename T>

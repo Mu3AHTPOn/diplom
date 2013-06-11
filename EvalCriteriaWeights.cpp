@@ -71,12 +71,6 @@ void TEvalCriteriaWeightsForm::setRowHeight(TObject *Sender, UnicodeString &str)
 	int newRowHeight= grid->Canvas->TextWidth(str) + 6 + 6;
 	int oldHeight = grid->RowHeights[0];
 	grid->RowHeights[0] = rowHeight > newRowHeight ? rowHeight : newRowHeight;
-
-//	int offset = grid->RowHeights[0] - oldHeight;
-//	grid->Height += offset;
-//	this->Height += offset;
-//	NextButton->Top += offset;
-//	BackButton->Top += offset;
 }
 
 //---------------------------------------------------------------------------
@@ -194,7 +188,7 @@ void TEvalCriteriaWeightsForm::eval() {
 	for (int i = 0; i < size; ++i) {
 		for (int j = 0; j < size; ++j) {
 			m[i][j] = rates->at(i)[j] / (double) rates->at(j)[i];
-			UnicodeString result = Format(L"%.2f", &TVarRec(m[i][j]), 1);
+			UnicodeString result = Format(L"%.2g", &TVarRec(m[i][j]), 1);
 			PairWiseGrid->Cells[j + 1][i + 1] = result;
 			setColWidth(PairWiseGrid, result, j + 1);
 		}
@@ -220,7 +214,7 @@ void TEvalCriteriaWeightsForm::eval() {
 	ConsistencLabel->Caption = Format(L"%.2f", &TVarRec(consistency), 1);
 	if (consistency > 0.1) {
 		ConsistencLabel->Font->Color = clRed;
-    }
+	}
 }
 //---------------------------------------------------------------------------
 void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesGetEditText(TObject *Sender,
@@ -264,7 +258,9 @@ void TEvalCriteriaWeightsForm::setData() {
 	PairWiseGrid->RowHeights[0] = 10;      //сбрасываем высоту первой строки
 	PairWiseGrid->Refresh();
 
+	consistency = 0.0;
 	ConsistencLabel->Font->Color = clBlack;
+	ConsistencLabel->Caption = L"-";
 
 	for (int i = 0 ; i < rates->size(); ++i) {
 		vector<int> &v = rates->at(i);
@@ -281,16 +277,16 @@ void TEvalCriteriaWeightsForm::setData() {
 					}
 				}
 			}
-        }
+		}
 	}
 
 	if (isDataFilled()) {
-        eval();
+		eval();
 	}
 
 	CriteriaEstimates->SetFocus();
 }
-
+//---------------------------------------------------------------------------
 void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *Sender,
           int ACol, int ARow, bool &CanSelect)
 {

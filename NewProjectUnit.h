@@ -54,7 +54,6 @@ __published:	// IDE-managed Components
 	void __fastcall ColNamesListBoxDblClick(TObject *Sender);
 	void __fastcall ColNamesListBoxKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FormShow(TObject *Sender);
-	void __fastcall Button1Click(TObject *Sender);
 	void __fastcall MethodComboBoxSelect(TObject *Sender);
 	void __fastcall FormHide(TObject *Sender);
 
@@ -70,9 +69,10 @@ private:	// User declarations
 	void onListExit();
 
 	Project *currentProject;
-
+	bool isNewProject;
 public:		// User declarations
 	__fastcall TNewProjectForm(TComponent* Owner);
+	void setIsNewProject(bool isNew);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TNewProjectForm *NewProjectForm;

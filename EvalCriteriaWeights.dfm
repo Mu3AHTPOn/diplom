@@ -25,23 +25,37 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   end
   object ConsistencLabel: TLabel
     Left = 144
-    Top = 389
+    Top = 405
     Width = 4
     Height = 13
     Caption = '-'
   end
   object Label2: TLabel
     Left = 8
-    Top = 389
+    Top = 405
     Width = 130
     Height = 13
     Caption = #1048#1085#1076#1077#1082#1089' '#1089#1086#1075#1083#1072#1089#1086#1074#1072#1085#1085#1086#1089#1090#1080':'
   end
+  object Label1: TLabel
+    Left = 8
+    Top = 386
+    Width = 63
+    Height = 13
+    Caption = #1055#1088#1080#1086#1088#1080#1090#1077#1090#1099
+  end
+  object Label3: TLabel
+    Left = 144
+    Top = 386
+    Width = 31
+    Height = 13
+    Caption = 'Label3'
+  end
   object CriteriaEstimates: TStringGrid
     Left = 361
-    Top = 72
+    Top = 64
     Width = 328
-    Height = 289
+    Height = 297
     ColCount = 2
     DefaultColWidth = 24
     RowCount = 2

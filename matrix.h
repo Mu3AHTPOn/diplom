@@ -20,8 +20,8 @@ class Matrix
         inline void setHeight(const int height);
         T* operator[](const int row);
         Matrix<T>& getColumn(const int index);
-        Matrix<T>& operator *(Matrix<T>& rhs) throw(MatrixException);
-        Matrix<T>& operator =(Matrix<T>& rhs);
+        Matrix<T>* operator *(Matrix<T>& rhs) throw(MatrixException);
+		Matrix<T>& operator =(Matrix<T>& rhs);
         Matrix<T>& operator /(double value);
 		Matrix<T>& append(Matrix<T>& rhs) throw(MatrixException);
 		Matrix<T>& normalizeToOne();

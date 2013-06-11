@@ -10,7 +10,7 @@
 TNewProjectForm *NewProjectForm;
 //---------------------------------------------------------------------------
 __fastcall TNewProjectForm::TNewProjectForm(TComponent* Owner)
-	: TForm(Owner)
+	: TForm(Owner), isNewProject(false)
 {
 }
 //---------------------------------------------------------------------------
@@ -218,7 +218,10 @@ void __fastcall TNewProjectForm::RowRemoveButtonClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TNewProjectForm::CancelButtonClick(TObject *Sender)
 {
-	Close();
+	if (isNewProject) {
+       ProjectManager::getInstance().closeProject();
+    }
+    Close();
 }
 //---------------------------------------------------------------------------
 
@@ -338,15 +341,10 @@ void __fastcall TNewProjectForm::FormShow(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-void __fastcall TNewProjectForm::Button1Click(TObject *Sender)
-{
-    Close();
+void TNewProjectForm::setIsNewProject(bool isNew) {
+	 isNewProject = isNew;
 }
 //---------------------------------------------------------------------------
-
-
-
-
 void __fastcall TNewProjectForm::MethodComboBoxSelect(TObject *Sender)
 {
 	currentProject->setMethod(MethodComboBox->ItemIndex);
@@ -356,6 +354,7 @@ void __fastcall TNewProjectForm::MethodComboBoxSelect(TObject *Sender)
 void __fastcall TNewProjectForm::FormHide(TObject *Sender)
 {
 	currentProject = NULL;
+	isNewProject = false;
 }
 //---------------------------------------------------------------------------
 

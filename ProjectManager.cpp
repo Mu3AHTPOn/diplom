@@ -46,7 +46,7 @@ void ProjectManager::setIsProjectOpen(bool isOpen)
 //---------------------------------------------------------------------------
 bool ProjectManager::isProjectOpen()
 {
-	return isOpenProject;
+	return isOpenProject && currentProject != NULL;
 }
 //---------------------------------------------------------------------------
 Project & ProjectManager::getCurrentProject()

@@ -53,14 +53,16 @@ void EigenSolver::evaluateMaxEigenValue(
         Matrix<double>& outMaxVector,
         double& outMaxEigenValue)
 {
-    Matrix<double>& y = inMatrix * outMaxVector;
+	Matrix<double> *y = inMatrix * outMaxVector;
 //    Matrix<double>& refY = *y;
 
-    for (int i = 0; i < y.getHeight(); ++i)
-    {
-        outMaxEigenValue += y[i][0] / (double) outMaxVector[i][0];
-    }
+	for (int i = 0; i < y->getHeight(); ++i)
+	{
+		outMaxEigenValue += (*y)[i][0] / (double) outMaxVector[i][0];
+	}
 
-    outMaxEigenValue /= y.getHeight();
+	outMaxEigenValue /= y->getHeight();
+
+	delete y;
 }
 

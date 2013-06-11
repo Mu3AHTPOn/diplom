@@ -14,47 +14,52 @@
 
 #pragma resource "*.dfm"
 
-// [\d]*(.|,)[\d]+
 TForm1 *Form1;
 
 //---------------------------------------------------------------------------
+//конструктор формы
 __fastcall TForm1::TForm1(TComponent* Owner)
-	: TForm(Owner), gridRegex(L"[\\d]+"),floatGridRegex(L"[\\d]*(.|,){0,1}[\\d]*"), projectManager(ProjectManager::getInstance()),
-	isOnChartButtonPresssed(false)
-{
+	: TForm(Owner),
+	gridRegex(L"[\\d]+"),
+	floatGridRegex(L"[\\d]*(.|,){0,1}[\\d]*")
+	, projectManager(ProjectManager::getInstance()),
+	isOnChartButtonPresssed(false) {
+
 	Form1 = this;
 	UIManager::getInstance()->addForm(Form1);
-	Form1->Hide();
 	NewProjectForm = new TNewProjectForm(this);
-	bool isClose(false), isOpen(false);
-//	Project & currentProject = projectManager.getCurrentProject();
 
 	EvalCriteriaWeightsForm = new TEvalCriteriaWeightsForm(this);
 
+	//прячем таблицу ввода данных
 	InputDataStringGrid->Visible = false;
 
+	//определение ширины MethodComboBox
 	MethodComboBox->Canvas->Font->Size = MethodComboBox->Font->Size;
 	const int AHP = MethodComboBox->Canvas->TextWidth((*MethodComboBox->Items)[0]);
 	const int WS = MethodComboBox->Canvas->TextWidth((*MethodComboBox->Items)[1]);
 
 	MethodComboBox->Width = AHP > WS ? AHP + 30 : WS + 30;
 }
-
 //---------------------------------------------------------------------------
-
+//событие нажатия на кнопку таблицы исходных данных
 void __fastcall TForm1::InputDataStringGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
-	if (Shift.Contains(ssCtrl)&& Key == 86U) {      //paste event
+	if (Shift.Contains(ssCtrl)&& Key == 86U) { //вставка из Excel
+		//получаем длину строки буфера обмена
 		TClipboard *cb = Clipboard();
 		wchar_t *str = new wchar_t[0];
 		int len = cb->GetTextBuf(str, 0);
+		//получаем строку из буфера обмена
 		str = new wchar_t[len];
 		cb->GetTextBuf(str, len);
 		UnicodeString uStr(str, len);
 		int i = 0, j = InputDataStringGrid->Col, k = InputDataStringGrid->Row;
+		//заполняем таблицу данными
 		UnicodeString pasteString;
 		while(str[i])
 		{
+			//при символе "Tab" переход вправо
 			if (str[i] == '\t') {
 				InputDataStringGrid->Cells[j][k] = pasteString;
 				pasteString = "";
@@ -62,6 +67,7 @@ void __fastcall TForm1::InputDataStringGridKeyDown(TObject *Sender, WORD &Key, T
 				++i;
 				++j;
 			}
+			//при символе новой строки  переход вниз
 			if (str[i] == '\n') {
 				InputDataStringGrid->Cells[j][k] = pasteString;
 				pasteString = "";
@@ -71,84 +77,79 @@ void __fastcall TForm1::InputDataStringGridKeyDown(TObject *Sender, WORD &Key, T
 				++k;
 			}
 
+			//накопление строки если ни один из символов выше не
+			//встретился
 			pasteString += str[i];
 			++i;
 		}
 
+		//заполнение ячейки
 		InputDataStringGrid->Cells[j][k] = pasteString;
 
 	} else if (Shift.Contains(ssCtrl) && Key == 67U) { //copy event
 
-	} else if (Key == 46U) {
-		InputDataStringGrid->Cells[InputDataStringGrid->Col][InputDataStringGrid->Row] = "";
+	} else if (Key == 46U) {	//on del button
+		InputDataStringGrid->Cells[InputDataStringGrid->Col][InputDataStringGrid->Row] = L"";
 	}
 }
 //---------------------------------------------------------------------------
-
+//инициализация размеров таблицы
 void TForm1::initGrid()
 {
 	InputDataStringGrid->ColCount = getCriteriaCount() + fixedCols;
 	InputDataStringGrid->RowCount = getAlternativesCount() + fixedRows + 1;
 }
-
+//---------------------------------------------------------------------------
+//событие создания форты
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
 
-	MethodComboBox->ItemIndex = 0;
+	MethodComboBox->ItemIndex = MathMethods::WS;
 
 	fixedCols = InputDataStringGrid->FixedCols;
 	fixedRows = InputDataStringGrid->FixedRows;
-
-//	InputDataStringGrid->Col = 1;
-//	InputDataStringGrid->Row = 1;
 }
 //---------------------------------------------------------------------------
-
-
-
+//возвращает количество критериев если проект открыт
 int TForm1::getCriteriaCount()
 {
-	return projectManager.getCurrentProject().getCriteriaCount();
+	Project &project = projectManager.getCurrentProject();
+	return &project == NULL ? 0 : project.getCriteriaCount();
 
 }
 //--------------------------------------------------------------------------
+//возвращает количество альтернатив если проект открыт
 int TForm1::getAlternativesCount()
 {
-	return projectManager.getCurrentProject().getAlternativesCount();
+	Project &project = projectManager.getCurrentProject();
+	return &project == NULL ? 0 : project.getAlternativesCount();
 
 }
 //---------------------------------------------------------------------------
-
-void __fastcall TForm1::Memo1Change(TObject *Sender)
-{
-//	Memo1->HideSelection = true;
-}
-//---------------------------------------------------------------------------
-
+//прячет коретку из поля результатов вычислений
 void __fastcall TForm1::Memo1KeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
 	HideCaret(ResultRichEdit->Handle);
 }
 //---------------------------------------------------------------------------
-
+//прячет коретку из поля результатов вычислений
 void __fastcall TForm1::Memo1MouseEnter(TObject *Sender)
 {
-	   HideCaret(ResultRichEdit->Handle);
-
+	HideCaret(ResultRichEdit->Handle);
 }
 //---------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------
-
+//событие закртия приложения через гланое меню
 void __fastcall TForm1::MMCloseAppClick(TObject *Sender)
 {
+	//если проект не удалось закрыть - форма не закрывается
 	if (closeProject())
 	{
 		UIManager::getInstance()->closeApp(this);
+		Close();
 	}
 }
 //---------------------------------------------------------------------------
-
+//событие на закрытии формы
 void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 {
 	if (! closeProject())
@@ -160,14 +161,13 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 	UIManager::getInstance()->closeApp(this);
 }
 //---------------------------------------------------------------------------
-
-
+//событие контекстного меню резуьтатов вычислений "Очистить"
 void __fastcall TForm1::N5Click(TObject *Sender)
 {
 	ResultRichEdit->Text = L"";
 }
 //---------------------------------------------------------------------------
-
+//событие расчёта через главное меню
 void __fastcall TForm1::N8Click(TObject *Sender)
 {
 	if (projectManager.isProjectOpen() && isDataValid()) {
@@ -179,6 +179,7 @@ void __fastcall TForm1::N8Click(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
+//событие расчёта через панель быстрого доступа
 void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
 {
 	if (projectManager.isProjectOpen() && isDataValid()) {
@@ -190,84 +191,34 @@ void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
 		}
     }
 }
-
+//---------------------------------------------------------------------------
+//расчёт методом анализа иерархий
 void TForm1::evalAHP()
 {
-//создаём множество объектов ahpsolver для оценок важности критериев и для
-//каждого критерия в частности
-try {
 	const int criteriaCount = getCriteriaCount();
 	const int alternativesCount = getAlternativesCount();
 	Project &currentProject = projectManager.getCurrentProject();
 
-	Matrix<double> criteriaEstimates(criteriaCount);
-
-	Matrix<double> *objectEstimates = new Matrix<double>[criteriaCount];
-	AHPSolver<double> *ahpObjects = new AHPSolver<double>[criteriaCount];
+	//создаём и заполняем матрицы рейтинков
+	Matrix<double> criteriaPriorities(criteriaCount);
+	Matrix<double> alternativePriorities(alternativesCount, criteriaCount);
 
 	vector<double> &priorities = currentProject.getCriteriaEstimates().getPriorities();
 	vector<Estimates> &alternativeEstimates = currentProject.getAlternativeEstimates();
+
 	for (int i = 0; i < criteriaCount; ++i) {
-		criteriaEstimates[i][0] = priorities[i];
-		objectEstimates[i] = *(new Matrix<double>(alternativesCount));
+		criteriaPriorities[i][0] = priorities[i];
+
+		vector<double> &v = alternativeEstimates[i].getPriorities();
 		for (int j = 0; j < alternativesCount; ++j) {
-			(objectEstimates[i])[j][0] = alternativeEstimates[i].getPriorities()[j];
+			alternativePriorities[j][i] = v[j];
 		}
-
-		ahpObjects[i] = *(new AHPSolver<double>(objectEstimates[i]));
 	}
 
+	Matrix<double> &result = (alternativePriorities * criteriaPriorities)->normalizeToOne();
+	showResult(result, L"Метод анализа иерархий");
 
-	//fill objectEstimates
-//	vector<double> &priorities = currentProject.getCriteriaEstimates().getPriorities();
-//	for (int i = 0; i < criteriaCount; ++i) {
-//
-//		for (int j = 0; j < alternativesCount; ++j) {
-//			curr[j][0] = priorities[j];
-//		}
-//
-//		ahpObjects[i] = *(new AHPSolver<int>(curr));
-//	}
-
-	Matrix<double> integrEstimate(ahpObjects[0].getMaxEigenVectors());
-	for(int i = 1; i < criteriaCount; ++i)
-	{
-		integrEstimate.append(ahpObjects[i].getMaxEigenVectors());
-	}
-
-	Matrix<double> result = integrEstimate * criteriaEstimates;
-
-	UnicodeString resultStr = L"(";
-
-	for (int i = 0; i < result.getHeight() - 1; ++i) {
-		resultStr += Format(L"%.3f; ", &TVarRec(result[i][0]), 1);
-	}
-
-	resultStr += Format(L"%.3f)", &TVarRec(result[result.getHeight() - 1][0]), 1);
-
-	UnicodeString methodCaption = L"Метод анализа иерархий";
-	UnicodeString resultCaption = L"Приоритеты альтернатив";
-	ResultRichEdit->Lines->Add(methodCaption);
-	ResultRichEdit->Lines->Add(resultCaption);
-//	ResultRichEdit->SelStart= methodCaption.Length();
-//	ResultRichEdit->SelAttributes->Color = clRed;
-//	ResultRichEdit->SelAttributes->Style = ResultRichEdit->SelAttributes->Style << fsBold;
-//	ResultRichEdit->Lines->Add(methodCaption);
-	ResultRichEdit->Lines->Add(resultStr);
-	ResultRichEdit->Lines->Add("");
-//	int t = ResultRichEdit->Perform(EM_LINEINDEX, ResultRichEdit->Lines->Count - 1, 0);;
-//	ResultRichEdit->SelStart = t;
-	for (int i = 0; i < ResultRichEdit->Lines->Count; ++i)
-	{
-		ResultRichEdit->Perform(EM_SCROLL, SB_LINEDOWN, 0);
-	}
-
-
-	showResultAtChart(result);
-	} catch (...)        //faken Embarcadero!
-	{
-
-    }
+	delete &result;
 }
 
 void TForm1::evalWS()
@@ -290,28 +241,10 @@ void TForm1::evalWS()
 		}
 	}
 
-	Matrix<double> &result = (objectEstimates * criteriaEstimates).normalizeToOne();
+	Matrix<double> &result = (objectEstimates * criteriaEstimates)->normalizeToOne();
+	showResult(result, L"Метод взвешенной суммы мест");
 
-	UnicodeString resultStr = L"(";
-
-	for (int i = 0; i < result.getHeight() - 1; ++i) {
-		resultStr += Format(L"%.3f; ", new TVarRec(result[i][0]), 1);
-	}
-
-	resultStr += Format(L"%.3f)", new TVarRec(result[result.getHeight() - 1][0]), 1);
-
-	UnicodeString methodCaption = L"Метод взвешенной суммы мест";
-	UnicodeString resultCaption = L"Приоритеты альтернатив";
-	ResultRichEdit->Lines->Add(methodCaption);
-	ResultRichEdit->Lines->Add(resultCaption);
-	ResultRichEdit->Lines->Add(resultStr);
-	ResultRichEdit->Lines->Add(L"");
-    for (int i = 0; i < ResultRichEdit->Lines->Count; ++i)
-	{
-		ResultRichEdit->Perform(EM_SCROLL, SB_LINEDOWN, 0);
-	}
-
-	showResultAtChart(result);
+	delete &result;
 }
 
 void TForm1::showResultAtChart(Matrix<double> &result)
@@ -328,6 +261,29 @@ void TForm1::showResultAtChart(Matrix<double> &result)
 
 	Chart1->Axes->Left->Maximum = max * 1.2;
 
+}
+//---------------------------------------------------------------------------
+void TForm1::showResult(Matrix<double> &result, UnicodeString method) {
+	UnicodeString resultStr = L"(";
+
+	for (int i = 0; i < result.getHeight() - 1; ++i) {
+		resultStr += Format(L"%.3f; ", new TVarRec(result[i][0]), 1);
+	}
+
+	resultStr += Format(L"%.3f)", new TVarRec(result[result.getHeight() - 1][0]), 1);
+
+	UnicodeString methodCaption = method;
+	UnicodeString resultCaption = L"Приоритеты альтернатив";
+	ResultRichEdit->Lines->Add(methodCaption);
+	ResultRichEdit->Lines->Add(resultCaption);
+	ResultRichEdit->Lines->Add(resultStr);
+	ResultRichEdit->Lines->Add(L"");
+    for (int i = 0; i < ResultRichEdit->Lines->Count; ++i)
+	{
+		ResultRichEdit->Perform(EM_SCROLL, SB_LINEDOWN, 0);
+	}
+
+	showResultAtChart(result);
 }
 //---------------------------------------------------------------------------
 
@@ -484,35 +440,12 @@ void TForm1::newProject()
         return;
 	}
 
-   	projectManager.newProject();
+	projectManager.newProject();
+	NewProjectForm->setIsNewProject(true);
 	NewProjectForm->ShowModal();
-	showCurrentProject();
-//	if (getCriteriaCount() > 0 && getAlternativesCount() > 0) {
-//	   projectManager.setIsProjectOpen(true);
-//		initGrid();
-//
-//		InputDataStringGrid->Refresh();
-//		Form1->Caption = projectManager.getCurrentProject().getName();
-//		MethodComboBox->ItemIndex = projectManager.getCurrentProject().getMethod();
-//		for (int i = 0; i < InputDataStringGrid->ColCount; i++) {
-//			for (int j = 0; j < InputDataStringGrid->RowCount; j++) {
-//					InputDataStringGrid->Cells[i][j] = L"";
-//			}
-//		}
-//
-//		InputDataStringGrid->Visible = true;
-//		InputDataStringGrid->FixedCols = 1;			//bug
-//		InputDataStringGrid->SetFocus();
-//	}
-//
-//	if (criteriaEstimates->size() > 0) {
-//		for (int i = 0; i < criteriaEstimates->size(); ++i)
-//		{
-//			UnicodeString str(Format(L"%.2f", &TVarRec(criteriaEstimates->at(i)), 1));
-//			InputDataStringGrid->Cells[i + 1][1] = str;
-//			setColWidth(str, i + 1);
-//        }
-//	}
+	if (projectManager.isProjectOpen()) {
+		showCurrentProject();
+    }
 }
 //--------------------------------------------------------------------------
 // return false if project doesn't close
@@ -605,15 +538,6 @@ bool TForm1::isDataValid()
 				return false;
             }
 		}
-
-//		try {
-//			double t = InputDataStringGrid->Cells[i+fixedCols][fixedRows].ToDouble();
-//            UnicodeString
-//		} catch (EConvertError &e) {
-//			for (int k = 0;  k < cols; ++k) {
-//				InputDataStringGrid->Cells[+fixedCols][fixedRows].
-//			}
-//		}
 	}
 
 	return true;
@@ -669,31 +593,12 @@ void __fastcall TForm1::MMSaveProjectClick(TObject *Sender)
 
 void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
 {
-	NewProjectForm->ShowModal();
-	showCurrentProject();
-//	initGrid();
-//	MethodComboBox->ItemIndex = projectManager.getCurrentProject().getMethod();
-//
-//	for (int i = 0; i < getAlternativesCount(); ++i) {
-//        vector<double> &estimates = projectManager.getCurrentProject().getAlternativeEstimates()[i].getPriorities();
-//		for (int j = 0; j < getCriteriaCount(); ++j) {
-//			InputDataStringGrid->Cells[j + fixedCols][i + fixedRows + 1] = FloatToStr(estimates[j]);
-//        }
-//    }
-//
-//	InputDataStringGrid->Refresh();
-//	Form1->Caption = projectManager.getCurrentProject().getName();
-//
-//	if (criteriaEstimates->size() > 0) {
-//		for (int i = 0; i < criteriaEstimates->size(); ++i)
-//		{
-//			UnicodeString str(Format(L"%.2f", &TVarRec(criteriaEstimates->at(i)), 1));
-//			InputDataStringGrid->Cells[i + 1][1] = str;
-//			setColWidth(str, i + 1);
-//        }
-//	}
+	if (projectManager.isProjectOpen()) {
+		NewProjectForm->ShowModal();
+		showCurrentProject();
 
-	projectManager.setIsCurrentProjectSaved(false);
+		projectManager.setIsCurrentProjectSaved(false);
+    }
 }
 //---------------------------------------------------------------------------
 
@@ -722,7 +627,7 @@ void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol
 					InputDataStringGrid->Row = ARow;
 					InputDataStringGrid->Cells[ACol][ARow] = L"";
 				} else {
-					currentProject.getAlternativeEstimates()[ARow - fixedRows - 1].getPriorities()[ACol - fixedCols] = StrToFloat(Value);
+					currentProject.getAlternativeEstimates()[ACol - fixedCols].getPriorities()[ARow- fixedRows - 1] = StrToFloat(Value);
 				}
 			} else {
 				currentProject.getCriteriaEstimates().getPriorities()[ACol - fixedCols] = StrToFloat(Value);
@@ -870,7 +775,7 @@ void TForm1::showCurrentProject()
 		for (int j = 0; j < priorities.size() ; ++j)
 		{
 			if (priorities[j] != 0) {
-				UnicodeString str(Format(L"%.2f", &TVarRec(priorities[j]), 1));
+				UnicodeString str(Format(L"%.2g", &TVarRec(priorities[j]), 1));
 				InputDataStringGrid->Cells[i + fixedCols][j + fixedRows + 1] = str;
 				setColWidth(str, i + fixedCols);
 			} else {
@@ -883,7 +788,7 @@ void TForm1::showCurrentProject()
 	for (int i = 0; i < criteriaPriorities.size(); ++i)
 	{
 		if (criteriaPriorities[i] != 0) {
-			UnicodeString str(Format(L"%.2f", &TVarRec(criteriaPriorities[i]), 1));
+			UnicodeString str(Format(L"%.2g", &TVarRec(criteriaPriorities[i]), 1));
 			InputDataStringGrid->Cells[i + fixedCols][fixedRows ] = str;
 			setColWidth(str, i + fixedCols);
 		} else {
@@ -897,7 +802,9 @@ void TForm1::showCurrentProject()
 }
 void __fastcall TForm1::MethodComboBoxSelect(TObject *Sender)
 {
-	projectManager.getCurrentProject().setMethod(MethodComboBox->ItemIndex);
+	if (projectManager.isProjectOpen()) {
+		projectManager.getCurrentProject().setMethod(MethodComboBox->ItemIndex);
+    }
 }
 //---------------------------------------------------------------------------
 
