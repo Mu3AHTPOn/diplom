@@ -232,14 +232,14 @@ void TEvalCriteriaWeightsForm::setData() {
 		gridNames = &currentProject->getCriteriaNames();
 		estimates= &currentProject->getCriteriaEstimates();
 		size = currentProject->getCriteriaCount() + 1;
-		ExplanationLabel->Caption = L"Задайте относительную важность критериев";
+		ExplanationLabel->Caption = L"Задайте относительную важность критериев в столбце 1";
 		Label1->Caption = L"Приоритеты критериев:";
 	} else {
 		vector<Estimates> &alternativeEstimates = currentProject->getAlternativeEstimates();
 		estimates = &alternativeEstimates[step - 1];
 		gridNames = &currentProject->getAlternativeNames();
 		size = currentProject->getAlternativesCount() + 1;
-		ExplanationLabel->Caption = L"Задайте относительную важность альтернатив";
+		ExplanationLabel->Caption = L"Задайте относительную важность альтернатив в столбце 1";
 		Label1->Caption = L"Приоритеты альтернатив:";
 	}
 
@@ -295,10 +295,10 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *S
 {
 	if (step == 0) {
 		if (ACol == 1) {
-			ExplanationLabel->Caption = L"Задайте относительную важность критериев";
+			ExplanationLabel->Caption = L"Задайте относительную важность критериев в столбце 1";
 		} else {
 			ExplanationLabel->Caption = L"Задайте относительную важность критериев без учёта критерия \"" +
-			gridNames->at(ACol - 1) + L"\"";
+			gridNames->at(ACol - 1) + L"\" в столбце " + IntToStr(ACol);
 
 			if (ACol > 2) {
 				ExplanationLabel->Caption = ExplanationLabel->Caption + L" и предидущих";
@@ -306,10 +306,10 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *S
 		}
 	} else {
         if (ACol == 1) {
-			ExplanationLabel->Caption = L"Задайте относительную важность альтернатив";
+			ExplanationLabel->Caption = L"Задайте относительную важность альтернатив в столбце 1";
 		} else {
 			ExplanationLabel->Caption = L"Задайте относительную важность альтернатив без учёта альтернативы \"" +
-			gridNames->at(ACol - 1) + L"\"";
+			gridNames->at(ACol - 1) + L"\" в столбце " + IntToStr(ACol);
 
 			if (ACol > 2) {
 				ExplanationLabel->Caption = ExplanationLabel->Caption + L" и предидущих";
