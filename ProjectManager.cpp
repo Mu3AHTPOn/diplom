@@ -6,7 +6,7 @@
 
 #pragma once
 //---------------------------------------------------------------------------
-
+//класс управления проектами
 ProjectManager* ProjectManager::instance = NULL;
 
 ProjectManager& ProjectManager::getInstance()
@@ -29,39 +29,48 @@ ProjectManager::~ProjectManager()
 	delete currentProject;
 }
 //---------------------------------------------------------------------------
+//устанавливает сохранён ли текущий проект
 void ProjectManager::setIsCurrentProjectSaved(bool isSaved)
 {
 	isSavedCurrentProject = isSaved;
 }
 //---------------------------------------------------------------------------
+//возвращает сохранён ли текущий проект
 bool ProjectManager::isSavedCurrentPreject()
 {
 	return isSavedCurrentProject;
 }
 //---------------------------------------------------------------------------
+//устанавливает открыт ли проект
 void ProjectManager::setIsProjectOpen(bool isOpen)
 {
 	isOpenProject = isOpen;
 }
 //---------------------------------------------------------------------------
+//возвращает открыт ли текущий проект
 bool ProjectManager::isProjectOpen()
 {
 	return isOpenProject && currentProject != NULL;
 }
 //---------------------------------------------------------------------------
+//возвращает ссылку на текущий проект
 Project & ProjectManager::getCurrentProject()
 {
     return *currentProject;
 }
 //---------------------------------------------------------------------------
+//сохраняет текущий проект на диск
 void ProjectManager::saveProject(UnicodeString fileName)
 {
-    TFileStream *fs = new TFileStream(fileName, fmCreate);
+	//открываем файловым поток
+	TFileStream *fs = new TFileStream(fileName, fmCreate);
 	try {
+		//заносим текущий проетк в JSON объект
 		TJSONObject *js = new TJSONObject();
 		TJSONArray *criteriaNamesJSON = new TJSONArray();
 		TJSONArray *alternativeNamesJSON = new TJSONArray();
 
+		//добавляем имена критериев
 		const vector<UnicodeString> &criteriaNames = getCurrentProject().getCriteriaNames();
 		vector<UnicodeString>::const_iterator iter;
 		for (iter = criteriaNames.begin(); iter != criteriaNames.end(); ++iter) {
@@ -70,6 +79,7 @@ void ProjectManager::saveProject(UnicodeString fileName)
 
 		js->AddPair(L"criteriaNames", criteriaNamesJSON);
 
+		//добавляем имена альтернатив
 		const vector<UnicodeString> &alternativeNames = getCurrentProject().getAlternativeNames();
 		for (iter = alternativeNames.begin(); iter != alternativeNames.end(); ++iter) {
 			alternativeNamesJSON->Add(*iter);
@@ -77,6 +87,7 @@ void ProjectManager::saveProject(UnicodeString fileName)
 
 		js->AddPair(L"alternativeNames", alternativeNamesJSON);
 
+		//добавляем оценки критериев (баллы и рассчитаныый рейтинг(приоритеты))
 		Estimates &criteriaEstimates = currentProject->getCriteriaEstimates();
 		vector< vector<int> > &rates = criteriaEstimates.getRates();
 		vector<double> &priorities = criteriaEstimates.getPriorities();
@@ -103,6 +114,7 @@ void ProjectManager::saveProject(UnicodeString fileName)
 		crteriaEstimatesJSON->AddPair(L"rates", crteriaRatesTable);
 		js->AddPair(L"criteriaEstimates", crteriaEstimatesJSON);
 
+		//добавляем оценки альтернатив
 		vector<Estimates> alternativeEstimates = getCurrentProject().getAlternativeEstimates();
 		TJSONArray *tableData = new TJSONArray();
 		for (int i = 0; i < alternativeEstimates.size(); i++) {
@@ -133,13 +145,16 @@ void ProjectManager::saveProject(UnicodeString fileName)
 		}
 
 		js->AddPair(L"alternativeEstimates", tableData);
+		//сохраняем имя и метод
 		js->AddPair(L"projectName", getCurrentProject().getName());
 		js->AddPair(L"method", IntToStr(getCurrentProject().getMethod()));
+        //сохраняем JSON объект в файл как строку
 		UnicodeString projectJSON = js->ToString();
 
 		fs->Write(projectJSON.BytesOf(), projectJSON.Length());
 		js->Free();
 
+		//устанавливаем, что проект сохранён
 		setIsCurrentProjectSaved(true);
 
 	} __finally {
@@ -147,6 +162,8 @@ void ProjectManager::saveProject(UnicodeString fileName)
 	}
 }
 //---------------------------------------------------------------------------
+//загрузка проекта из файла, действия аналогичные, что и в сохранении, только
+//в обратном порядке(парсим JSON объект и заполняем пустой проект)
 Project & ProjectManager::loadProject(UnicodeString fileName)
 {
     TFileStream *fs = new TFileStream(fileName, fmOpenRead);
@@ -239,6 +256,7 @@ Project & ProjectManager::loadProject(UnicodeString fileName)
 	return getCurrentProject();
 }
 //---------------------------------------------------------------------------
+//закрываем текущий проект
 void ProjectManager::closeProject() {
 	setIsProjectOpen(false);
 	setIsCurrentProjectSaved(false);
@@ -246,6 +264,7 @@ void ProjectManager::closeProject() {
 	currentProject = NULL;
 }
 //---------------------------------------------------------------------------
+//создаём новый проект
 Project & ProjectManager::newProject()
 {
 	closeProject();

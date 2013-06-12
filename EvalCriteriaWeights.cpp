@@ -15,8 +15,9 @@ __fastcall TEvalCriteriaWeightsForm::TEvalCriteriaWeightsForm(TComponent* Owner)
 	EvalCriteriaWeightsForm = this;
 }
 //---------------------------------------------------------------------------
+//пишем имена критериев/альтернатив и закрашиваем ячейки, в кторых нельзя писать
 void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesDrawCell(TObject *Sender, int ACol,
-          int ARow, TRect &Rect, TGridDrawState State)
+		  int ARow, TRect &Rect, TGridDrawState State)
 {
 	if (ACol == 0 || ARow == 0) {
 		drawFixedColNames(Sender, ACol, ARow, Rect);
@@ -27,11 +28,12 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesDrawCell(TObject *Sen
 		if (ARow < ACol) {
 			CriteriaEstimates->Canvas->Brush->Color = cl3DLight;
 			CriteriaEstimates->Canvas->FillRect(CriteriaEstimates->CellRect(ACol, ARow));
-        }
+		}
 	}
 }
 
 //---------------------------------------------------------------------------
+//пишем имена на таблице баллов и матрице парных сравнений
 void TEvalCriteriaWeightsForm::drawFixedColNames(TObject *Sender, int ACol, int ARow, TRect &Rect)
 {
 	if (ACol == 0 && ARow == 0) {
@@ -63,6 +65,7 @@ void TEvalCriteriaWeightsForm::drawFixedColNames(TObject *Sender, int ACol, int 
 	}
 }
 //---------------------------------------------------------------------------
+//устанавливаем высоту строк
 void TEvalCriteriaWeightsForm::setRowHeight(TObject *Sender, UnicodeString &str)
 {
 	TStringGrid *grid = (TStringGrid*) Sender;
@@ -74,6 +77,7 @@ void TEvalCriteriaWeightsForm::setRowHeight(TObject *Sender, UnicodeString &str)
 }
 
 //---------------------------------------------------------------------------
+//устанавливаем ширину столбцов
 void TEvalCriteriaWeightsForm::setColWidth(TObject *Sender, UnicodeString &str, int col)
 {
 	TStringGrid *grid = (TStringGrid*) Sender;
@@ -83,6 +87,7 @@ void TEvalCriteriaWeightsForm::setColWidth(TObject *Sender, UnicodeString &str, 
 	grid->ColWidths[col] = columnWidth > newColumnWidth ? columnWidth : newColumnWidth;
 }
 //---------------------------------------------------------------------------
+//проверяем правильность ввода
 void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSetEditText(TObject *Sender,
           int ACol, int ARow, const UnicodeString Value)
 {
@@ -99,6 +104,9 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSetEditText(TObject *
 	} else {
 		vector< vector<int> > &rates = estimates->getRates();
 		rates[ARow - 1][ACol - 1] = StrToInt(Value);
+		//есди была заполнена ячейка, находящаяся на главной диагонали
+		//то заполняем всю стоку этим значением, для получения необходимой
+		//для МАИ матрицы быллов
 		if (ARow == ACol) {
 			const int value = rates[ARow - 1][ACol - 1];
 			for (int i = ACol; i < rates.size(); ++i) {
@@ -108,11 +116,13 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSetEditText(TObject *
 		}
 	}
 
+	//если вся таблица заполнена - производим расчёт
 	if (isDataFilled()) {
 		eval();
     }
 }
 //---------------------------------------------------------------------------
+//приводим форму в исходное состояние при её показе
 void __fastcall TEvalCriteriaWeightsForm::FormShow(TObject *Sender)
 {
 	currentProject = &ProjectManager::getInstance().getCurrentProject();
@@ -122,9 +132,10 @@ void __fastcall TEvalCriteriaWeightsForm::FormShow(TObject *Sender)
 	setData();
 }
 //---------------------------------------------------------------------------
-
+//нажатие на кнопку далее
 void __fastcall TEvalCriteriaWeightsForm::NextButtonClick(TObject *Sender)
 {
+	//если коэффициент согласованности сильно высок - показываем предупреждение
 	if (consistency > maxConsistency) {
 		UnicodeString str = L"Коэффициент согласованности должен быть менее " +
 							FloatToStr(maxConsistency) +
@@ -141,17 +152,19 @@ void __fastcall TEvalCriteriaWeightsForm::NextButtonClick(TObject *Sender)
 
 	++step;
 
+	//проверяем необходимо ли выйти
 	const int method = currentProject->getMethod();
 	const int size(method == Processor::WS ? 1 : currentProject->getCriteriaCount() + 1);
 	if (step == size)
 	{
 		Close();
 	} else {
+		//показывем сохраннённые ранее быллы, если они есть
         setData();
     }
 }
 //---------------------------------------------------------------------------
-
+//кнопка назад
 void __fastcall TEvalCriteriaWeightsForm::BackButtonClick(TObject *Sender)
 {
 	if (step > 0) {
@@ -168,6 +181,7 @@ void TEvalCriteriaWeightsForm::setBackPointer(bool *back)
 	isBack = back;
 }
 //---------------------------------------------------------------------------
+//проверка таблицы на заполненность
 bool TEvalCriteriaWeightsForm::isDataFilled() {
 	vector< vector<int> > &rates = estimates->getRates();
 	for (int i = 0; i < rates.size(); ++i)
@@ -183,6 +197,7 @@ bool TEvalCriteriaWeightsForm::isDataFilled() {
 	return true;
 }
 //---------------------------------------------------------------------------
+//расчёт рейтингов объектов с использованием МАИ
 void TEvalCriteriaWeightsForm::eval() {
 	const int size = estimates->getRates().size();
 	Matrix<double> *m = processor.evalPairwiseMatrix(estimates->getRates());
@@ -218,6 +233,7 @@ void TEvalCriteriaWeightsForm::eval() {
 	delete ahpEstimates;
 }
 //---------------------------------------------------------------------------
+//при попытке записи в запрещеённую ячейку переносим в разрешённую
 void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesGetEditText(TObject *Sender,
 		  int ACol, int ARow, UnicodeString &Value)
 {
@@ -226,6 +242,7 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesGetEditText(TObject *
 	}
 }
 //---------------------------------------------------------------------------
+//отображение информации на форме
 void TEvalCriteriaWeightsForm::setData() {
 	int size;
 	if (step == 0) {
@@ -264,6 +281,7 @@ void TEvalCriteriaWeightsForm::setData() {
 	ConsistencLabel->Caption = L"-";
 	PrioritiesLabel->Caption = L"-";
 
+	//заполнение таблицы
 	for (int i = 0 ; i < rates.size(); ++i) {
 		vector<int> &v = rates[i];
 		for (int j = 0; j < v.size(); ++j) {
@@ -283,6 +301,7 @@ void TEvalCriteriaWeightsForm::setData() {
 		}
 	}
 
+	//расчёт если все данные заполнены
 	if (isDataFilled()) {
 		eval();
 	}
@@ -290,6 +309,7 @@ void TEvalCriteriaWeightsForm::setData() {
 	CriteriaEstimates->SetFocus();
 }
 //---------------------------------------------------------------------------
+//пишем пояснение
 void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *Sender,
           int ACol, int ARow, bool &CanSelect)
 {

@@ -16,13 +16,13 @@ __fastcall TNewProjectForm::TNewProjectForm(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TNewProjectForm::FormCreate(TObject *Sender)
 {
-	listEdit = new TEdit(this);
-	listEdit->Parent = RowNamesListBox;
-	listEdit->Visible = false;
-	listEdit->Ctl3D = false;
-	listEdit->BorderStyle = bsNone;
-	listEdit->OnKeyPress = listEditKeyPress;
-	listEdit->OnExit = ListEditExit;
+	comboBoxNamesListEdit = new TEdit(this);
+	comboBoxNamesListEdit->Parent = RowNamesListBox;
+	comboBoxNamesListEdit->Visible = false;
+	comboBoxNamesListEdit->Ctl3D = false;
+	comboBoxNamesListEdit->BorderStyle = bsNone;
+	comboBoxNamesListEdit->OnKeyPress = listEditKeyPress;
+	comboBoxNamesListEdit->OnExit = ListEditExit;
 
 	const int AHP = Canvas->TextWidth((*MethodComboBox->Items)[0]);
 	const int WS = Canvas->TextWidth((*MethodComboBox->Items)[1]);
@@ -68,19 +68,19 @@ void TNewProjectForm::showEditText(TListBox *list)
 		return;
 	}
 
-	listEdit->Parent = list;
-	listEdit->Width = list->ClientWidth;
+	comboBoxNamesListEdit->Parent = list;
+	comboBoxNamesListEdit->Width = list->ClientWidth;
 
 	TRect lRect(list->ItemRect(i));
-	listEdit->Top = lRect.Top + 1;
-	listEdit->Left= lRect.Left+ 1;
-	listEdit->Height = (lRect.Bottom - lRect.Top) + 1;
+	comboBoxNamesListEdit->Top = lRect.Top + 1;
+	comboBoxNamesListEdit->Left= lRect.Left+ 1;
+	comboBoxNamesListEdit->Height = (lRect.Bottom - lRect.Top) + 1;
 
-	listEdit->Text = list->Items->Strings[i];
+	comboBoxNamesListEdit->Text = list->Items->Strings[i];
 
-	listEdit->Visible = true;
-	listEdit->SelectAll();
-	listEdit->SetFocus();
+	comboBoxNamesListEdit->Visible = true;
+	comboBoxNamesListEdit->SelectAll();
+	comboBoxNamesListEdit->SetFocus();
 }
 
 //---------------------------------------------------------------------------
@@ -106,7 +106,7 @@ void TNewProjectForm::removeCurrentItem(TListBox *list)
 		}
 	}
 
-	listEdit->Visible = false;
+	comboBoxNamesListEdit->Visible = false;
 }
 //---------------------------------------------------------------------------
 void TNewProjectForm::addItem(TListBox *list, bool inEnd)
@@ -123,6 +123,7 @@ void TNewProjectForm::addItem(TListBox *list, bool inEnd)
 		currentProject->addEstimate(index, defVal, Project::CRITERIA);
 	}
 
+	//-1 значит добавить в конец
 	if (index == -1) {
 		list->ItemIndex = list->Count - 1;
 	} else {
@@ -154,17 +155,17 @@ void TNewProjectForm::moveItemDown(TListBox *list)
 //---------------------------------------------------------------------------
 void TNewProjectForm::onListKeyPress(System::WideChar &Key)
 {
-	TListBox* list = (TListBox*) listEdit->Parent;
+	TListBox* list = (TListBox*) comboBoxNamesListEdit->Parent;
 	if (Key == 13U) {      //onEnter
-		listEdit->Visible = false;
+		comboBoxNamesListEdit->Visible = false;
 		Key = 0U;
 		list->SetFocus();
 	} else if (Key == '\x1B')      //onEscape
 	{
-		listEdit->Visible = false;
+		comboBoxNamesListEdit->Visible = false;
 		Key = 0U;
 		list->SetFocus();
-		listEdit->Text = L"";
+		comboBoxNamesListEdit->Text = L"";
 	}
 }
 //---------------------------------------------------------------------------
@@ -180,18 +181,18 @@ void TNewProjectForm::onListKeyDown(TListBox* list, WORD &Key, TShiftState Shift
 //---------------------------------------------------------------------------
 void TNewProjectForm::onListExit()
 {
-	TListBox *list = (TListBox*) listEdit->Parent;
-	if (list->Count > 0 && listEdit->Text != L"") {
-		list->Items->Strings[list->ItemIndex] = listEdit->Text;
+	TListBox *list = (TListBox*) comboBoxNamesListEdit->Parent;
+	if (list->Count > 0 && comboBoxNamesListEdit->Text != L"") {
+		list->Items->Strings[list->ItemIndex] = comboBoxNamesListEdit->Text;
 
         if (list == RowNamesListBox) {
-			currentProject->getAlternativeNames()[list->ItemIndex] = listEdit->Text;
+			currentProject->getAlternativeNames()[list->ItemIndex] = comboBoxNamesListEdit->Text;
 		} else {
-			currentProject->getCriteriaNames()[list->ItemIndex] = listEdit->Text;
+			currentProject->getCriteriaNames()[list->ItemIndex] = comboBoxNamesListEdit->Text;
 		}
 
-		listEdit->Visible = false;
-		listEdit->Text = L"";
+		comboBoxNamesListEdit->Visible = false;
+		comboBoxNamesListEdit->Text = L"";
 	}
 }
 //---------------------------------------------------------------------------

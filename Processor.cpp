@@ -6,7 +6,9 @@
 //---------------------------------------------------------------------------
 
 #pragma once
+//класс реализующий расчёт с помощью мат методов
 
+//реализация МАИ
 AHPSolver<int> *Processor::evalAHP(Estimates &estimates) {
 	Matrix<double> *m = evalPairwiseMatrix(estimates.getRates());
 
@@ -32,6 +34,7 @@ AHPSolver<int> *Processor::evalAHP(Estimates &estimates) {
 	return ahpEstimates;
 }
 //---------------------------------------------------------------------------
+//вычисление матрицы парных сравнений
 Matrix<double> *Processor::evalPairwiseMatrix(vector< vector<int> > &rates) {
 	const int size = rates.size();
 	Matrix<double> *m = new Matrix<double>(size, size);
@@ -44,6 +47,7 @@ Matrix<double> *Processor::evalPairwiseMatrix(vector< vector<int> > &rates) {
     return m;
 }
 //---------------------------------------------------------------------------
+//возвращает коэффициент согласованности
 double Processor::evalConsistency(Estimates &estimates) {
 	Matrix<double> *m = evalPairwiseMatrix(estimates.getRates());
 
@@ -55,12 +59,13 @@ double Processor::evalConsistency(Estimates &estimates) {
 	return ahpEstimates.evaluatePairwiseConsistency();
 }
 //---------------------------------------------------------------------------
+//реализация МВСМ
 Matrix<double> &Processor::evalWS() {
 	Project &project = ProjectManager::getInstance().getCurrentProject();
 	const int criteriaCount = project.getCriteriaCount();
 	const int alternativesCount = project.getAlternativesCount();
 
-	//создаём и заполняем матрицы рейтинков
+	//создаём и заполняем матрицы рейтингов
 	Matrix<double> criteriaPriorities(criteriaCount);
 	Matrix<double> alternativePriorities(alternativesCount, criteriaCount);
 

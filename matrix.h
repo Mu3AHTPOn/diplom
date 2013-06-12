@@ -31,7 +31,6 @@ class Matrix
         inline int getWidth() const;
         inline int getHeight() const;
         T** getMatrix() const { return matrix; }
-        T * eigenVectors();
         T * eigenValue();
         T * eigenValue(T *eigenValue);
 	private:

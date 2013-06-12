@@ -6,7 +6,8 @@
 
 #pragma once
 //---------------------------------------------------------------------------
-
+//класс реализует проект, который содержит в себе всю необходимую для расчётов
+//информацию
 Project::Project(): name(L"Новый проект")
 {
 
@@ -16,55 +17,48 @@ Project::~Project()
 {
 
 }
-
+//возвращает количество критериев
 int Project::getCriteriaCount()
 {
 	return criteriaNames.size();
 }
-
+//возвращает количество альтернатив
 int Project::getAlternativesCount()
 {
 	return alternativeNames.size();
 }
-
+//возвращает имя проекта
 const UnicodeString & Project::getName()
 {
-    return name;
+	return name;
 }
-
+//задаёт имя проекта
 void Project::setName(UnicodeString name)
 {
     this->name = name;
 }
-
+//возвращает имена альтернатив
 vector<UnicodeString> &Project::getAlternativeNames()
 {
-//	vector<UnicodeString> names(getAlternativesCount());
-//	const int n(getAlternativesCount());
-//	for (int i = 0; i < n; ++i)
-//	{
-//		UnicodeString str = alternativeEstimates[i].getEstimatedBy();
-//		names.push_back(str);
-//	}
-
 	return alternativeNames;
 }
-
+//возвращает имена критерев
 vector<UnicodeString> & Project::getCriteriaNames()
 {
 	return criteriaNames;
 }
-
+//возвращает оценки альтерантив
 vector<Estimates> & Project::getAlternativeEstimates()
 {
 	return alternativeEstimates;
 }
-
+//возвращает оценки критериев
 Estimates& Project::getCriteriaEstimates()
 {
 	return criteriaEstimates;
 }
-
+//удаляет оценку альтернативы либо критерия со сдвигом введённых пользоателем
+//баллов
 void Project::removeEstimate(int index, EstimateType type)
 {
 	if (type == EstimateType::ALTERNATIVE) {
@@ -100,7 +94,8 @@ void Project::removeEstimate(int index, EstimateType type)
 		alternativeEstimates.erase(alternativeEstimates.begin() + index);
 	}
 }
-
+//добавляет оценку альтернативы либо критерия со сдвигом введённых пользоателем
+//баллов
 void Project::addEstimate(int index, UnicodeString name, EstimateType type)
 {
 	 if (type == EstimateType::ALTERNATIVE) {
@@ -186,11 +181,11 @@ void Project::moveEstimate(int from, int to, EstimateType type)
 {
 
 }
-
+//устанавливает метод расчёта
 void Project::setMethod(int method) {
     this->method = method;
 }
-
+//возвращает метод расчёта
 int Project::getMethod() {
     return method;
 }

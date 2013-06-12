@@ -11,7 +11,7 @@ void EigenSolver::evaluateEigen(
     evaluateEigenVector(inMatrix, outMaxVector);
     evaluateMaxEigenValue(inMatrix, outMaxVector, outMaxEigenValue);
 }
-
+//вычисляет собственные вектора
 template<typename T>
 void EigenSolver::evaluateEigenVector(
         Matrix<T>& inMatrix,

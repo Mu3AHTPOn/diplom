@@ -34,6 +34,7 @@ Matrix<T>::Matrix(Matrix<T> &rhs)
     }
 }
 
+//инициализация матрицы
 template<typename T>
 void Matrix<T>::initMatrix(T value)
 {
@@ -58,31 +59,25 @@ Matrix<T>::~Matrix()
 
 	delete [] matrix;
 }
-
+//возвращает ширину
 template<typename T>
 int Matrix<T>::getWidth() const
 {
-    return width;
+	return width;
 }
-
+//возвращает высоту
 template<typename T>
 int Matrix<T>::getHeight() const
 {
     return height;
 }
-
-template<typename T>
-T *Matrix<T>::eigenVectors()
-{
-
-}
-
+//возвращает указатель на строку
 template<typename T>
 T* Matrix<T>::operator [](const int row)
 {
     return matrix[row];
 }
-
+//возвращает ссылку на столбец
 template<typename T>
 Matrix<T>& Matrix<T>::getColumn(const int index)
 {
@@ -94,7 +89,7 @@ Matrix<T>& Matrix<T>::getColumn(const int index)
 
     return column;
 }
-
+//оператор умножения, возвращает указатель на новую матрицу
 template<typename T>
 Matrix<T>* Matrix<T>::operator *(Matrix<T>& rhs) throw(MatrixException)
 {
@@ -112,7 +107,7 @@ Matrix<T>* Matrix<T>::operator *(Matrix<T>& rhs) throw(MatrixException)
 
     return result;
 }
-
+//оператор присвоения
 template<typename T>
 Matrix<T>& Matrix<T>::operator =(Matrix<T> &rhs)
 {
@@ -134,7 +129,7 @@ Matrix<T>& Matrix<T>::operator =(Matrix<T> &rhs)
 
     return *this;
 }
-
+//деление матрицы на число
 template<typename T>
 Matrix<T> &Matrix<T>::operator /(double value)
 {
@@ -216,14 +211,13 @@ Matrix<T> &Matrix<T>::append(Matrix<T> &rhs) throw(MatrixException)
     matrix = newMatrix;
     return *this;
 }
-
-
+//возвращает true если матрица квадратная
 template<typename T>
 bool Matrix<T>::isQuadratic()
 {
     return width == height;
 }
-
+//нормализует матрицу на 1
 template<typename T>
 Matrix<T>& Matrix<T>::normalizeToOne()
 {
@@ -245,7 +239,7 @@ Matrix<T>& Matrix<T>::normalizeToOne()
     delete [] sums;
     return *this;
 }
-
+//возвращет длину вектора
 template<typename T>
 double Matrix<T>::getLength(int col)
 {
@@ -257,7 +251,7 @@ double Matrix<T>::getLength(int col)
 
     return sqrt(sum);
 }
-
+//возвращает сумму столбца
 template<typename T>
 T Matrix<T>::getSum(int col)
 {

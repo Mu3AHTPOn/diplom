@@ -58,7 +58,7 @@ __published:	// IDE-managed Components
 	void __fastcall FormHide(TObject *Sender);
 
 private:	// User declarations
-	TEdit *listEdit;
+	TEdit *comboBoxNamesListEdit;
 	void showEditText(TListBox *list);
 	void removeCurrentItem(TListBox *list);
 	void addItem(TListBox* list, bool inEnd = false);

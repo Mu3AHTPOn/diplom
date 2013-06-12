@@ -200,20 +200,21 @@ void TForm1::evalAHP()
 	showResult(result, L"Метод анализа иерархий");
 	delete &result;
 }
-
+//расчёт методом взвешенной суммы мест
 void TForm1::evalWS()
 {
 	Matrix<double> &result = processor.evalWS();
 	showResult(result, L"Метод взвешенной суммы мест");
 	delete &result;
 }
-
+//отображание результатов на графику
 void TForm1::showResultAtChart(Matrix<double> &result)
 {
 	Chart1->Series[0]->Clear();
 
 	double max(0);
 	vector<UnicodeString> alternativeNames = projectManager.getCurrentProject().getAlternativeNames();
+	//расчёт максимального значения для шкалы по Y
 	for (int i = 0; i < result.getHeight(); ++i)
 	{
 		max = result[i][0] > max ? result[i][0] : max;
@@ -224,6 +225,7 @@ void TForm1::showResultAtChart(Matrix<double> &result)
 
 }
 //---------------------------------------------------------------------------
+//отображение результотов
 void TForm1::showResult(Matrix<double> &result, UnicodeString method) {
 	UnicodeString resultStr = L"(";
 
@@ -247,15 +249,16 @@ void TForm1::showResult(Matrix<double> &result, UnicodeString method) {
 	showResultAtChart(result);
 }
 //---------------------------------------------------------------------------
-
-
+//событие рисования ячейки таблицы
 void __fastcall TForm1::InputDataStringGridDrawCell(TObject *Sender, int ACol, int ARow,
           TRect &Rect, TGridDrawState State)
 {
+	//пишем название в фикированных столбцах
 	if (ACol == 0 || ARow == 0) {
 		drawFixedColNames(ACol, ARow, Rect);
 	}
 
+	//закрашиваем первую строку и пишем её значения
 	if (ARow == 1 && ! (InputDataStringGrid->Row == ARow && InputDataStringGrid->Col == ACol))
 	{
 		InputDataStringGrid->Canvas->Brush->Color = cl3DLight;
@@ -265,7 +268,8 @@ void __fastcall TForm1::InputDataStringGridDrawCell(TObject *Sender, int ACol, i
 	}
 }
 //---------------------------------------------------------------------------
-
+//событие двойного нажатия на ячейки, показывает форму изменения имени
+//критерия либо альтернативы и устанавливает введённое в форме значение
 void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 {
 	const int cols = InputDataStringGrid->ColCount;
@@ -315,6 +319,9 @@ void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
+//занимается отрисовкой имён альтернатив и критериев
+//необходима для динамической установки ширины/высоты ячеек и
+//рисования вертикального текста
 void TForm1::drawFixedColNames(int ACol, int ARow, TRect &Rect)
 {
 	if (ACol == 0 && ARow == 0) {
@@ -341,12 +348,13 @@ void TForm1::drawFixedColNames(int ACol, int ARow, TRect &Rect)
 		UnicodeString &name = criteriaNames[ACol- 1];
         setRowHeight(name);
 
+		//устанавливаем ориентацию текста как 90 градусуов и небодьшое смещение
 		InputDataStringGrid->Canvas->Font->Orientation = 90 * 10;
 		InputDataStringGrid->Canvas->TextOut(Rect.Left, Rect.Bottom - 6, name);
 	}
 }
  //---------------------------------------------------------------------------
-
+//вычисляет и устанавливет высоту строки
 void TForm1::setRowHeight(UnicodeString &str)
 {
 	int rowHeight = InputDataStringGrid->RowHeights[0];
@@ -355,7 +363,7 @@ void TForm1::setRowHeight(UnicodeString &str)
 	InputDataStringGrid->RowHeights[0] = rowHeight > newRowHeight ? rowHeight : newRowHeight;
 }
  //---------------------------------------------------------------------------
-
+//вычисляет и устанавливает ширину столбца
 void TForm1::setColWidth(UnicodeString &str, int col)
 {
 	int columnWidth = InputDataStringGrid->ColWidths[col];
@@ -364,7 +372,7 @@ void TForm1::setColWidth(UnicodeString &str, int col)
 	InputDataStringGrid->ColWidths[col] = columnWidth > newColumnWidth ? columnWidth : newColumnWidth;
 }
 //---------------------------------------------------------------------------
-
+//сохраняет текущий проект
 void TForm1::saveProject()
 {
     if (projectManager.isProjectOpen() && SaveDialog1->Execute(this->Handle))
@@ -373,6 +381,7 @@ void TForm1::saveProject()
 	}
 }
 //--------------------------------------------------------------------------
+//загружает проект
 void TForm1::loadProject()
 {
 	if (! closeProject())
@@ -385,6 +394,7 @@ void TForm1::loadProject()
 			projectManager.loadProject(OpenDialog1->FileName);
 			showCurrentProject();
 		} catch (...) {
+			//сообщение об ошибке в случае невозможности открытия
 			Application->MessageBoxW(
 				L"Файл проекта повреждён!",
 				L"Ошибка!",
@@ -394,6 +404,7 @@ void TForm1::loadProject()
 	}
 }
 //--------------------------------------------------------------------------
+//создаёт новый проект
 void TForm1::newProject()
 {
 	if (! closeProject())
@@ -405,13 +416,15 @@ void TForm1::newProject()
 	NewProjectForm->setIsNewProject(true);
 	NewProjectForm->ShowModal();
 	if (projectManager.isProjectOpen()) {
+		//если проект был создан - заполняем таблицу
 		showCurrentProject();
     }
 }
 //--------------------------------------------------------------------------
-// return false if project doesn't close
+// закрываем проект
 bool TForm1::closeProject()
 {
+    //покаызваем диалог о сохранении текущего проекта
 	if (! showSaveDialog())
 	{
 		return false;
@@ -422,7 +435,8 @@ bool TForm1::closeProject()
         return true;
     }
 
-	for (int i = 0; i < getCriteriaCount() + 1; ++i)              //очистка табицы
+	//очистка табицы
+	for (int i = 0; i < getCriteriaCount() + 1; ++i)
 	{
 		for (int j = 0; j < getAlternativesCount() + 1; ++j)
 		{
@@ -439,7 +453,7 @@ bool TForm1::closeProject()
 	return true;
 }
 //--------------------------------------------------------------------------
-//return false if user click on cancel
+//предлагаем сохранить текущий проект
 bool TForm1::showSaveDialog()
 {
 	if (projectManager.isProjectOpen() && ! projectManager.isSavedCurrentPreject()) {
@@ -458,6 +472,7 @@ bool TForm1::showSaveDialog()
 	return true;
 }
 //--------------------------------------------------------------------------
+//проверяем нет ли непривальных данных в таблице
 bool TForm1::isDataValid()
 {
 	const int cols = InputDataStringGrid->ColCount;
@@ -551,7 +566,7 @@ void __fastcall TForm1::MMSaveProjectClick(TObject *Sender)
 	saveProject();
 }
 //---------------------------------------------------------------------------
-
+//редактирование проекта
 void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
 {
 	if (projectManager.isProjectOpen()) {
@@ -562,7 +577,7 @@ void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
-
+//провряем, что ввёл пользователь и выводим диалог ошибки если необходимо
 void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol,
 		  int ARow, const UnicodeString Value)
 {
@@ -604,7 +619,7 @@ void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol
 	projectManager.setIsCurrentProjectSaved(false);
 }
 //---------------------------------------------------------------------------
-
+//запоминаем нажатие на графике (необходимо для его перетаскивания и изменения размеров)
 void __fastcall TForm1::Chart1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
           int X, int Y)
 {
@@ -615,6 +630,8 @@ void __fastcall TForm1::Chart1MouseDown(TObject *Sender, TMouseButton Button, TS
     }
 }
 //---------------------------------------------------------------------------
+//после того, как клавиша мыши отпушена, проверяем не вышел ли график за
+//пределы формы и возвращаем его обратно, если такое случилось
 void __fastcall TForm1::Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift,
 		  int X, int Y)
 {
@@ -638,6 +655,8 @@ void __fastcall TForm1::Chart1MouseUp(TObject *Sender, TMouseButton Button, TShi
     }
 }
 //---------------------------------------------------------------------------
+//возвращает true если мышь на границе графика (необходимо для замены курсора
+//на курсор изменения размеров)
 void TForm1::isOnChartBorder(int X, int Y)
 {
 	const int offset = 5;
@@ -647,7 +666,7 @@ void TForm1::isOnChartBorder(int X, int Y)
 	isTop = Y < offset;
 	isBottom = Y > Chart1->Height - offset;
 }
-
+//перемещаем либо изменяем размер графика
 void __fastcall TForm1::Chart1MouseMove(TObject *Sender, TShiftState Shift, int X,
 		  int Y)
 {
@@ -681,6 +700,7 @@ void __fastcall TForm1::Chart1MouseMove(TObject *Sender, TShiftState Shift, int 
 			Chart1->Height += changing.Y;
 			Chart1->Top -= changing.Y;
 		} else {
+			//перемещение графика
 			Chart1->Left -= changing.X;
 			Chart1->Top -= changing.Y;
 		}
@@ -691,6 +711,7 @@ void __fastcall TForm1::Chart1MouseMove(TObject *Sender, TShiftState Shift, int 
 	}
 }
 //---------------------------------------------------------------------------
+//меняем курсов на курсов изменения раземра
 void TForm1::changeCursor(int X, int Y)
 {
 	isOnChartBorder(X, Y);
@@ -720,6 +741,7 @@ void TForm1::changeCursor(int X, int Y)
     }
 }
 //---------------------------------------------------------------------------
+//отображаем текущий проект на форме
 void TForm1::showCurrentProject()
 {
  	initGrid();
