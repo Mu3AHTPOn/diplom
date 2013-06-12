@@ -97,11 +97,12 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSetEditText(TObject *
 		CriteriaEstimates->Row = ARow;
 		CriteriaEstimates->Cells[ACol][ARow] = L"";
 	} else {
-		rates->at(ARow - 1)[ACol - 1] = StrToInt(Value);
+		vector< vector<int> > &rates = estimates->getRates();
+		rates[ARow - 1][ACol - 1] = StrToInt(Value);
 		if (ARow == ACol) {
-			const int value = rates->at(ARow - 1)[ACol - 1];
-			for (int i = ACol; i < rates->size(); ++i) {
-				rates->at(ARow - 1)[i] = value;
+			const int value = rates[ARow - 1][ACol - 1];
+			for (int i = ACol; i < rates.size(); ++i) {
+				rates[ARow - 1][i] = value;
 				CriteriaEstimates->Cells[i + 1][ARow] = IntToStr(value);
 			}
 		}
@@ -141,7 +142,7 @@ void __fastcall TEvalCriteriaWeightsForm::NextButtonClick(TObject *Sender)
 	++step;
 
 	const int method = currentProject->getMethod();
-	const int size(method == MathMethods::WS ? 1 : currentProject->getCriteriaCount() + 1);
+	const int size(method == Processor::WS ? 1 : currentProject->getCriteriaCount() + 1);
 	if (step == size)
 	{
 		Close();
@@ -150,7 +151,6 @@ void __fastcall TEvalCriteriaWeightsForm::NextButtonClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
-
 
 void __fastcall TEvalCriteriaWeightsForm::BackButtonClick(TObject *Sender)
 {
@@ -169,9 +169,10 @@ void TEvalCriteriaWeightsForm::setBackPointer(bool *back)
 }
 //---------------------------------------------------------------------------
 bool TEvalCriteriaWeightsForm::isDataFilled() {
-	for (int i = 0; i < rates->size(); ++i)
+	vector< vector<int> > &rates = estimates->getRates();
+	for (int i = 0; i < rates.size(); ++i)
 	{
-		vector<int> &v = rates->at(i);
+		vector<int> &v = rates[i];
 		for (int j = 0; j < v.size(); ++j) {
 			if (CriteriaEstimates->Cells[j + 1][i + 1].IsEmpty()) {
 				return false;
@@ -183,38 +184,38 @@ bool TEvalCriteriaWeightsForm::isDataFilled() {
 }
 //---------------------------------------------------------------------------
 void TEvalCriteriaWeightsForm::eval() {
-	const int size = rates->size();
-	Matrix<double> m(size, size);
+	const int size = estimates->getRates().size();
+	Matrix<double> *m = processor.evalPairwiseMatrix(estimates->getRates());
 	for (int i = 0; i < size; ++i) {
 		for (int j = 0; j < size; ++j) {
-			m[i][j] = rates->at(i)[j] / (double) rates->at(j)[i];
-			UnicodeString result = Format(L"%.2g", &TVarRec(m[i][j]), 1);
+			UnicodeString result = Format(L"%.2g", &TVarRec((*m)[i][j]), 1);
 			PairWiseGrid->Cells[j + 1][i + 1] = result;
 			setColWidth(PairWiseGrid, result, j + 1);
 		}
 	}
 
-	AHPSolver<int> ahpEstimates;
-	ahpEstimates.setPairwiseComparationMatrix(m);
-	Matrix<double> &eigen = ahpEstimates.getMaxEigenVectors();
-	double sum(0);
-	for (int i = 0; i < eigen.getHeight(); ++i)
-	{
-		sum += eigen[i][0];
+	delete m;
+
+	AHPSolver<int> *ahpEstimates = processor.evalAHP(*estimates);
+
+	UnicodeString resultStr = L"(";
+
+    vector<double> &priorities = estimates->getPriorities();
+	for (int i = 0; i < size - 1; ++i) {
+		resultStr += Format(L"%.3f; ", new TVarRec(priorities[i]), 1);
 	}
 
-	priorities->clear();
-	for (int i = 0; i < size; ++i)
-	{
-		priorities->push_back(eigen[i][0] / sum);
-	}
+	resultStr += Format(L"%.3f)", new TVarRec(priorities[size - 1]), 1);
+	PrioritiesLabel->Caption = resultStr;
 
 	ConsistencLabel->Font->Color = clBlack;
-	consistency = ahpEstimates.evaluatePairwiseConsistency();
+	consistency = ahpEstimates->evaluatePairwiseConsistency();
 	ConsistencLabel->Caption = Format(L"%.2f", &TVarRec(consistency), 1);
 	if (consistency > 0.1) {
 		ConsistencLabel->Font->Color = clRed;
 	}
+
+	delete ahpEstimates;
 }
 //---------------------------------------------------------------------------
 void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesGetEditText(TObject *Sender,
@@ -229,22 +230,22 @@ void TEvalCriteriaWeightsForm::setData() {
 	int size;
 	if (step == 0) {
 		gridNames = &currentProject->getCriteriaNames();
-		rates = &currentProject->getCriteriaEstimates().getRates();
+		estimates= &currentProject->getCriteriaEstimates();
 		size = currentProject->getCriteriaCount() + 1;
-		priorities = &currentProject->getCriteriaEstimates().getPriorities();
 		ExplanationLabel->Caption = L"Задайте относительную важность критериев";
+		Label1->Caption = L"Приоритеты критериев:";
 	} else {
 		vector<Estimates> &alternativeEstimates = currentProject->getAlternativeEstimates();
-		Estimates &estiamtes = alternativeEstimates[step - 1];
-		priorities = &estiamtes.getPriorities();
+		estimates = &alternativeEstimates[step - 1];
 		gridNames = &currentProject->getAlternativeNames();
-		rates = &estiamtes.getRates();
 		size = currentProject->getAlternativesCount() + 1;
 		ExplanationLabel->Caption = L"Задайте относительную важность альтернатив";
+		Label1->Caption = L"Приоритеты альтернатив:";
 	}
 
-	const int n = rates->size() - 1;
-	rates->at(n)[n] = 9;
+	vector< vector<int> > &rates = estimates->getRates();
+	const int n = rates.size() - 1;
+	rates[n][n] = 9;
 
 	CriteriaEstimates->ColCount = size - 1;
 	CriteriaEstimates->RowCount = size;
@@ -261,19 +262,21 @@ void TEvalCriteriaWeightsForm::setData() {
 	consistency = 0.0;
 	ConsistencLabel->Font->Color = clBlack;
 	ConsistencLabel->Caption = L"-";
+	PrioritiesLabel->Caption = L"-";
 
-	for (int i = 0 ; i < rates->size(); ++i) {
-		vector<int> &v = rates->at(i);
+	for (int i = 0 ; i < rates.size(); ++i) {
+		vector<int> &v = rates[i];
 		for (int j = 0; j < v.size(); ++j) {
 			PairWiseGrid->Cells[j + 1][i + 1] = L"";
 			const int val = v[j];
-			if (v[j] == 0) {
+			if (val == 0) {
 				CriteriaEstimates->Cells[j + 1][i + 1] = L"";
 			} else {
-				CriteriaEstimates->Cells[j + 1][i + 1] = IntToStr(v[j]);
+				CriteriaEstimates->Cells[j + 1][i + 1] = IntToStr(val);
 				if (i == j) {
 					for (int k = j; k < v.size(); ++k) {
-						CriteriaEstimates->Cells[k + 1][i + 1] = IntToStr(v[j]);
+						v[k] = val;
+						CriteriaEstimates->Cells[k + 1][i + 1] = IntToStr(val);
 					}
 				}
 			}
@@ -319,8 +322,7 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *S
 void __fastcall TEvalCriteriaWeightsForm::FormHide(TObject *Sender)
 {
 	currentProject = NULL;
-	priorities = NULL;
-	rates = NULL;
+	estimates = NULL;
 	gridNames = NULL;
 }
 //---------------------------------------------------------------------------

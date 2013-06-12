@@ -165,6 +165,7 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 void __fastcall TForm1::N5Click(TObject *Sender)
 {
 	ResultRichEdit->Text = L"";
+	Chart1->Series[0]->Clear();
 }
 //---------------------------------------------------------------------------
 //событие расчёта через главное меню
@@ -195,55 +196,15 @@ void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
 //расчёт методом анализа иерархий
 void TForm1::evalAHP()
 {
-	const int criteriaCount = getCriteriaCount();
-	const int alternativesCount = getAlternativesCount();
-	Project &currentProject = projectManager.getCurrentProject();
-
-	//создаём и заполняем матрицы рейтинков
-	Matrix<double> criteriaPriorities(criteriaCount);
-	Matrix<double> alternativePriorities(alternativesCount, criteriaCount);
-
-	vector<double> &priorities = currentProject.getCriteriaEstimates().getPriorities();
-	vector<Estimates> &alternativeEstimates = currentProject.getAlternativeEstimates();
-
-	for (int i = 0; i < criteriaCount; ++i) {
-		criteriaPriorities[i][0] = priorities[i];
-
-		vector<double> &v = alternativeEstimates[i].getPriorities();
-		for (int j = 0; j < alternativesCount; ++j) {
-			alternativePriorities[j][i] = v[j];
-		}
-	}
-
-	Matrix<double> &result = (alternativePriorities * criteriaPriorities)->normalizeToOne();
+	Matrix<double> &result = processor.evalWS();
 	showResult(result, L"Метод анализа иерархий");
-
 	delete &result;
 }
 
 void TForm1::evalWS()
 {
-	const int criteriaCount = getCriteriaCount();
-	const int alternativesCount = getAlternativesCount();
-
-	Matrix<double> criteriaEstimates(criteriaCount);
-	Matrix<double> objectEstimates(alternativesCount, criteriaCount);
-
-	for (int i = 0; i < criteriaCount; ++i) {
-		criteriaEstimates[i][0] = InputDataStringGrid->Cells[i+fixedCols][fixedRows].ToDouble();
-	}
-
- 	//fill objectEstimates
-	TStringGrid *test = InputDataStringGrid;
-	for (int i = 0; i < criteriaCount; ++i) {
-		for (int j = 0; j < alternativesCount; ++j) {
-			objectEstimates[j][i] = InputDataStringGrid->Cells[i + fixedCols][j + fixedRows + 1].ToInt();
-		}
-	}
-
-	Matrix<double> &result = (objectEstimates * criteriaEstimates)->normalizeToOne();
+	Matrix<double> &result = processor.evalWS();
 	showResult(result, L"Метод взвешенной суммы мест");
-
 	delete &result;
 }
 

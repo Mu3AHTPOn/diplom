@@ -25,7 +25,7 @@
 #include <VCLTee.Series.hpp>
 #include <vector>
 #include "ProjectManager.cpp"
-#include "MathMethods.h"
+#include "Processor.cpp"
 
 using std::vector;
 using boost::wregex;
@@ -39,12 +39,7 @@ __published:	// IDE-managed Components
 	TMenuItem *MMOPentProject;
 	TMenuItem *MMCloseProject;
 	TMenuItem *N6;
-	TMenuItem *N7;
 	TMenuItem *N8;
-	TMenuItem *N11;
-	TMenuItem *N13;
-	TMenuItem *N9;
-	TMenuItem *N10;
 	TStringGrid *InputDataStringGrid;
 	TRichEdit *ResultRichEdit;
 	TMenuItem *MMCloseApp;
@@ -124,6 +119,7 @@ private:	// User declarations
 	bool isOnChartButtonPresssed;
 	TPoint lastChartMousePoint;
 	bool isLeft, isRight, isTop, isBottom;
+	Processor processor;
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
 };

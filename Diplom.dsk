@@ -1,54 +1,72 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'F:\diplom\ahpsolver.h',0,1,1,27,25,0,0,,
-File_1=TSourceModule,'F:\diplom\Project.cpp',0,1,45,1,191,0,0,,
-File_2=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\xmemory',0,1,106,1,129,0,0,,
-File_3=TSourceModule,'F:\diplom\MathMethods.h',0,1,1,17,4,0,0,,
-File_4=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\vector',0,1,441,1,464,0,0,,
-File_5=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\Data.DBXJSON.hpp',0,1,191,33,215,0,0,,
-File_6=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.MaskUtils.hpp',0,1,30,37,55,0,0,,
-File_7=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\xutility',0,1,1554,1,1577,0,0,,
-File_8=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\memory',0,1,117,1,140,0,0,,
-File_9=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\ustring.h',0,1,183,1,208,0,0,,
-File_10=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\iosfwd',0,1,104,17,129,0,0,,
+File_0=TSourceModule,'F:\diplom\ProjectManager.cpp',0,1,21,1,44,0,0,,
+File_1=TSourceModule,'F:\diplom\MathMethods.h',0,1,1,1,4,0,0,,
+File_2=TSourceModule,'F:\diplom\ahpsolver.h',0,1,1,27,25,0,0,,
+File_3=TSourceModule,'F:\diplom\Project.cpp',0,1,45,1,191,0,0,,
+File_4=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\xmemory',0,1,106,1,129,0,0,,
+File_5=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\vector',0,1,441,1,464,0,0,,
+File_6=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\Data.DBXJSON.hpp',0,1,191,33,215,0,0,,
+File_7=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.MaskUtils.hpp',0,1,30,37,55,0,0,,
+File_8=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\xutility',0,1,1554,1,1577,0,0,,
+File_9=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\memory',0,1,117,1,140,0,0,,
+File_10=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\ustring.h',0,1,183,1,208,0,0,,
 File_11=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Graphics.hpp',0,1,607,1,632,0,0,,
 File_12=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.ComCtrls.hpp',0,1,2133,1,2158,0,0,,
 File_13=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\rtl\System.UITypes.hpp',0,1,69,1,94,0,0,,
-File_14=TSourceModule,'c:\program files (x86)\embarcadero\rad studio\10.0\include\windows\vcl\Vcl.Grids.hpp',0,1,561,1,586,0,0,,
 
 [Modules]
-Module0=F:\diplom\EvalCriteriaWeights.cpp
-Module1=F:\diplom\MainForm.cpp
-Module2=F:\diplom\ProjectManager.cpp
-Module3=F:\diplom\NewProjectUnit.cpp
-Module4=F:\diplom\setColRowNameFormUnit.cpp
-Module5=F:\diplom\matrix.cpp
-Module6=F:\diplom\eigensolver.cpp
-Module7=F:\diplom\ahpsolver.cpp
-Module8=F:\diplom\Estimates.cpp
-Module9=F:\diplom\Diplom.cbproj
-Module10=F:\diplom\eigensolver.h
-Count=11
+Module0=c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\iosfwd
+Module1=F:\diplom\EvalCriteriaWeights.cpp
+Module2=F:\diplom\Processor.cpp
+Module3=F:\diplom\Estimates.cpp
+Module4=F:\diplom\ahpsolver.cpp
+Module5=F:\diplom\MainForm.cpp
+Module6=F:\diplom\NewProjectUnit.cpp
+Module7=F:\diplom\Diplom.cbproj
+Module8=F:\diplom\setColRowNameFormUnit.cpp
+Module9=F:\diplom\matrix.cpp
+Module10=F:\diplom\eigensolver.cpp
+Module11=F:\diplom\eigensolver.h
+Count=12
 EditWindowCount=1
+
+[c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\iosfwd]
+ModuleType=TSourceModule
+FormState=0
+FormOnTop=0
 
 [F:\diplom\EvalCriteriaWeights.cpp]
 ModuleType=TSourceModule
 FormState=1
-FormOnTop=1
+FormOnTop=0
+
+[F:\diplom\Processor.cpp]
+ModuleType=TSourceModule
+FormState=0
+FormOnTop=0
+
+[F:\diplom\Estimates.cpp]
+ModuleType=TSourceModule
+FormState=0
+FormOnTop=0
+
+[F:\diplom\ahpsolver.cpp]
+ModuleType=TSourceModule
+FormState=0
+FormOnTop=0
 
 [F:\diplom\MainForm.cpp]
 ModuleType=TSourceModule
 FormState=1
 FormOnTop=0
 
-[F:\diplom\ProjectManager.cpp]
-ModuleType=TSourceModule
-FormState=0
-FormOnTop=0
-
 [F:\diplom\NewProjectUnit.cpp]
 ModuleType=TSourceModule
 FormState=1
 FormOnTop=0
+
+[F:\diplom\Diplom.cbproj]
+ModuleType=TBaseProject
 
 [F:\diplom\setColRowNameFormUnit.cpp]
 ModuleType=TSourceModule
@@ -65,27 +83,14 @@ ModuleType=TSourceModule
 FormState=0
 FormOnTop=0
 
-[F:\diplom\ahpsolver.cpp]
-ModuleType=TSourceModule
-FormState=0
-FormOnTop=0
-
-[F:\diplom\Estimates.cpp]
-ModuleType=TSourceModule
-FormState=0
-FormOnTop=0
-
-[F:\diplom\Diplom.cbproj]
-ModuleType=TBaseProject
-
 [F:\diplom\eigensolver.h]
 ModuleType=TSourceModule
 FormState=0
 FormOnTop=0
 
 [EditWindow0]
-ViewCount=11
-CurrentEditView=F:\diplom\EvalCriteriaWeights.cpp
+ViewCount=12
+CurrentEditView=c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\iosfwd
 View0=0
 View1=1
 View2=2
@@ -97,6 +102,7 @@ View7=7
 View8=8
 View9=9
 View10=10
+View11=11
 PercentageSizes=1
 Create=1
 Visible=1
@@ -129,44 +135,54 @@ BottomMiddelPanelData=0000080001020200000009000000446F636B5369746530100000004772
 [View0]
 CustomEditViewType=TEditView
 Module=F:\diplom\MainForm.cpp
-CursorX=1
-CursorY=1
-TopLine=1
+CursorX=46
+CursorY=199
+TopLine=178
 LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\MainForm.cpp
 
 [View1]
 CustomEditViewType=TEditView
-Module=F:\diplom\ProjectManager.cpp
-CursorX=1
-CursorY=44
-TopLine=21
+Module=F:\diplom\Processor.cpp
+CursorX=46
+CursorY=32
+TopLine=4
 LeftCol=1
 Bookmarks=
-EditViewName=F:\diplom\ProjectManager.cpp
+EditViewName=F:\diplom\Processor.cpp
 
 [View2]
 CustomEditViewType=TEditView
 Module=F:\diplom\EvalCriteriaWeights.cpp
-CursorX=45
-CursorY=214
-TopLine=191
+CursorX=63
+CursorY=197
+TopLine=175
 LeftCol=1
 Bookmarks=
-EditViewName=Borland.FormDesignerView
+EditViewName=F:\diplom\EvalCriteriaWeights.cpp
 
 [View3]
 CustomEditViewType=TEditView
+Module=c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\iosfwd
+CursorX=17
+CursorY=129
+TopLine=104
+LeftCol=1
+Bookmarks=
+EditViewName=c:\program files (x86)\embarcadero\rad studio\10.0\include\dinkumware\iosfwd
+
+[View4]
+CustomEditViewType=TEditView
 Module=F:\diplom\NewProjectUnit.cpp
-CursorX=13
-CursorY=224
-TopLine=218
+CursorX=68
+CursorY=188
+TopLine=163
 LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\NewProjectUnit.cpp
 
-[View4]
+[View5]
 CustomEditViewType=TEditView
 Module=F:\diplom\Estimates.cpp
 CursorX=1
@@ -176,7 +192,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\Estimates.cpp
 
-[View5]
+[View6]
 CustomEditViewType=TEditView
 Module=F:\diplom\setColRowNameFormUnit.cpp
 CursorX=39
@@ -186,7 +202,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\setColRowNameFormUnit.cpp
 
-[View6]
+[View7]
 CustomEditViewType=TEditView
 Module=F:\diplom\matrix.cpp
 CursorX=1
@@ -196,17 +212,17 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\matrix.cpp
 
-[View7]
+[View8]
 CustomEditViewType=TEditView
 Module=F:\diplom\ahpsolver.cpp
-CursorX=118
-CursorY=80
-TopLine=80
+CursorX=37
+CursorY=45
+TopLine=68
 LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\ahpsolver.cpp
 
-[View8]
+[View9]
 CustomEditViewType=TEditView
 Module=F:\diplom\eigensolver.cpp
 CursorX=36
@@ -216,7 +232,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\eigensolver.cpp
 
-[View9]
+[View10]
 CustomEditViewType=TEditView
 Module=F:\diplom\eigensolver.h
 CursorX=1
@@ -226,7 +242,7 @@ LeftCol=1
 Bookmarks=
 EditViewName=F:\diplom\eigensolver.h
 
-[View10]
+[View11]
 CustomEditViewType=TEditView
 Module=F:\diplom\Diplom.cpp
 CursorX=1
@@ -262,10 +278,7 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=3
-Breakpoint0='F:\diplom\MainForm.cpp',446,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint1='F:\diplom\ProjectManager.cpp',243,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint2='F:\diplom\ProjectManager.cpp',44,'',0,1,'',1,0,0,'',1,'','','',0,''
+Count=0
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -375,8 +388,8 @@ SplitPos=111
 
 [PropInspDesignerSelection]
 ArrangeBy=Name
-SelectedItem=Caption,
-ExpandedItems=Anchors=1,BevelEdges=0,Constraints=0,Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,Options=0,StyleElements=0,Touch=0,GlassFrame=0,HorzScrollBar=0,Padding=0
+SelectedItem=Action,
+ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0,Font=0
 
 [TFileExplorerForm]
 PercentageSizes=1
@@ -875,7 +888,7 @@ LRDockWidth=2745
 Dockable=1
 StayOnTop=0
 
-[Item__C74C7DBB_4D99_4FF4_BABE_F02A005254E6_]
+[Item__CE401FF6_F956_4BDB_9F54_088BD85F0CF4_]
 PercentageSizes=1
 Create=1
 Visible=0
@@ -894,7 +907,7 @@ LRDockWidth=2745
 Dockable=1
 StayOnTop=0
 
-[Item__CE401FF6_F956_4BDB_9F54_088BD85F0CF4_]
+[Item__C74C7DBB_4D99_4FF4_BABE_F02A005254E6_]
 PercentageSizes=1
 Create=1
 Visible=0

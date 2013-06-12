@@ -2,8 +2,9 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
   Caption = #1042#1099#1095#1080#1089#1083#1077#1085#1080#1077' '#1074#1077#1089#1086#1074#1099#1093' '#1082#1086#1101#1092#1092#1080#1094#1080#1077#1085#1090#1086#1074
-  ClientHeight = 484
+  ClientHeight = 494
   ClientWidth = 698
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,13 +19,15 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   PixelsPerInch = 96
   TextHeight = 13
   object ExplanationLabel: TLabel
-    Left = 56
+    Left = 8
     Top = 24
-    Width = 3
+    Width = 682
     Height = 13
+    Alignment = taCenter
+    AutoSize = False
   end
   object ConsistencLabel: TLabel
-    Left = 144
+    Left = 152
     Top = 405
     Width = 4
     Height = 13
@@ -40,16 +43,16 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   object Label1: TLabel
     Left = 8
     Top = 386
-    Width = 63
+    Width = 120
     Height = 13
-    Caption = #1055#1088#1080#1086#1088#1080#1090#1077#1090#1099
+    Caption = #1055#1088#1080#1086#1088#1080#1090#1077#1090#1099' '#1082#1088#1080#1090#1077#1088#1080#1077#1074
   end
-  object Label3: TLabel
-    Left = 144
+  object PrioritiesLabel: TLabel
+    Left = 152
     Top = 386
-    Width = 31
+    Width = 66
     Height = 13
-    Caption = 'Label3'
+    Caption = 'PrioritiesLabel'
   end
   object CriteriaEstimates: TStringGrid
     Left = 361
@@ -68,7 +71,7 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   end
   object BackButton: TButton
     Left = 249
-    Top = 423
+    Top = 439
     Width = 75
     Height = 25
     Caption = #1053#1072#1079#1072#1076
@@ -77,7 +80,7 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   end
   object NextButton: TButton
     Left = 361
-    Top = 423
+    Top = 439
     Width = 75
     Height = 25
     Caption = #1044#1072#1083#1077#1077

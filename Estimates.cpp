@@ -4,7 +4,8 @@
 
 #include "Estimates.h"
 //---------------------------------------------------------------------------
-#pragma package(smart_init)
+
+#pragma once
 
 vector<double> & Estimates::getPriorities() {
     return priorities;

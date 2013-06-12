@@ -43,8 +43,6 @@ object Form1: TForm1
     OnDrawCell = InputDataStringGridDrawCell
     OnKeyDown = InputDataStringGridKeyDown
     OnSetEditText = InputDataStringGridSetEditText
-    ExplicitLeft = 8
-    ExplicitTop = 61
   end
   object ResultRichEdit: TRichEdit
     Left = 0
@@ -64,7 +62,6 @@ object Form1: TForm1
     TabOrder = 1
     OnKeyDown = Memo1KeyDown
     OnMouseEnter = Memo1MouseEnter
-    ExplicitWidth = 1054
   end
   object Chart1: TChart
     Left = 729
@@ -93,7 +90,6 @@ object Form1: TForm1
     OnMouseDown = Chart1MouseDown
     OnMouseMove = Chart1MouseMove
     OnMouseUp = Chart1MouseUp
-    ExplicitLeft = 742
     ColorPaletteIndex = 13
     object Series1: TBarSeries
       ColorEachPoint = True
@@ -116,7 +112,6 @@ object Form1: TForm1
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 4
-    ExplicitTop = -6
     object NewProjectButton: TSpeedButton
       Left = 0
       Top = 0
@@ -485,8 +480,6 @@ object Form1: TForm1
       Items.Strings = (
         #1052#1077#1090#1086#1076' '#1074#1079#1074#1077#1096#1077#1085#1085#1086#1081' '#1089#1091#1084#1084#1099' '#1084#1077#1089#1090
         #1052#1077#1090#1086#1076' '#1072#1085#1072#1083#1080#1079#1072' '#1080#1077#1088#1072#1088#1093#1080#1081)
-      ExplicitLeft = 126
-      ExplicitTop = 3
     end
   end
   object Panel1: TPanel
@@ -536,24 +529,9 @@ object Form1: TForm1
     end
     object N6: TMenuItem
       Caption = #1056#1072#1089#1095#1105#1090
-      object N7: TMenuItem
-        Caption = #1052#1077#1090#1086#1076' '#1088#1072#1089#1095#1105#1090#1072
-      end
       object N8: TMenuItem
         Caption = #1056#1072#1089#1095#1105#1090
         OnClick = N8Click
-      end
-    end
-    object N11: TMenuItem
-      Caption = #1055#1072#1088#1072#1084#1077#1090#1088#1099
-      object N13: TMenuItem
-        Caption = #1055#1091#1085#1082#1090#1099' '#1085#1072#1089#1090#1088#1086#1077#1082' '#1087#1072#1088#1072#1084#1077#1090#1088#1086#1074' '#1084#1077#1090#1086#1076#1086#1074' '
-      end
-    end
-    object N9: TMenuItem
-      Caption = #1055#1086#1084#1086#1097#1100
-      object N10: TMenuItem
-        Caption = #1057#1087#1088#1072#1074#1082#1072
       end
     end
   end

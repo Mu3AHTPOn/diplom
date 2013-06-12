@@ -15,7 +15,7 @@
 #include "matrix.cpp"
 #include "Project.cpp"
 #include "ProjectManager.cpp"
-#include "MathMethods.h"
+#include "Processor.cpp"
 //---------------------------------------------------------------------------
 
 using std::vector;
@@ -32,7 +32,7 @@ __published:	// IDE-managed Components
 	TStringGrid *PairWiseGrid;
 	TLabel *Label2;
 	TLabel *Label1;
-	TLabel *Label3;
+	TLabel *PrioritiesLabel;
 	void __fastcall CriteriaEstimatesDrawCell(TObject *Sender, int ACol, int ARow, TRect &Rect,
           TGridDrawState State);
 	void __fastcall CriteriaEstimatesSetEditText(TObject *Sender, int ACol, int ARow,
@@ -54,14 +54,14 @@ private:	// User declarations
 	void eval();
 
 	vector<UnicodeString> *gridNames;
-	vector< vector<int> > *rates;
 	double consistency;
 	const double maxConsistency;
-	vector<double> *priorities;
+	Estimates *estimates;
 	const wregex gridRegex;
 	int step;
 	bool *isBack;
 	Project *currentProject;
+	Processor processor;
 
 public:		// User declarations
 	__fastcall TEvalCriteriaWeightsForm(TComponent* Owner);

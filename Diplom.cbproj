@@ -167,9 +167,6 @@
             <DependentOn>MainForm.h</DependentOn>
             <BuildOrder>2</BuildOrder>
         </CppCompile>
-        <None Include="MathMethods.h">
-            <BuildOrder>15</BuildOrder>
-        </None>
         <CppCompile Include="matrix.cpp">
             <DependentOn>matrix.h</DependentOn>
             <BuildOrder>3</BuildOrder>
@@ -183,6 +180,10 @@
             <FormType>dfm</FormType>
             <DependentOn>NewProjectUnit.h</DependentOn>
             <BuildOrder>10</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="Processor.cpp">
+            <DependentOn>Processor.h</DependentOn>
+            <BuildOrder>16</BuildOrder>
         </CppCompile>
         <None Include="Profiling\AQtimeModule1.aqt"/>
         <CppCompile Include="Project.cpp">
