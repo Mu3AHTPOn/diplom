@@ -288,7 +288,6 @@ void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 				  setColWidth(*newName);
 				  InputDataStringGrid->Refresh();
 				  projectManager.setIsCurrentProjectSaved(false);
-				  delete newName;
 			  }
 			} __finally {
 			  form->Free();
@@ -308,8 +307,8 @@ void __fastcall TForm1::InputDataStringGridDblClick(TObject *Sender)
 			  if (! newName->IsEmpty()) {
 				  setRowHeight(*newName);
 				  projectManager.getCurrentProject().getAlternativeNames()[i - 2] = *newName;
-				  delete newName;
 				  InputDataStringGrid->Refresh();
+				  projectManager.setIsCurrentProjectSaved(false);
 			  }
 			} __finally {
 			  form->Free();
