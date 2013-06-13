@@ -23,7 +23,8 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 	gridRegex(L"[\\d]+"),
 	floatGridRegex(L"[\\d]*(.|,){0,1}[\\d]*")
 	, projectManager(ProjectManager::getInstance()),
-	isOnChartButtonPresssed(false) {
+	isOnChartButtonPresssed(false),
+	emptyCellBG(RGBA(255, 254, 198, 0)) {
 
 	Form1 = this;
 	UIManager::getInstance()->addForm(Form1);
@@ -33,13 +34,6 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 
 	//пр€чем таблицу ввода данных
 	InputDataStringGrid->Visible = false;
-
-	//определение ширины MethodComboBox
-	MethodComboBox->Canvas->Font->Size = MethodComboBox->Font->Size;
-	const int AHP = MethodComboBox->Canvas->TextWidth((*MethodComboBox->Items)[0]);
-	const int WS = MethodComboBox->Canvas->TextWidth((*MethodComboBox->Items)[1]);
-
-	MethodComboBox->Width = AHP > WS ? AHP + 30 : WS + 30;
 }
 //---------------------------------------------------------------------------
 //событие нажати€ на кнопку таблицы исходных данных
@@ -103,9 +97,6 @@ void TForm1::initGrid()
 //событие создани€ форты
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
-
-	MethodComboBox->ItemIndex = MathMethods::WS;
-
 	fixedCols = InputDataStringGrid->FixedCols;
 	fixedRows = InputDataStringGrid->FixedRows;
 }
@@ -171,26 +162,13 @@ void __fastcall TForm1::N5Click(TObject *Sender)
 //событие расчЄта через главное меню
 void __fastcall TForm1::N8Click(TObject *Sender)
 {
-	if (projectManager.isProjectOpen() && isDataValid()) {
-		if (MethodComboBox->ItemIndex == MathMethods::WS) {
-		   evalWS();
-		} else {
-		   evalAHP();
-		}
-	}
+	evalProject();
 }
 //---------------------------------------------------------------------------
 //событие расчЄта через панель быстрого доступа
 void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
 {
-	if (projectManager.isProjectOpen() && isDataValid()) {
-		if (MethodComboBox->ItemIndex == MathMethods::WS) {
-		    evalWS();
-		} else
-		{
-			evalAHP();
-		}
-    }
+	evalProject();
 }
 //---------------------------------------------------------------------------
 //расчЄт методом анализа иерархий
@@ -256,15 +234,18 @@ void __fastcall TForm1::InputDataStringGridDrawCell(TObject *Sender, int ACol, i
 	//пишем название в фикированных столбцах
 	if (ACol == 0 || ARow == 0) {
 		drawFixedColNames(ACol, ARow, Rect);
-	}
-
-	//закрашиваем первую строку и пишем еЄ значени€
-	if (ARow == 1 && ! (InputDataStringGrid->Row == ARow && InputDataStringGrid->Col == ACol))
-	{
-		InputDataStringGrid->Canvas->Brush->Color = cl3DLight;
+	} else if (InputDataStringGrid->Cells[ACol][ARow].IsEmpty()) {
+		//закрашиваем пустые €чейки жЄлтым цветом
+		InputDataStringGrid->Canvas->Brush->Color = emptyCellBG;
 		InputDataStringGrid->Canvas->FillRect(InputDataStringGrid->CellRect(ACol, ARow));
-		UnicodeString str = ACol == 0 ? UnicodeString(L"¬ажность критериев") : InputDataStringGrid->Cells[ACol][ARow];
-		InputDataStringGrid->Canvas->TextOut(Rect.Left + 2, Rect.Top + 4, str);
+    } else if (ARow == 1) {
+		if (! (InputDataStringGrid->Row == ARow && InputDataStringGrid->Col == ACol)) {
+			//закрашиваем первую строку и пишем еЄ значени€
+			InputDataStringGrid->Canvas->Brush->Color = cl3DLight;
+			InputDataStringGrid->Canvas->FillRect(InputDataStringGrid->CellRect(ACol, ARow));
+			UnicodeString str = ACol == 0 ? UnicodeString(L"¬ажность критериев") : InputDataStringGrid->Cells[ACol][ARow];
+			InputDataStringGrid->Canvas->TextOut(Rect.Left + 2, Rect.Top + 4, str);
+		}
 	}
 }
 //---------------------------------------------------------------------------
@@ -374,9 +355,29 @@ void TForm1::setColWidth(UnicodeString &str, int col)
 //сохран€ет текущий проект
 void TForm1::saveProject()
 {
-    if (projectManager.isProjectOpen() && SaveDialog1->Execute(this->Handle))
+	if (projectManager.isProjectOpen() && SaveDialog1->Execute(this->Handle))
 	{
 		projectManager.saveProject(SaveDialog1->FileName);
+	}
+}
+//--------------------------------------------------------------------------
+//открывает форму параметров проекта
+void TForm1::editProject() {
+	if (projectManager.isProjectOpen()) {
+		NewProjectForm->ShowModal();
+		showCurrentProject();
+
+		projectManager.setIsCurrentProjectSaved(false);
+	}
+}
+//производит расчЄт проекта
+void TForm1::evalProject() {
+    if (projectManager.isProjectOpen() && isDataValid()) {
+		if (projectManager.getCurrentProject().getMethod() == MathMethods::WS) {
+		   evalWS();
+		} else {
+		   evalAHP();
+		}
 	}
 }
 //--------------------------------------------------------------------------
@@ -446,7 +447,6 @@ bool TForm1::closeProject()
 	InputDataStringGrid->Visible = false;
 	Chart1->Series[0]->Clear();
 	ResultRichEdit->Clear();
-	MethodComboBox->ItemIndex = 0;
 
 	projectManager.closeProject();
 	return true;
@@ -568,12 +568,7 @@ void __fastcall TForm1::MMSaveProjectClick(TObject *Sender)
 //редактирование проекта
 void __fastcall TForm1::MMEditProjectClick(TObject *Sender)
 {
-	if (projectManager.isProjectOpen()) {
-		NewProjectForm->ShowModal();
-		showCurrentProject();
-
-		projectManager.setIsCurrentProjectSaved(false);
-    }
+	editProject();
 }
 //---------------------------------------------------------------------------
 //провр€ем, что ввЄл пользователь и выводим диалог ошибки если необходимо
@@ -779,13 +774,32 @@ void TForm1::showCurrentProject()
     }
 
 	Form1->Caption = projectManager.getCurrentProject().getName();
-	MethodComboBox->ItemIndex = projectManager.getCurrentProject().getMethod();
 	InputDataStringGrid->SetFocus();
 }
-void __fastcall TForm1::MethodComboBoxSelect(TObject *Sender)
+//---------------------------------------------------------------------------
+void __fastcall TForm1::EditProjectSpeedButtonClick(TObject *Sender)
 {
-	if (projectManager.isProjectOpen()) {
-		projectManager.getCurrentProject().setMethod(MethodComboBox->ItemIndex);
+	editProject();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::InputDataStringGridSelectCell(TObject *Sender, int ACol, int ARow,
+          bool &CanSelect)
+{
+	const int col = InputDataStringGrid->Col;
+	const int row = InputDataStringGrid->Row;
+	if (row == fixedRows) {
+		UnicodeString str = InputDataStringGrid->Cells[col][row];
+		if (! str.IsEmpty() && StrToFloat(str) == 0) {
+			Application->MessageBoxW(
+				L"ќценка не может быть равна 0",
+				L"ќшибка",
+				MB_OK | MB_ICONERROR
+			);
+			InputDataStringGrid->Cells[col][row] = NULL;
+			InputDataStringGrid->Col = ACol = col;
+			InputDataStringGrid->Row = ARow = row;
+        }
     }
 }
 //---------------------------------------------------------------------------

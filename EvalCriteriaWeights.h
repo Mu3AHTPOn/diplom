@@ -8,6 +8,7 @@
 #include <Vcl.StdCtrls.hpp>
 #include <Vcl.Forms.hpp>
 #include <Vcl.Grids.hpp>
+#include <VCLTee.TeCanvas.hpp>
 
 #include <vector>
 #include "boost/regex.hpp"
@@ -64,7 +65,7 @@ private:	// User declarations
 	bool *isBack;
 	Project *currentProject;
 	Processor processor;
-
+    TColor emptyCellBG;
 public:		// User declarations
 	__fastcall TEvalCriteriaWeightsForm(TComponent* Owner);
 	void setBackPointer(bool *back);

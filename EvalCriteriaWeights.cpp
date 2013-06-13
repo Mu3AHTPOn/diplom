@@ -10,7 +10,7 @@ TEvalCriteriaWeightsForm *EvalCriteriaWeightsForm;
 //---------------------------------------------------------------------------
 __fastcall TEvalCriteriaWeightsForm::TEvalCriteriaWeightsForm(TComponent* Owner)
 	: TForm(Owner), gridRegex(L"[\\d]+"), step(0), consistency(0.0),
-	  maxConsistency(0.1)
+	  maxConsistency(0.1), emptyCellBG(RGBA(255, 254, 198, 0))
 {
 	EvalCriteriaWeightsForm = this;
 }
@@ -29,6 +29,12 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesDrawCell(TObject *Sen
 			CriteriaEstimates->Canvas->Brush->Color = cl3DLight;
 			CriteriaEstimates->Canvas->FillRect(CriteriaEstimates->CellRect(ACol, ARow));
 		}
+	}
+
+	if (CriteriaEstimates->Cells[ACol][ARow].IsEmpty() && ARow >= ACol) {
+		//закрашиваем пустые ячейки жёлтым цветом
+		CriteriaEstimates->Canvas->Brush->Color = emptyCellBG;
+		CriteriaEstimates->Canvas->FillRect(CriteriaEstimates->CellRect(ACol, ARow));
 	}
 }
 
@@ -135,10 +141,19 @@ void __fastcall TEvalCriteriaWeightsForm::FormShow(TObject *Sender)
 //нажатие на кнопку далее
 void __fastcall TEvalCriteriaWeightsForm::NextButtonClick(TObject *Sender)
 {
+	if (! isDataFilled()) {
+		Application->MessageBoxW(
+			L"Таблица оценок не заполенна! Заполните её, что бы продолжить!",
+			L"Ошибка!",
+			MB_OK | MB_ICONERROR
+		);
+		return;
+    }
+
 	//если коэффициент согласованности сильно высок - показываем предупреждение
 	if (consistency > maxConsistency) {
 		UnicodeString str = L"Коэффициент согласованности должен быть менее " +
-							FloatToStr(maxConsistency) +
+							Format(L"%.2f%%", &TVarRec(maxConsistency * 100), 1) +
 							L". Попробуйте согласовать оценки";
 
 		if (Application->MessageBoxW(
@@ -225,7 +240,7 @@ void TEvalCriteriaWeightsForm::eval() {
 
 	ConsistencLabel->Font->Color = clBlack;
 	consistency = ahpEstimates->evaluatePairwiseConsistency();
-	ConsistencLabel->Caption = Format(L"%.2f", &TVarRec(consistency), 1);
+	ConsistencLabel->Caption = Format(L"%.2f%%", &TVarRec(consistency * 100), 1);
 	if (consistency > 0.1) {
 		ConsistencLabel->Font->Color = clRed;
 	}
@@ -256,7 +271,8 @@ void TEvalCriteriaWeightsForm::setData() {
 		estimates = &alternativeEstimates[step - 1];
 		gridNames = &currentProject->getAlternativeNames();
 		size = currentProject->getAlternativesCount() + 1;
-		ExplanationLabel->Caption = L"Задайте относительную важность альтернатив в столбце 1";
+		ExplanationLabel->Caption = L"Задайте относительную важность альтернатив по критерию" +
+									 currentProject->getCriteriaNames()[step - 1] + L"в столбце 1";
 		Label1->Caption = L"Приоритеты альтернатив:";
 	}
 
@@ -318,18 +334,20 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *S
 			ExplanationLabel->Caption = L"Задайте относительную важность критериев в столбце 1";
 		} else {
 			ExplanationLabel->Caption = L"Задайте относительную важность критериев без учёта критерия \"" +
-			gridNames->at(ACol - 1) + L"\" в столбце " + IntToStr(ACol);
+			gridNames->at(ACol - 2) + L"\" в столбце " + IntToStr(ACol);
 
 			if (ACol > 2) {
 				ExplanationLabel->Caption = ExplanationLabel->Caption + L" и предыдущих";
             }
 		}
 	} else {
-        if (ACol == 1) {
-			ExplanationLabel->Caption = L"Задайте относительную важность альтернатив в столбце 1";
+		if (ACol == 1) {
+			ExplanationLabel->Caption = L"Задайте относительную важность альтернатив по критерию \"" +
+				currentProject->getCriteriaNames()[step - 1] + L"\" в столбце 1";
 		} else {
-			ExplanationLabel->Caption = L"Задайте относительную важность альтернатив без учёта альтернативы \"" +
-			gridNames->at(ACol - 1) + L"\" в столбце " + IntToStr(ACol);
+			ExplanationLabel->Caption = L"Задайте относительную важность альтернатив по критерию \"" +
+				currentProject->getCriteriaNames()[step - 1] + L"\" без учёта альтернативы \"" +
+				gridNames->at(ACol - 2) + L"\" в столбце " + IntToStr(ACol);
 
 			if (ACol > 2) {
 				ExplanationLabel->Caption = ExplanationLabel->Caption + L" и предыдущих";

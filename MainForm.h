@@ -57,8 +57,8 @@ __published:	// IDE-managed Components
 	TSpeedButton *SpeedButton3;
 	TSpeedButton *SpeedButton2;
 	TSpeedButton *SpeedButton5;
-	TComboBox *MethodComboBox;
 	TSpeedButton *SpeedButton1;
+	TSpeedButton *EditProjectSpeedButton;
 	void __fastcall InputDataStringGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall Memo1KeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
@@ -87,7 +87,9 @@ __published:	// IDE-managed Components
 	void __fastcall Chart1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
 	void __fastcall Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift,
           int X, int Y);
-	void __fastcall MethodComboBoxSelect(TObject *Sender);
+	void __fastcall EditProjectSpeedButtonClick(TObject *Sender);
+	void __fastcall InputDataStringGridSelectCell(TObject *Sender, int ACol, int ARow,
+          bool &CanSelect);
 
 
 private:	// User declarations
@@ -110,6 +112,8 @@ private:	// User declarations
 	void newProject();
 	void loadProject();
 	void saveProject();
+	void editProject();
+	void evalProject();
 	bool closeProject();
 
 	int fixedCols, fixedRows;
@@ -120,6 +124,7 @@ private:	// User declarations
 	TPoint lastChartMousePoint;
 	bool isLeft, isRight, isTop, isBottom;
 	Processor processor;
+	TColor emptyCellBG;
 public:		// User declarations
 	__fastcall TForm1(TComponent* Owner);
 };
