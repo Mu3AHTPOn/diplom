@@ -54,6 +54,36 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
     Height = 13
     Caption = 'PrioritiesLabel'
   end
+  object Label3: TLabel
+    Left = 8
+    Top = 43
+    Width = 316
+    Height = 18
+    Alignment = taCenter
+    AutoSize = False
+    Caption = #1052#1072#1090#1088#1080#1094#1072' '#1087#1072#1088#1085#1099#1093' '#1089#1088#1072#1074#1085#1077#1085#1080#1081
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label4: TLabel
+    Left = 361
+    Top = 43
+    Width = 329
+    Height = 18
+    Alignment = taCenter
+    AutoSize = False
+    Caption = #1052#1072#1090#1088#1080#1094#1072' '#1086#1094#1077#1085#1086#1082
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
   object CriteriaEstimates: TStringGrid
     Left = 361
     Top = 64

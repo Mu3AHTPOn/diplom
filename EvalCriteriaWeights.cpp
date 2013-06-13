@@ -321,7 +321,7 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *S
 			gridNames->at(ACol - 1) + L"\" в столбце " + IntToStr(ACol);
 
 			if (ACol > 2) {
-				ExplanationLabel->Caption = ExplanationLabel->Caption + L" и предидущих";
+				ExplanationLabel->Caption = ExplanationLabel->Caption + L" и предыдущих";
             }
 		}
 	} else {
@@ -332,7 +332,7 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *S
 			gridNames->at(ACol - 1) + L"\" в столбце " + IntToStr(ACol);
 
 			if (ACol > 2) {
-				ExplanationLabel->Caption = ExplanationLabel->Caption + L" и предидущих";
+				ExplanationLabel->Caption = ExplanationLabel->Caption + L" и предыдущих";
             }
         }
     }
