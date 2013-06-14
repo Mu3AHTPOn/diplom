@@ -33,8 +33,10 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesDrawCell(TObject *Sen
 
 	if (CriteriaEstimates->Cells[ACol][ARow].IsEmpty() && ARow >= ACol) {
 		//закрашиваем пустые ячейки жёлтым цветом
-		CriteriaEstimates->Canvas->Brush->Color = emptyCellBG;
-		CriteriaEstimates->Canvas->FillRect(CriteriaEstimates->CellRect(ACol, ARow));
+		if (UIManager::getInstance().getIndicator()) {
+			CriteriaEstimates->Canvas->Brush->Color = emptyCellBG;
+			CriteriaEstimates->Canvas->FillRect(CriteriaEstimates->CellRect(ACol, ARow));
+        }
 	}
 }
 
@@ -218,7 +220,7 @@ void TEvalCriteriaWeightsForm::eval() {
 	Matrix<double> *m = processor.evalPairwiseMatrix(estimates->getRates());
 	for (int i = 0; i < size; ++i) {
 		for (int j = 0; j < size; ++j) {
-			UnicodeString result = Format(L"%.2g", &TVarRec((*m)[i][j]), 1);
+			UnicodeString result = Format(L"%.2f", &TVarRec((*m)[i][j]), 1);
 			PairWiseGrid->Cells[j + 1][i + 1] = result;
 			setColWidth(PairWiseGrid, result, j + 1);
 		}
@@ -264,14 +266,14 @@ void TEvalCriteriaWeightsForm::setData() {
 		gridNames = &currentProject->getCriteriaNames();
 		estimates= &currentProject->getCriteriaEstimates();
 		size = currentProject->getCriteriaCount() + 1;
-		ExplanationLabel->Caption = L"Задайте относительную важность критериев в столбце 1";
+		ExplanationLabel->Text = L"Задайте относительную важность критериев в столбце 1";
 		Label1->Caption = L"Приоритеты критериев:";
 	} else {
 		vector<Estimates> &alternativeEstimates = currentProject->getAlternativeEstimates();
 		estimates = &alternativeEstimates[step - 1];
 		gridNames = &currentProject->getAlternativeNames();
 		size = currentProject->getAlternativesCount() + 1;
-		ExplanationLabel->Caption = L"Задайте относительную важность альтернатив по критерию \"" +
+		ExplanationLabel->Text = L"Задайте относительную важность альтернатив по критерию \"" +
 									 currentProject->getCriteriaNames()[step - 1] + L"\" в столбце 1";
 		Label1->Caption = L"Приоритеты альтернатив:";
 	}
@@ -331,27 +333,27 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *S
 {
 	if (step == 0) {
 		if (ACol == 1) {
-			ExplanationLabel->Caption = L"Задайте относительную важность критериев в столбце 1";
+			ExplanationLabel->Text = L"Задайте относительную важность критериев в столбце 1";
 		} else {
-			ExplanationLabel->Caption = L"Задайте относительную важность критериев без учёта критерия \"" +
+			ExplanationLabel->Text = L"Задайте относительную важность критериев без учёта критерия \"" +
 			gridNames->at(ACol - 2) + L"\" в столбце " + IntToStr(ACol);
 
 			if (ACol > 2) {
-				ExplanationLabel->Caption = ExplanationLabel->Caption + L" и предыдущих";
+				ExplanationLabel->Text = ExplanationLabel->Text + L" и предыдущих";
             }
 		}
 	} else {
 		if (ACol == 1) {
 			UnicodeString middlePart = L"Задайте относительную важность альтернатив по критерию \"" + currentProject->getCriteriaNames()[step - 1];
 //			UnicodeString str(middlePart + L"dfsd f");
-			ExplanationLabel->Caption = middlePart + L"\" в столбце 1";
+			ExplanationLabel->Text = middlePart + L"\" в столбце 1";
 		} else {
-			ExplanationLabel->Caption = L"Задайте относительную важность альтернатив по критерию \"" +
+			ExplanationLabel->Text = L"Задайте относительную важность альтернатив по критерию \"" +
 				currentProject->getCriteriaNames()[step - 1] + L"\" без учёта альтернативы \"" +
 				gridNames->at(ACol - 2) + L"\" в столбце " + IntToStr(ACol);
 
 			if (ACol > 2) {
-				ExplanationLabel->Caption = ExplanationLabel->Caption + L" и предыдущих";
+				ExplanationLabel->Text = ExplanationLabel->Text + L" и предыдущих";
             }
         }
     }

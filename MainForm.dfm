@@ -51,8 +51,6 @@ object Form1: TForm1
     OnKeyDown = InputDataStringGridKeyDown
     OnSelectCell = InputDataStringGridSelectCell
     OnSetEditText = InputDataStringGridSetEditText
-    ExplicitTop = 84
-    ExplicitHeight = 194
   end
   object ResultRichEdit: TRichEdit
     Left = 0
@@ -551,8 +549,6 @@ object Form1: TForm1
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 2
-    ExplicitLeft = -8
-    ExplicitTop = 319
   end
   object MainMenu1: TMainMenu
     Left = 704

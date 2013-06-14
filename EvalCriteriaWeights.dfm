@@ -18,22 +18,6 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object ExplanationLabel: TLabel
-    Left = 8
-    Top = 8
-    Width = 682
-    Height = 45
-    Alignment = taCenter
-    AutoSize = False
-    Color = clBlack
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentColor = False
-    ParentFont = False
-  end
   object ConsistencLabel: TLabel
     Left = 152
     Top = 421
@@ -137,5 +121,18 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
     TabOrder = 3
     OnDrawCell = CriteriaEstimatesDrawCell
     OnSetEditText = CriteriaEstimatesSetEditText
+  end
+  object ExplanationLabel: TMemo
+    Left = 8
+    Top = 8
+    Width = 682
+    Height = 45
+    Hint = #1055#1086#1076#1089#1082#1072#1079#1082#1072
+    Lines.Strings = (
+      'ExplanationLabel')
+    ParentShowHint = False
+    ReadOnly = True
+    ShowHint = True
+    TabOrder = 4
   end
 end

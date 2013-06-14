@@ -17,6 +17,7 @@
 #include "Project.cpp"
 #include "ProjectManager.cpp"
 #include "Processor.cpp"
+#include "UIManager.cpp"
 //---------------------------------------------------------------------------
 
 using std::vector;
@@ -25,7 +26,6 @@ using boost::wregex;
 class TEvalCriteriaWeightsForm : public TForm
 {
 __published:	// IDE-managed Components
-	TLabel *ExplanationLabel;
 	TStringGrid *CriteriaEstimates;
 	TButton *BackButton;
 	TButton *NextButton;
@@ -36,6 +36,7 @@ __published:	// IDE-managed Components
 	TLabel *PrioritiesLabel;
 	TLabel *Label3;
 	TLabel *Label4;
+	TMemo *ExplanationLabel;
 	void __fastcall CriteriaEstimatesDrawCell(TObject *Sender, int ACol, int ARow, TRect &Rect,
           TGridDrawState State);
 	void __fastcall CriteriaEstimatesSetEditText(TObject *Sender, int ACol, int ARow,

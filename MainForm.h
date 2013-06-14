@@ -110,7 +110,7 @@ private:	// User declarations
 	void setRowHeight(UnicodeString &str);
 	void setColWidth(UnicodeString &str, int col = 0);
 	bool showSaveDialog();
-	bool isDataValid();
+	bool isDataValid(bool allowDialogs);
 	void isOnChartBorder(int X, int Y);
 	void changeCursor(int X, int Y);
 	inline int getCriteriaCount();
@@ -122,7 +122,7 @@ private:	// User declarations
 	void loadProject();
 	void saveProject();
 	void editProject();
-	void evalProject();
+	void evalProject(bool allowDialogs);
 	bool closeProject();
 
 	int fixedCols, fixedRows;

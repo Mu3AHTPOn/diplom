@@ -21,7 +21,7 @@ TForm1 *Form1;
 __fastcall TForm1::TForm1(TComponent* Owner)
 	: TForm(Owner),
 	gridRegex(L"[\\d]+"),
-	floatGridRegex(L"[\\d]*(.|,){0,1}[\\d]*")
+	floatGridRegex(L"[\\d]*(\\.|,){0,1}?[\\d]*")
 	, projectManager(ProjectManager::getInstance()),
 	isOnChartButtonPresssed(false),
 	emptyCellBG(RGBA(255, 254, 198, 0)) {
@@ -164,13 +164,13 @@ void __fastcall TForm1::N5Click(TObject *Sender)
 //событие расчЄта через главное меню
 void __fastcall TForm1::N8Click(TObject *Sender)
 {
-	evalProject();
+	evalProject(true);
 }
 //---------------------------------------------------------------------------
 //событие расчЄта через панель быстрого доступа
 void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
 {
-	evalProject();
+	evalProject(true);
 }
 //---------------------------------------------------------------------------
 //расчЄт методом анализа иерархий
@@ -236,12 +236,14 @@ void __fastcall TForm1::InputDataStringGridDrawCell(TObject *Sender, int ACol, i
 	//пишем название в фикированных столбцах
 	if (ACol == 0 || ARow == 0) {
 		drawFixedColNames(ACol, ARow, Rect);
-	} else if (UIManager::getInstance().getIndicator() && InputDataStringGrid->Cells[ACol][ARow].IsEmpty()) {
-		//закрашиваем пустые €чейки жЄлтым цветом
-		const TColor oldColor = InputDataStringGrid->Canvas->Brush->Color;
-		InputDataStringGrid->Canvas->Brush->Color = emptyCellBG;
-		InputDataStringGrid->Canvas->FillRect(InputDataStringGrid->CellRect(ACol, ARow));
-		InputDataStringGrid->Canvas->Brush->Color = oldColor;
+	} else if (InputDataStringGrid->Cells[ACol][ARow].IsEmpty()) {
+		if (UIManager::getInstance().getIndicator()) {
+			//закрашиваем пустые €чейки жЄлтым цветом
+			const TColor oldColor = InputDataStringGrid->Canvas->Brush->Color;
+			InputDataStringGrid->Canvas->Brush->Color = emptyCellBG;
+			InputDataStringGrid->Canvas->FillRect(InputDataStringGrid->CellRect(ACol, ARow));
+			InputDataStringGrid->Canvas->Brush->Color = oldColor;
+        }
 	} else if (UIManager::getInstance().getIndicator() && StrToFloat(InputDataStringGrid->Cells[ACol][ARow]) == 0) {
 		//закрашиваем красным €чейки с нулЄм
 		const TColor oldColor = InputDataStringGrid->Canvas->Brush->Color;
@@ -380,8 +382,8 @@ void TForm1::editProject() {
 	}
 }
 //производит расчЄт проекта
-void TForm1::evalProject() {
-    if (projectManager.isProjectOpen() && isDataValid()) {
+void TForm1::evalProject(bool allowDialogs) {
+	if (projectManager.isProjectOpen() && isDataValid(allowDialogs)) {
 		if (projectManager.getCurrentProject().getMethod() == MathMethods::WS) {
 		   evalWS();
 		} else {
@@ -481,7 +483,7 @@ bool TForm1::showSaveDialog()
 }
 //--------------------------------------------------------------------------
 //провер€ем нет ли непривальных данных в таблице
-bool TForm1::isDataValid()
+bool TForm1::isDataValid(bool allowDialogs)
 {
 	const int cols = InputDataStringGrid->ColCount;
 	const int rows = InputDataStringGrid->RowCount;
@@ -499,13 +501,15 @@ bool TForm1::isDataValid()
 						regex_match(val.w_str(), floatGridRegex) :
 						regex_match(val.w_str(), gridRegex);
 
-			if (! isValid)
+			if ((isValid && val.IsEmpty()) || ! isValid)
 			{
-				Application->MessageBoxW(
-					L"¬ведены неверные данные (вводить можно только целые числа)",
-					L"ќшибка",
-					MB_OK| MB_ICONERROR
-				);
+				if (allowDialogs) {
+					Application->MessageBoxW(
+						L"¬ведены неверные данные (вводить можно только целые числа)",
+						L"ќшибка",
+						MB_OK| MB_ICONERROR
+					);
+                }
 
 				InputDataStringGrid->Col = i;
 				InputDataStringGrid->Row = j;
@@ -543,17 +547,13 @@ void __fastcall TForm1::SpeedButton3Click(TObject *Sender)
 
 void __fastcall TForm1::NewProjectButtonClick(TObject *Sender)
 {
-//	newProject();
-	BalloonHint1->Description=L"112312312312312331";
+	newProject();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::SpeedButton5Click(TObject *Sender)
 {
-//	closeProject();
-
-	BalloonHint1->Description = L"vdsf \ngdfg sfg dfsg sdfgdvd fg ;lksdfgj lk;sdfg l;kdfsg;kl sdf;kgh sdk;jgh kjsdfhgkjhsd fkgjhdf lkgjhsdfkjg sdlkfjg lkjdsfg lkjdsfgh lkjdfhg kjdfh g ljkdfh gkj hdsflgh dflkjgh ldkfjgh lkdsfhg jkdsfhg dfg fg dfg ";
-	BalloonHint1->ShowHint(ClientToScreen(TPoint(100, 100)));
+	closeProject();
 }
 //---------------------------------------------------------------------------
 
@@ -621,8 +621,8 @@ void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol
 
 	projectManager.setIsCurrentProjectSaved(false);
 
-	if (UIManager::getInstance().getAutoEval() && isDataValid()) {
-		evalProject();
+	if (UIManager::getInstance().getAutoEval() && isDataValid(false)) {
+		evalProject(false);
     }
 }
 //---------------------------------------------------------------------------
@@ -789,8 +789,8 @@ void TForm1::showCurrentProject()
 	Form1->Caption = projectManager.getCurrentProject().getName();
 	InputDataStringGrid->SetFocus();
 
-	if (UIManager::getInstance().getAutoEval() && isDataValid()) {
-		evalProject();
+	if (UIManager::getInstance().getAutoEval() && isDataValid(false)) {
+		evalProject(false);
     }
 }
 //---------------------------------------------------------------------------
@@ -832,7 +832,7 @@ void __fastcall TForm1::MMIndicatorClick(TObject *Sender)
 {
 	MMIndicator->Checked = ! MMIndicator->Checked;
 	UIManager::getInstance().getIndicator() = MMIndicator->Checked;
-	InputDataStringGrid->Refresh();
+	InputDataStringGrid->Repaint();
 }
 //---------------------------------------------------------------------------
 
@@ -840,6 +840,9 @@ void __fastcall TForm1::MMAutoEvalClick(TObject *Sender)
 {
 	MMAutoEval->Checked = ! MMAutoEval->Checked;
 	UIManager::getInstance().getAutoEval() = MMAutoEval->Checked;
+	if (MMAutoEval->Checked) {
+		evalProject(false);
+    }
 }
 //---------------------------------------------------------------------------
 
