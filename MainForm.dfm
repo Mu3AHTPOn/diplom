@@ -15,6 +15,7 @@ object Form1: TForm1
   Menu = MainMenu1
   OldCreateOrder = False
   Position = poScreenCenter
+  WindowState = wsMaximized
   OnClose = FormClose
   OnCreate = FormCreate
   DesignSize = (
@@ -44,7 +45,6 @@ object Form1: TForm1
     OnKeyDown = InputDataStringGridKeyDown
     OnSelectCell = InputDataStringGridSelectCell
     OnSetEditText = InputDataStringGridSetEditText
-    ExplicitHeight = 346
   end
   object ResultRichEdit: TRichEdit
     Left = 0
@@ -64,47 +64,6 @@ object Form1: TForm1
     TabOrder = 1
     OnKeyDown = Memo1KeyDown
     OnMouseEnter = Memo1MouseEnter
-  end
-  object Chart1: TChart
-    Left = 729
-    Top = 52
-    Width = 289
-    Height = 290
-    AllowPanning = pmNone
-    Legend.Alignment = laBottom
-    Legend.CheckBoxesStyle = cbsRadio
-    Legend.TextStyle = ltsPlain
-    Legend.Visible = False
-    Title.Font.Height = -13
-    Title.Font.Style = [fsBold]
-    Title.Text.Strings = (
-      #1056#1077#1079#1091#1083#1100#1090#1072#1090' '#1074#1099#1095#1080#1089#1083#1077#1085#1080#1081)
-    LeftAxis.Automatic = False
-    LeftAxis.AutomaticMaximum = False
-    LeftAxis.Maximum = 1.000000000000000000
-    Panning.MouseWheel = pmwNone
-    View3D = False
-    Zoom.Allow = False
-    Constraints.MinHeight = 200
-    Constraints.MinWidth = 200
-    TabOrder = 3
-    Anchors = []
-    OnMouseDown = Chart1MouseDown
-    OnMouseMove = Chart1MouseMove
-    OnMouseUp = Chart1MouseUp
-    ColorPaletteIndex = 13
-    object Series1: TBarSeries
-      ColorEachPoint = True
-      Marks.Arrow.Visible = True
-      Marks.Callout.Brush.Color = clBlack
-      Marks.Callout.Arrow.Visible = True
-      Marks.Visible = False
-      XValues.Name = 'X'
-      XValues.Order = loAscending
-      YValues.Name = 'Bar'
-      YValues.Order = loNone
-      Data = {0000000000}
-    end
   end
   object Panel2: TPanel
     Left = 0
@@ -543,20 +502,18 @@ object Form1: TForm1
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 2
-    ExplicitTop = 348
   end
   object HintMemo: TMemo
     Left = 490
     Top = 83
-    Width = 185
-    Height = 100
-    Hint = #1055#1086#1076#1089#1082#1072#1079#1082#1072
+    Width = 225
+    Height = 50
+    Hint = #1055#1086#1076#1089#1082#1072#1079#1082#1072' ('#1087#1086#1083#1077' '#1084#1086#1078#1085#1086' '#1087#1077#1088#1077#1084#1077#1097#1072#1090#1100' '#1080' '#1084#1077#1085#1103#1090#1100' '#1077#1075#1086' '#1088#1072#1079#1084#1077#1088')'
     Color = clBtnFace
-    Constraints.MinHeight = 100
-    Constraints.MinWidth = 100
+    Constraints.MinHeight = 50
+    Constraints.MinWidth = 225
     Lines.Strings = (
-      #1054#1090#1082#1088#1086#1081#1090#1077' '#1083#1080#1073#1086#1081' '#1089#1086#1079#1076#1072#1081#1090#1077' '#1085#1086#1074#1099#1081' '
-      #1087#1088#1086#1077#1082#1090)
+      #1054#1090#1082#1088#1086#1081#1090#1077' '#1083#1080#1073#1086' '#1089#1086#1079#1076#1072#1081#1090#1077' '#1085#1086#1074#1099#1081' '#1087#1088#1086#1077#1082#1090)
     ParentShowHint = False
     ReadOnly = True
     ShowHint = True
@@ -564,6 +521,47 @@ object Form1: TForm1
     OnMouseDown = Chart1MouseDown
     OnMouseMove = Chart1MouseMove
     OnMouseUp = Chart1MouseUp
+  end
+  object Chart1: TChart
+    Left = 741
+    Top = 52
+    Width = 289
+    Height = 290
+    AllowPanning = pmNone
+    Legend.Alignment = laBottom
+    Legend.CheckBoxesStyle = cbsRadio
+    Legend.TextStyle = ltsPlain
+    Legend.Visible = False
+    Title.Font.Height = -13
+    Title.Font.Style = [fsBold]
+    Title.Text.Strings = (
+      #1056#1077#1079#1091#1083#1100#1090#1072#1090' '#1074#1099#1095#1080#1089#1083#1077#1085#1080#1081)
+    LeftAxis.Automatic = False
+    LeftAxis.AutomaticMaximum = False
+    LeftAxis.Maximum = 1.000000000000000000
+    Panning.MouseWheel = pmwNone
+    View3D = False
+    Zoom.Allow = False
+    Constraints.MinHeight = 200
+    Constraints.MinWidth = 200
+    TabOrder = 3
+    Anchors = []
+    OnMouseDown = Chart1MouseDown
+    OnMouseMove = Chart1MouseMove
+    OnMouseUp = Chart1MouseUp
+    ColorPaletteIndex = 13
+    object Series1: TBarSeries
+      ColorEachPoint = True
+      Marks.Arrow.Visible = True
+      Marks.Callout.Brush.Color = clBlack
+      Marks.Callout.Arrow.Visible = True
+      Marks.Visible = False
+      XValues.Name = 'X'
+      XValues.Order = loAscending
+      YValues.Name = 'Bar'
+      YValues.Order = loNone
+      Data = {0000000000}
+    end
   end
   object MainMenu1: TMainMenu
     Left = 704

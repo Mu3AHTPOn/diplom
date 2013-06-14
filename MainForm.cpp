@@ -462,7 +462,7 @@ bool TForm1::closeProject()
 	ResultRichEdit->Clear();
 
 	projectManager.closeProject();
-	showHint(L"Откройте либой создайте новый проект");
+	showHint(L"Откройте либо создайте новый проект");
 	return true;
 }
 //--------------------------------------------------------------------------
