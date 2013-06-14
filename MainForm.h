@@ -60,11 +60,11 @@ __published:	// IDE-managed Components
 	TSpeedButton *SpeedButton1;
 	TSpeedButton *EditProjectSpeedButton;
 	TLabel *Label1;
-	TBalloonHint *BalloonHint1;
 	TMenuItem *N2;
 	TMenuItem *MMHint;
 	TMenuItem *MMIndicator;
 	TMenuItem *MMAutoEval;
+	TMemo *HintMemo;
 	void __fastcall InputDataStringGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall Memo1KeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
@@ -111,8 +111,10 @@ private:	// User declarations
 	void setColWidth(UnicodeString &str, int col = 0);
 	bool showSaveDialog();
 	bool isDataValid(bool allowDialogs);
-	void isOnChartBorder(int X, int Y);
-	void changeCursor(int X, int Y);
+	void isOnControlBorder(TObject* c, int X, int Y);
+	void changeCursor(TObject* c, int X, int Y);
+	void changeChartCursor(TObject* c, int X, int Y);
+	void changeHintCursor(TObject* c, int X, int Y);
 	inline int getCriteriaCount();
 	inline int getAlternativesCount();
 	void showCurrentProject();
@@ -124,6 +126,8 @@ private:	// User declarations
 	void editProject();
 	void evalProject(bool allowDialogs);
 	bool closeProject();
+
+	void showHint(UnicodeString text);
 
 	int fixedCols, fixedRows;
 	UnicodeString lastParam;

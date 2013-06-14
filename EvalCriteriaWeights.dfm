@@ -81,6 +81,7 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
     Top = 80
     Width = 328
     Height = 297
+    Hint = #1046#1105#1083#1090#1099#1084' '#1094#1074#1077#1090#1086#1084' '#1074#1099#1076#1077#1083#1077#1085#1099' '#1103#1095#1077#1081#1082#1072', '#1082#1086#1090#1088#1099#1077' '#1085#1077#1086#1073#1093#1086#1076#1080#1084#1086' '#1079#1072#1086#1087#1083#1085#1080#1090#1100
     ColCount = 2
     DefaultColWidth = 24
     RowCount = 2
@@ -128,8 +129,14 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
     Width = 682
     Height = 45
     Hint = #1055#1086#1076#1089#1082#1072#1079#1082#1072
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
     Lines.Strings = (
       'ExplanationLabel')
+    ParentFont = False
     ParentShowHint = False
     ReadOnly = True
     ShowHint = True

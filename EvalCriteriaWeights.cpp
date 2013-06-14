@@ -266,7 +266,7 @@ void TEvalCriteriaWeightsForm::setData() {
 		gridNames = &currentProject->getCriteriaNames();
 		estimates= &currentProject->getCriteriaEstimates();
 		size = currentProject->getCriteriaCount() + 1;
-		ExplanationLabel->Text = L"Задайте относительную важность критериев в столбце 1";
+		ExplanationLabel->Text = L"Задайте относительную важность критериев в столбце 1 (по шкале от 1 до 9)";
 		Label1->Caption = L"Приоритеты критериев:";
 	} else {
 		vector<Estimates> &alternativeEstimates = currentProject->getAlternativeEstimates();
@@ -274,7 +274,7 @@ void TEvalCriteriaWeightsForm::setData() {
 		gridNames = &currentProject->getAlternativeNames();
 		size = currentProject->getAlternativesCount() + 1;
 		ExplanationLabel->Text = L"Задайте относительную важность альтернатив по критерию \"" +
-									 currentProject->getCriteriaNames()[step - 1] + L"\" в столбце 1";
+									 currentProject->getCriteriaNames()[step - 1] + L"\" в столбце 1 (по шкале от 1 до 9)";
 		Label1->Caption = L"Приоритеты альтернатив:";
 	}
 
@@ -333,20 +333,22 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *S
 {
 	if (step == 0) {
 		if (ACol == 1) {
-			ExplanationLabel->Text = L"Задайте относительную важность критериев в столбце 1";
+			ExplanationLabel->Text = L"Задайте относительную важность критериев в столбце 1 (по шкале от 1 до 9";
 		} else {
 			ExplanationLabel->Text = L"Задайте относительную важность критериев без учёта критерия \"" +
 			gridNames->at(ACol - 2) + L"\" в столбце " + IntToStr(ACol);
 
 			if (ACol > 2) {
-				ExplanationLabel->Text = ExplanationLabel->Text + L" и предыдущих";
+				ExplanationLabel->Text = ExplanationLabel->Text + L" и предыдущих (по шкале от 1 до 9)";
+			} else {
+				ExplanationLabel->Text = ExplanationLabel->Text + L" (по шкале от 1 до 9)";
             }
 		}
 	} else {
 		if (ACol == 1) {
 			UnicodeString middlePart = L"Задайте относительную важность альтернатив по критерию \"" + currentProject->getCriteriaNames()[step - 1];
 //			UnicodeString str(middlePart + L"dfsd f");
-			ExplanationLabel->Text = middlePart + L"\" в столбце 1";
+			ExplanationLabel->Text = middlePart + L"\" в столбце 1 (по шкале от 1 до 9";
 		} else {
 			ExplanationLabel->Text = L"Задайте относительную важность альтернатив по критерию \"" +
 				currentProject->getCriteriaNames()[step - 1] + L"\" без учёта альтернативы \"" +
@@ -354,6 +356,8 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *S
 
 			if (ACol > 2) {
 				ExplanationLabel->Text = ExplanationLabel->Text + L" и предыдущих";
+			} else {
+				ExplanationLabel->Text = ExplanationLabel->Text + L" (по шкале от 1 до 9)";
             }
         }
     }

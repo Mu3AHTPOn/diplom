@@ -550,6 +550,26 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 2
   end
+  object HintMemo: TMemo
+    Left = 490
+    Top = 83
+    Width = 185
+    Height = 100
+    Hint = #1055#1086#1076#1089#1082#1072#1079#1082#1072
+    Color = clBtnFace
+    Constraints.MinHeight = 100
+    Constraints.MinWidth = 100
+    Lines.Strings = (
+      #1054#1090#1082#1088#1086#1081#1090#1077' '#1083#1080#1073#1086#1081' '#1089#1086#1079#1076#1072#1081#1090#1077' '#1085#1086#1074#1099#1081' '
+      #1087#1088#1086#1077#1082#1090)
+    ParentShowHint = False
+    ReadOnly = True
+    ShowHint = True
+    TabOrder = 5
+    OnMouseDown = Chart1MouseDown
+    OnMouseMove = Chart1MouseMove
+    OnMouseUp = Chart1MouseUp
+  end
   object MainMenu1: TMainMenu
     Left = 704
     Top = 352
@@ -624,11 +644,6 @@ object Form1: TForm1
     FileName = 'myProject'
     Filter = 'Project files|*.awm'
     Left = 728
-    Top = 456
-  end
-  object BalloonHint1: TBalloonHint
-    Style = bhsStandard
-    Left = 480
     Top = 456
   end
 end

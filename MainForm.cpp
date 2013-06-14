@@ -390,6 +390,8 @@ void TForm1::evalProject(bool allowDialogs) {
 		   evalAHP();
 		}
 	}
+
+	showHint(L"Расчёты произведены");
 }
 //--------------------------------------------------------------------------
 //загружает проект
@@ -460,6 +462,7 @@ bool TForm1::closeProject()
 	ResultRichEdit->Clear();
 
 	projectManager.closeProject();
+	showHint(L"Откройте либой создайте новый проект");
 	return true;
 }
 //--------------------------------------------------------------------------
@@ -487,21 +490,40 @@ bool TForm1::isDataValid(bool allowDialogs)
 {
 	const int cols = InputDataStringGrid->ColCount;
 	const int rows = InputDataStringGrid->RowCount;
-	for (int i = fixedCols; i < cols; ++i)
+	for (int i = fixedRows; i < rows; ++i)
 	{
-		for (int j = fixedRows ; j < rows; ++j)
+		for (int j = fixedCols; j < cols; ++j)
 		{
-			const UnicodeString &val = InputDataStringGrid->Cells[i][j];
+			const UnicodeString &val = InputDataStringGrid->Cells[j][i];
 			if (val.IsEmpty()) {
-                return false;
+				Project &project = projectManager.getCurrentProject();
+				if (i == fixedRows) {
+					showHint(L"Заполните оценку для критерия \"" +
+							project.getCriteriaNames()[j - fixedCols] + L"\""
+						);
+				} else {
+					showHint(L"Заполните оценку для альтернативы \"" +
+							project.getAlternativeNames()[i - fixedRows - 1] +
+							L"\" по критерию \"" +
+							project.getCriteriaNames()[j - fixedCols] + L"\""
+						);
+                }
+				if (allowDialogs) {
+						Application->MessageBoxW(
+							L"Введены неверные данные (вводить можно только целые числа)",
+							L"Ошибка",
+							MB_OK| MB_ICONERROR
+						);
+					}
+				return false;
 			}
 
 			const bool allowFloat = projectManager.getCurrentProject().getMethod() == MathMethods::AHP;
-			const bool isValid = allowFloat || j == 1 ?
+			const bool isValid = allowFloat || i == 1 ?
 						regex_match(val.w_str(), floatGridRegex) :
 						regex_match(val.w_str(), gridRegex);
 
-			if ((isValid && val.IsEmpty()) || ! isValid)
+			if (! isValid)
 			{
 				if (allowDialogs) {
 					Application->MessageBoxW(
@@ -509,16 +531,29 @@ bool TForm1::isDataValid(bool allowDialogs)
 						L"Ошибка",
 						MB_OK| MB_ICONERROR
 					);
-                }
+				}
 
-				InputDataStringGrid->Col = i;
-				InputDataStringGrid->Row = j;
+				InputDataStringGrid->Col = j;
+				InputDataStringGrid->Row = i;
 				return false;
 			} else if (StrToFloat(val) == 0) {
-				//TODO change подсказку
+				if (allowDialogs) {
+					Application->MessageBoxW(
+						L"Введено недопустимое значение",
+						L"Ошибка",
+						MB_OK| MB_ICONERROR
+					);
+				}
 
-				InputDataStringGrid->Col = i;
-				InputDataStringGrid->Row = j;
+				Project &project = projectManager.getCurrentProject();
+				showHint(L"Введено недопустимое значение для оценки альтернативы \"" +
+							project.getAlternativeNames()[i - fixedRows - 1] +
+							L"\" по критерию \"" +
+							project.getCriteriaNames()[j - fixedCols] + L"\""
+						);
+
+				InputDataStringGrid->Col = j;
+				InputDataStringGrid->Row = i;
 				return false;
             }
 		}
@@ -621,9 +656,13 @@ void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol
 
 	projectManager.setIsCurrentProjectSaved(false);
 
-	if (UIManager::getInstance().getAutoEval() && isDataValid(false)) {
-		evalProject(false);
-    }
+	if (isDataValid(false)) {
+		if (UIManager::getInstance().getAutoEval()) {
+			evalProject(false);
+		} else {
+			showHint(L"Нажмите расчёт!");
+		}
+	}
 }
 //---------------------------------------------------------------------------
 //запоминаем нажатие на графике (необходимо для его перетаскивания и изменения размеров)
@@ -633,7 +672,7 @@ void __fastcall TForm1::Chart1MouseDown(TObject *Sender, TMouseButton Button, TS
 	if (Button == mbLeft) {
 		isOnChartButtonPresssed = true;
 		lastChartMousePoint = Mouse->CursorPos;
-		isOnChartBorder(X, Y);
+		isOnControlBorder(Sender, X, Y);
     }
 }
 //---------------------------------------------------------------------------
@@ -642,86 +681,101 @@ void __fastcall TForm1::Chart1MouseDown(TObject *Sender, TMouseButton Button, TS
 void __fastcall TForm1::Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift,
 		  int X, int Y)
 {
+	TControl *control = (TControl*) Sender;
 	isOnChartButtonPresssed = false;
-	if (Chart1->Left < 0) {
-		Chart1->Left = 0;
+	if (control->Left < 0) {
+		control->Left = 0;
 	}
 
-	if (Chart1->Top < 0) {
-        Chart1->Top = 0;
+	if (control->Top < 0) {
+		control->Top = 0;
 	}
 
-	if (Chart1->Top > Form1->Height - Chart1->Height)
+	if (control->Top > Form1->Height - control->Height)
 	{
-		Chart1->Top = Form1->Height - Chart1->Height;
+		control->Top = Form1->Height - control->Height;
 	}
 
-	if (Chart1->Left > Form1->Width - Chart1->Width)
+	if (control->Left > Form1->Width - control->Width)
 	{
-		Chart1->Left = Form1->Width - Chart1->Width;
-    }
+		control->Left = Form1->Width - control->Width;
+	}
 }
 //---------------------------------------------------------------------------
 //возвращает true если мышь на границе графика (необходимо для замены курсора
 //на курсор изменения размеров)
-void TForm1::isOnChartBorder(int X, int Y)
+void TForm1::isOnControlBorder(TObject *Sender, int X, int Y)
 {
+	TControl *control = (TControl*) Sender;
 	const int offset = 5;
 	isLeft = isRight = isTop = isBottom = false;
-	isLeft= X < offset;
-	isRight = X > Chart1->Width - offset;
+	isLeft = X < offset;
+	const int rightOffset = Sender == Chart1 ? offset : offset + 5;  //Memo has right padding;
+	isRight = X > control->Width - rightOffset;
 	isTop = Y < offset;
-	isBottom = Y > Chart1->Height - offset;
+	const int bottomOffset = Sender == Chart1 ? offset : offset + 5;  //Memo has bottom padding
+	isBottom = Y > control->Height - bottomOffset;
 }
 //перемещаем либо изменяем размер графика
 void __fastcall TForm1::Chart1MouseMove(TObject *Sender, TShiftState Shift, int X,
 		  int Y)
 {
+	TControl *control = (TControl*) Sender;
 	if (isOnChartButtonPresssed) {
 		const TPoint changing(lastChartMousePoint.X - Mouse->CursorPos.X, lastChartMousePoint.Y - Mouse->CursorPos.Y);
 		if (isLeft)
 		{
-			Chart1->Width += changing.X;
-			Chart1->Left -= changing.X;
+			control->Width += changing.X;
+			control->Left -= changing.X;
 
 			if (isTop)
 			{
-				Chart1->Height += changing.Y;
-				Chart1->Top -= changing.Y;
+				control->Height += changing.Y;
+				control->Top -= changing.Y;
 			} else if (isBottom) {
-				Chart1->Height -= changing.Y;
+				control->Height -= changing.Y;
 			}
 		} else if (isRight) {
-			Chart1->Width -= changing.X;
+			control->Width -= changing.X;
 
 			if (isTop)
 			{
-				Chart1->Height += changing.Y;
-				Chart1->Top -= changing.Y;
+				control->Height += changing.Y;
+				control->Top -= changing.Y;
 			} else if (isBottom) {
-				Chart1->Height -= changing.Y;
+				control->Height -= changing.Y;
 			}
 		} else if (isBottom) {
-           Chart1->Height -= changing.Y;
+		   control->Height -= changing.Y;
 		} else if (isTop) {
-			Chart1->Height += changing.Y;
-			Chart1->Top -= changing.Y;
+			control->Height += changing.Y;
+			control->Top -= changing.Y;
 		} else {
 			//перемещение графика
-			Chart1->Left -= changing.X;
-			Chart1->Top -= changing.Y;
+			control->Left -= changing.X;
+			control->Top -= changing.Y;
 		}
 
 		lastChartMousePoint = Mouse->CursorPos;
 	} else {
-       changeCursor(X, Y);
+	   changeCursor(Sender, X, Y);
 	}
 }
 //---------------------------------------------------------------------------
-//меняем курсов на курсов изменения раземра
-void TForm1::changeCursor(int X, int Y)
+//меняем курсор объектов, которые могут менять размеры
+void TForm1::changeCursor(TObject* Sender, int X, int Y)
 {
-	isOnChartBorder(X, Y);
+	if (Sender == Chart1) {
+	   changeChartCursor(Sender, X, Y);
+	} else if (Sender == HintMemo) {
+       changeHintCursor(Sender, X, Y);
+    }
+}
+//---------------------------------------------------------------------------
+//меняем курсор графика на курсов изменения раземра
+void TForm1::changeChartCursor(TObject* c, int X, int Y)
+{
+	isOnControlBorder(c, X, Y);
 	if (isLeft)
 	{
 		if (isTop)
@@ -745,7 +799,37 @@ void TForm1::changeCursor(int X, int Y)
 		Chart1->OriginalCursor = crSizeNS;
 	} else {
 		Chart1->OriginalCursor = crDefault;
-    }
+	}
+}
+//---------------------------------------------------------------------------
+//меняем курсор подсказки на курсов изменения раземра
+void TForm1::changeHintCursor(TObject* c, int X, int Y)
+{
+	isOnControlBorder(c, X, Y);
+	if (isLeft)
+	{
+		if (isTop)
+		{
+			HintMemo->Cursor = crSizeNWSE;
+		} else if (isBottom) {
+			HintMemo->Cursor = crSizeNESW;
+		} else {
+			HintMemo->Cursor = crSizeWE;
+		}
+	} else if (isRight) {
+		if (isTop)
+		{
+			HintMemo->Cursor = crSizeNESW;
+		} else if (isBottom) {
+			HintMemo->Cursor = crSizeNWSE;;
+		} else {
+			HintMemo->Cursor = crSizeWE;
+		}
+	} else if (isBottom || isTop) {
+		HintMemo->Cursor = crSizeNS;
+	} else {
+		HintMemo->Cursor = crDefault;
+	}
 }
 //---------------------------------------------------------------------------
 //отображаем текущий проект на форме
@@ -789,9 +873,13 @@ void TForm1::showCurrentProject()
 	Form1->Caption = projectManager.getCurrentProject().getName();
 	InputDataStringGrid->SetFocus();
 
-	if (UIManager::getInstance().getAutoEval() && isDataValid(false)) {
-		evalProject(false);
-    }
+	if (isDataValid(false)) {
+		if (UIManager::getInstance().getAutoEval()) {
+			evalProject(false);
+		} else {
+			showHint(L"Нажмите расчёт!");
+		}
+	}
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::EditProjectSpeedButtonClick(TObject *Sender)
@@ -817,7 +905,30 @@ void __fastcall TForm1::InputDataStringGridSelectCell(TObject *Sender, int ACol,
 //			InputDataStringGrid->Col = ACol = col;
 //			InputDataStringGrid->Row = ARow = row;
 //        }
-    }
+	}
+
+	for (int i = 0; i < getAlternativesCount() + 1; ++i) {
+		for (int j = 0; j < getCriteriaCount(); ++j) {
+			if (InputDataStringGrid->Cells[j + fixedCols][i + fixedRows].IsEmpty()) {
+				Project &project = projectManager.getCurrentProject();
+				if (i == 0) {
+					showHint(L"Заполните оценку для критерия \""
+							+ project.getCriteriaNames()[j] + L"\""
+						);
+
+					return;
+				} else {
+					showHint(L"Заполните оценку для альтернативы \""
+							+ project.getAlternativeNames()[i - 1]
+							+ L"\" по критерию \""
+							+ project.getCriteriaNames()[j] + L"\""
+						);
+
+					return;
+				}
+			}
+		}
+	}
 }
 //---------------------------------------------------------------------------
 
@@ -825,6 +936,7 @@ void __fastcall TForm1::MMHintClick(TObject *Sender)
 {
 	MMHint->Checked = ! MMHint->Checked;
 	UIManager::getInstance().getHint() = MMHint->Checked;
+	HintMemo->Visible = MMHint->Checked;
 }
 //---------------------------------------------------------------------------
 
@@ -843,6 +955,10 @@ void __fastcall TForm1::MMAutoEvalClick(TObject *Sender)
 	if (MMAutoEval->Checked) {
 		evalProject(false);
     }
+}
+//---------------------------------------------------------------------------
+void TForm1::showHint(UnicodeString text) {
+	HintMemo->Text = text;
 }
 //---------------------------------------------------------------------------
 
