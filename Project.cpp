@@ -57,7 +57,7 @@ Estimates& Project::getCriteriaEstimates()
 {
 	return criteriaEstimates;
 }
-//удаляет оценку альтернативы либо критерия со сдвигом введённых пользоателем
+//удаляет оценку альтернативы либо критерия со очисткой введённых пользоателем
 //баллов
 void Project::removeEstimate(int index, EstimateType type)
 {
@@ -93,6 +93,8 @@ void Project::removeEstimate(int index, EstimateType type)
 		priorities.erase(priorities.begin() + index);
 		alternativeEstimates.erase(alternativeEstimates.begin() + index);
 	}
+
+	resetEstimates();
 }
 //добавляет оценку альтернативы либо критерия со сдвигом введённых пользоателем
 //баллов
@@ -174,7 +176,9 @@ void Project::addEstimate(int index, UnicodeString name, EstimateType type)
 		} else {
 			alternativeEstimates.insert(alternativeEstimates.begin() + index, newEstimates);
         }
-    }
+	}
+
+	resetEstimates();
 }
 
 void Project::moveEstimate(int from, int to, EstimateType type)
@@ -188,4 +192,36 @@ void Project::setMethod(int method) {
 //возвращает метод расчёта
 int Project::getMethod() {
     return method;
+}
+
+void Project::resetEstimates() {
+	for (int i = 0; i < alternativeEstimates.size(); ++i) {
+		Estimates &estimates = alternativeEstimates[i];
+		vector< vector<int> > &rates = estimates.getRates();
+		for (int j = 0; j < rates.size(); ++j) {
+			vector<int> &v = rates[j];
+			for (int k = 0; k < v.size(); ++k) {
+				v[k] = 0;
+            }
+		}
+
+		vector<double> &priorities = estimates.getPriorities();
+		for (int i = 0; i < priorities.size(); ++i) {
+            priorities[i] = 0;
+        }
+	}
+
+	Estimates &estimates = criteriaEstimates;
+	vector< vector<int> > &rates = estimates.getRates();
+	for (int j = 0; j < rates.size(); ++j) {
+		vector<int> &v = rates[j];
+		for (int k = 0; k < v.size(); ++k) {
+			v[k] = 0;
+		}
+	}
+
+	vector<double> &priorities = estimates.getPriorities();
+	for (int i = 0; i < priorities.size(); ++i) {
+		priorities[i] = 0;
+	}
 }

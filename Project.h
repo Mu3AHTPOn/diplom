@@ -26,13 +26,14 @@ class Project {
 		inline int getMethod();
 		inline void setMethod(int method);
 
-        enum EstimateType { ALTERNATIVE, CRITERIA };
+		enum EstimateType { ALTERNATIVE, CRITERIA };
 
 		void removeEstimate(int index, EstimateType type);
 		void addEstimate(int index, UnicodeString name, EstimateType type);
 		void moveEstimate(int from, int to, EstimateType type);
 
 	private:
+		void resetEstimates();
 		vector<UnicodeString> criteriaNames;
 		vector<UnicodeString> alternativeNames;
 		UnicodeString name;

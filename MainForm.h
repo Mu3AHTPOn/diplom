@@ -59,7 +59,6 @@ __published:	// IDE-managed Components
 	TSpeedButton *SpeedButton5;
 	TSpeedButton *SpeedButton1;
 	TSpeedButton *EditProjectSpeedButton;
-	TLabel *Label1;
 	TMenuItem *N2;
 	TMenuItem *MMHint;
 	TMenuItem *MMIndicator;

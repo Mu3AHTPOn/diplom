@@ -22,18 +22,11 @@ object Form1: TForm1
     541)
   PixelsPerInch = 96
   TextHeight = 13
-  object Label1: TLabel
-    Left = 368
-    Top = 456
-    Width = 31
-    Height = 13
-    Caption = 'Label1'
-  end
   object InputDataStringGrid: TStringGrid
     Left = 0
     Top = 30
     Width = 1038
-    Height = 346
+    Height = 338
     Align = alClient
     BevelWidth = 5
     DefaultColWidth = 24
@@ -51,12 +44,13 @@ object Form1: TForm1
     OnKeyDown = InputDataStringGridKeyDown
     OnSelectCell = InputDataStringGridSelectCell
     OnSetEditText = InputDataStringGridSetEditText
+    ExplicitHeight = 346
   end
   object ResultRichEdit: TRichEdit
     Left = 0
-    Top = 408
+    Top = 400
     Width = 1038
-    Height = 133
+    Height = 141
     Align = alBottom
     Font.Charset = RUSSIAN_CHARSET
     Font.Color = clWindowText
@@ -537,7 +531,7 @@ object Form1: TForm1
   end
   object Panel1: TPanel
     Left = 0
-    Top = 376
+    Top = 368
     Width = 1038
     Height = 32
     Align = alBottom
@@ -549,6 +543,7 @@ object Form1: TForm1
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 2
+    ExplicitTop = 348
   end
   object HintMemo: TMemo
     Left = 490

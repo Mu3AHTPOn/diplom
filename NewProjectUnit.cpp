@@ -232,12 +232,12 @@ void __fastcall TNewProjectForm::NextButtonClick(TObject *Sender)
 	onListExit();
 	int colCount = ColNamesListBox->Count;
 	int rowCount = RowNamesListBox->Count;
-	if (colCount == 0) {
+	if (colCount < 2) {
 		//TODO show error
 		return;
 	}
 
-	if (rowCount == 0) {
+	if (rowCount < 2) {
 		//TODO show error
 		return;
 	}
