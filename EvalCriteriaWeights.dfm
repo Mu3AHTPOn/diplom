@@ -20,43 +20,51 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   TextHeight = 13
   object ExplanationLabel: TLabel
     Left = 8
-    Top = 24
+    Top = 8
     Width = 682
-    Height = 13
+    Height = 45
     Alignment = taCenter
     AutoSize = False
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
   end
   object ConsistencLabel: TLabel
     Left = 152
-    Top = 405
+    Top = 421
     Width = 4
     Height = 13
     Caption = '-'
   end
   object Label2: TLabel
     Left = 8
-    Top = 405
+    Top = 421
     Width = 130
     Height = 13
     Caption = #1048#1085#1076#1077#1082#1089' '#1089#1086#1075#1083#1072#1089#1086#1074#1072#1085#1085#1086#1089#1090#1080':'
   end
   object Label1: TLabel
     Left = 8
-    Top = 386
+    Top = 402
     Width = 120
     Height = 13
     Caption = #1055#1088#1080#1086#1088#1080#1090#1077#1090#1099' '#1082#1088#1080#1090#1077#1088#1080#1077#1074
   end
   object PrioritiesLabel: TLabel
     Left = 152
-    Top = 386
+    Top = 402
     Width = 66
     Height = 13
     Caption = 'PrioritiesLabel'
   end
   object Label3: TLabel
     Left = 8
-    Top = 43
+    Top = 59
     Width = 316
     Height = 18
     Alignment = taCenter
@@ -71,7 +79,7 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   end
   object Label4: TLabel
     Left = 361
-    Top = 43
+    Top = 59
     Width = 329
     Height = 18
     Alignment = taCenter
@@ -86,7 +94,7 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   end
   object CriteriaEstimates: TStringGrid
     Left = 361
-    Top = 64
+    Top = 80
     Width = 328
     Height = 297
     ColCount = 2
@@ -101,7 +109,7 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   end
   object BackButton: TButton
     Left = 249
-    Top = 439
+    Top = 455
     Width = 75
     Height = 25
     Caption = #1053#1072#1079#1072#1076
@@ -110,7 +118,7 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   end
   object NextButton: TButton
     Left = 361
-    Top = 439
+    Top = 455
     Width = 75
     Height = 25
     Caption = #1044#1072#1083#1077#1077
@@ -119,7 +127,7 @@ object EvalCriteriaWeightsForm: TEvalCriteriaWeightsForm
   end
   object PairWiseGrid: TStringGrid
     Left = 8
-    Top = 64
+    Top = 80
     Width = 316
     Height = 297
     ColCount = 2

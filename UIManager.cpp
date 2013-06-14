@@ -7,16 +7,17 @@
 
 UIManager* UIManager::instance = NULL;
 
-UIManager* UIManager::getInstance() {
+UIManager& UIManager::getInstance() {
 	if (instance == NULL) {
 		instance = new UIManager();
 	}
 
-	return instance;
+	return *instance;
 }
 
 UIManager::UIManager() {
 	forms = new list<TForm*>();
+	autoEval = indicator = hint = true;
 }
 
 UIManager::~UIManager() {
@@ -48,4 +49,16 @@ void UIManager::closeApp(TForm *currentForm)
 	}
 
 	forms->clear();
+}
+
+bool &UIManager::getAutoEval(){
+	return autoEval;
+}
+
+bool &UIManager::getIndicator() {
+	return indicator;
+}
+
+bool &UIManager::getHint() {
+    return hint;
 }

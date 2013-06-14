@@ -271,8 +271,8 @@ void TEvalCriteriaWeightsForm::setData() {
 		estimates = &alternativeEstimates[step - 1];
 		gridNames = &currentProject->getAlternativeNames();
 		size = currentProject->getAlternativesCount() + 1;
-		ExplanationLabel->Caption = L"Задайте относительную важность альтернатив по критерию" +
-									 currentProject->getCriteriaNames()[step - 1] + L"в столбце 1";
+		ExplanationLabel->Caption = L"Задайте относительную важность альтернатив по критерию \"" +
+									 currentProject->getCriteriaNames()[step - 1] + L"\" в столбце 1";
 		Label1->Caption = L"Приоритеты альтернатив:";
 	}
 
@@ -342,8 +342,9 @@ void __fastcall TEvalCriteriaWeightsForm::CriteriaEstimatesSelectCell(TObject *S
 		}
 	} else {
 		if (ACol == 1) {
-			ExplanationLabel->Caption = L"Задайте относительную важность альтернатив по критерию \"" +
-				currentProject->getCriteriaNames()[step - 1] + L"\" в столбце 1";
+			UnicodeString middlePart = L"Задайте относительную важность альтернатив по критерию \"" + currentProject->getCriteriaNames()[step - 1];
+//			UnicodeString str(middlePart + L"dfsd f");
+			ExplanationLabel->Caption = middlePart + L"\" в столбце 1";
 		} else {
 			ExplanationLabel->Caption = L"Задайте относительную важность альтернатив по критерию \"" +
 				currentProject->getCriteriaNames()[step - 1] + L"\" без учёта альтернативы \"" +

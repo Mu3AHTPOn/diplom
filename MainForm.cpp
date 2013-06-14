@@ -27,9 +27,11 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 	emptyCellBG(RGBA(255, 254, 198, 0)) {
 
 	Form1 = this;
-	UIManager::getInstance()->addForm(Form1);
+	UIManager::getInstance().addForm(Form1);
 	NewProjectForm = new TNewProjectForm(this);
 
+//	HintLabel->Handle;
+//	SetWindowLongW(h, GWL_STYLE, GetWindowLongW(h, GWL_STYLE) | BS_MULTILINE);
 	EvalCriteriaWeightsForm = new TEvalCriteriaWeightsForm(this);
 
 	//пр€чем таблицу ввода данных
@@ -135,7 +137,7 @@ void __fastcall TForm1::MMCloseAppClick(TObject *Sender)
 	//если проект не удалось закрыть - форма не закрываетс€
 	if (closeProject())
 	{
-		UIManager::getInstance()->closeApp(this);
+		UIManager::getInstance().closeApp(this);
 		Close();
 	}
 }
@@ -149,7 +151,7 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 		return;
 	}
 
-	UIManager::getInstance()->closeApp(this);
+	UIManager::getInstance().closeApp(this);
 }
 //---------------------------------------------------------------------------
 //событие контекстного меню резуьтатов вычислений "ќчистить"
@@ -234,18 +236,25 @@ void __fastcall TForm1::InputDataStringGridDrawCell(TObject *Sender, int ACol, i
 	//пишем название в фикированных столбцах
 	if (ACol == 0 || ARow == 0) {
 		drawFixedColNames(ACol, ARow, Rect);
-	} else if (InputDataStringGrid->Cells[ACol][ARow].IsEmpty()) {
+	} else if (UIManager::getInstance().getIndicator() && InputDataStringGrid->Cells[ACol][ARow].IsEmpty()) {
 		//закрашиваем пустые €чейки жЄлтым цветом
+		const TColor oldColor = InputDataStringGrid->Canvas->Brush->Color;
 		InputDataStringGrid->Canvas->Brush->Color = emptyCellBG;
 		InputDataStringGrid->Canvas->FillRect(InputDataStringGrid->CellRect(ACol, ARow));
-    } else if (ARow == 1) {
-		if (! (InputDataStringGrid->Row == ARow && InputDataStringGrid->Col == ACol)) {
-			//закрашиваем первую строку и пишем еЄ значени€
-			InputDataStringGrid->Canvas->Brush->Color = cl3DLight;
-			InputDataStringGrid->Canvas->FillRect(InputDataStringGrid->CellRect(ACol, ARow));
-			UnicodeString str = ACol == 0 ? UnicodeString(L"¬ажность критериев") : InputDataStringGrid->Cells[ACol][ARow];
-			InputDataStringGrid->Canvas->TextOut(Rect.Left + 2, Rect.Top + 4, str);
-		}
+		InputDataStringGrid->Canvas->Brush->Color = oldColor;
+	} else if (UIManager::getInstance().getIndicator() && StrToFloat(InputDataStringGrid->Cells[ACol][ARow]) == 0) {
+		//закрашиваем красным €чейки с нулЄм
+		const TColor oldColor = InputDataStringGrid->Canvas->Brush->Color;
+		InputDataStringGrid->Canvas->Brush->Color = clRed;
+		InputDataStringGrid->Canvas->FillRect(InputDataStringGrid->CellRect(ACol, ARow));
+		InputDataStringGrid->Canvas->TextOut(Rect.Left+ 2, Rect.Top + 4, InputDataStringGrid->Cells[ACol][ARow]);
+		InputDataStringGrid->Canvas->Brush->Color = oldColor;
+	} else if (ARow == 1 && ! (InputDataStringGrid->Row == ARow && InputDataStringGrid->Col == ACol)) {
+		//закрашиваем первую строку и пишем еЄ значени€
+		InputDataStringGrid->Canvas->Brush->Color = cl3DLight;
+		InputDataStringGrid->Canvas->FillRect(InputDataStringGrid->CellRect(ACol, ARow));
+		UnicodeString str = ACol == 0 ? UnicodeString(L"¬ажность критериев") : InputDataStringGrid->Cells[ACol][ARow];
+		InputDataStringGrid->Canvas->TextOut(Rect.Left + 2, Rect.Top + 4, str);
 	}
 }
 //---------------------------------------------------------------------------
@@ -501,12 +510,8 @@ bool TForm1::isDataValid()
 				InputDataStringGrid->Col = i;
 				InputDataStringGrid->Row = j;
 				return false;
-			} else if (StrToFloat(val) < 0.000000001) {
-				Application->MessageBoxW(
-					L"¬ведены неверные данные (введите оценки больше 0)",
-					L"ќшибка",
-					MB_OK| MB_ICONERROR
-				);
+			} else if (StrToFloat(val) == 0) {
+				//TODO change подсказку
 
 				InputDataStringGrid->Col = i;
 				InputDataStringGrid->Row = j;
@@ -520,7 +525,7 @@ bool TForm1::isDataValid()
 //--------------------------------------------------------------------------
 void __fastcall TForm1::MMNewProjectClick(TObject *Sender)
 {
-	newProject();	
+	newProject();
 }
 //---------------------------------------------------------------------------
 
@@ -538,13 +543,17 @@ void __fastcall TForm1::SpeedButton3Click(TObject *Sender)
 
 void __fastcall TForm1::NewProjectButtonClick(TObject *Sender)
 {
-	newProject();
+//	newProject();
+	BalloonHint1->Description=L"112312312312312331";
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TForm1::SpeedButton5Click(TObject *Sender)
 {
-	closeProject();	
+//	closeProject();
+
+	BalloonHint1->Description = L"vdsf \ngdfg sfg dfsg sdfgdvd fg ;lksdfgj lk;sdfg l;kdfsg;kl sdf;kgh sdk;jgh kjsdfhgkjhsd fkgjhdf lkgjhsdfkjg sdlkfjg lkjdsfg lkjdsfgh lkjdfhg kjdfh g ljkdfh gkj hdsflgh dflkjgh ldkfjgh lkdsfhg jkdsfhg dfg fg dfg ";
+	BalloonHint1->ShowHint(ClientToScreen(TPoint(100, 100)));
 }
 //---------------------------------------------------------------------------
 
@@ -611,6 +620,10 @@ void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol
 	}
 
 	projectManager.setIsCurrentProjectSaved(false);
+
+	if (UIManager::getInstance().getAutoEval() && isDataValid()) {
+		evalProject();
+    }
 }
 //---------------------------------------------------------------------------
 //запоминаем нажатие на графике (необходимо дл€ его перетаскивани€ и изменени€ размеров)
@@ -775,6 +788,10 @@ void TForm1::showCurrentProject()
 
 	Form1->Caption = projectManager.getCurrentProject().getName();
 	InputDataStringGrid->SetFocus();
+
+	if (UIManager::getInstance().getAutoEval() && isDataValid()) {
+		evalProject();
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::EditProjectSpeedButtonClick(TObject *Sender)
@@ -790,17 +807,39 @@ void __fastcall TForm1::InputDataStringGridSelectCell(TObject *Sender, int ACol,
 	const int row = InputDataStringGrid->Row;
 	if (row == fixedRows) {
 		UnicodeString str = InputDataStringGrid->Cells[col][row];
-		if (! str.IsEmpty() && StrToFloat(str) == 0) {
-			Application->MessageBoxW(
-				L"ќценка не может быть равна 0",
-				L"ќшибка",
-				MB_OK | MB_ICONERROR
-			);
-			InputDataStringGrid->Cells[col][row] = NULL;
-			InputDataStringGrid->Col = ACol = col;
-			InputDataStringGrid->Row = ARow = row;
-        }
+//		if (! str.IsEmpty() && StrToFloat(str) == 0) {
+//			Application->MessageBoxW(
+//				L"ќценка не может быть равна 0",
+//				L"ќшибка",
+//				MB_OK | MB_ICONERROR
+//			);
+//			InputDataStringGrid->Cells[col][row] = NULL;
+//			InputDataStringGrid->Col = ACol = col;
+//			InputDataStringGrid->Row = ARow = row;
+//        }
     }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::MMHintClick(TObject *Sender)
+{
+	MMHint->Checked = ! MMHint->Checked;
+	UIManager::getInstance().getHint() = MMHint->Checked;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::MMIndicatorClick(TObject *Sender)
+{
+	MMIndicator->Checked = ! MMIndicator->Checked;
+	UIManager::getInstance().getIndicator() = MMIndicator->Checked;
+	InputDataStringGrid->Refresh();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::MMAutoEvalClick(TObject *Sender)
+{
+	MMAutoEval->Checked = ! MMAutoEval->Checked;
+	UIManager::getInstance().getAutoEval() = MMAutoEval->Checked;
 }
 //---------------------------------------------------------------------------
 

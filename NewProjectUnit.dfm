@@ -169,13 +169,13 @@ object NewProjectForm: TNewProjectForm
   end
   object Label1: TLabel
     Left = 24
-    Top = 87
-    Width = 201
-    Height = 19
+    Top = 90
+    Width = 166
+    Height = 16
     Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1103' '#1072#1083#1100#1090#1077#1088#1085#1072#1090#1080#1074
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -16
+    Font.Height = -13
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
@@ -331,12 +331,12 @@ object NewProjectForm: TNewProjectForm
   object Label2: TLabel
     Left = 266
     Top = 87
-    Width = 186
-    Height = 19
+    Width = 152
+    Height = 16
     Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1103' '#1082#1088#1080#1090#1077#1088#1080#1077#1074
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -16
+    Font.Height = -13
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False

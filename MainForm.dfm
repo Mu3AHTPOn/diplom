@@ -22,11 +22,18 @@ object Form1: TForm1
     541)
   PixelsPerInch = 96
   TextHeight = 13
+  object Label1: TLabel
+    Left = 368
+    Top = 456
+    Width = 31
+    Height = 13
+    Caption = 'Label1'
+  end
   object InputDataStringGrid: TStringGrid
     Left = 0
     Top = 30
     Width = 1038
-    Height = 318
+    Height = 346
     Align = alClient
     BevelWidth = 5
     DefaultColWidth = 24
@@ -44,12 +51,14 @@ object Form1: TForm1
     OnKeyDown = InputDataStringGridKeyDown
     OnSelectCell = InputDataStringGridSelectCell
     OnSetEditText = InputDataStringGridSetEditText
+    ExplicitTop = 84
+    ExplicitHeight = 194
   end
   object ResultRichEdit: TRichEdit
     Left = 0
-    Top = 379
+    Top = 408
     Width = 1038
-    Height = 162
+    Height = 133
     Align = alBottom
     Font.Charset = RUSSIAN_CHARSET
     Font.Color = clWindowText
@@ -530,9 +539,9 @@ object Form1: TForm1
   end
   object Panel1: TPanel
     Left = 0
-    Top = 348
+    Top = 376
     Width = 1038
-    Height = 31
+    Height = 32
     Align = alBottom
     Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090#1099
     Font.Charset = DEFAULT_CHARSET
@@ -542,6 +551,8 @@ object Form1: TForm1
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 2
+    ExplicitLeft = -8
+    ExplicitTop = 319
   end
   object MainMenu1: TMainMenu
     Left = 704
@@ -580,6 +591,24 @@ object Form1: TForm1
         OnClick = N8Click
       end
     end
+    object N2: TMenuItem
+      Caption = #1055#1072#1088#1072#1084#1077#1090#1088#1099
+      object MMHint: TMenuItem
+        Caption = #1042#1089#1087#1083#1099#1074#1072#1102#1097#1072#1103' '#1087#1086#1076#1089#1082#1072#1079#1082#1072
+        Checked = True
+        OnClick = MMHintClick
+      end
+      object MMIndicator: TMenuItem
+        Caption = #1048#1085#1076#1080#1082#1072#1090#1086#1088' '#1087#1091#1089#1090#1099#1093' '#1103#1095#1077#1077#1082
+        Checked = True
+        OnClick = MMIndicatorClick
+      end
+      object MMAutoEval: TMenuItem
+        Caption = #1040#1074#1090#1086#1088#1072#1089#1095#1105#1090
+        Checked = True
+        OnClick = MMAutoEvalClick
+      end
+    end
   end
   object ResultsPopupMenu: TPopupMenu
     Left = 584
@@ -599,6 +628,11 @@ object Form1: TForm1
     FileName = 'myProject'
     Filter = 'Project files|*.awm'
     Left = 728
+    Top = 456
+  end
+  object BalloonHint1: TBalloonHint
+    Style = bhsStandard
+    Left = 480
     Top = 456
   end
 end

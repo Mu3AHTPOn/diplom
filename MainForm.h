@@ -59,6 +59,12 @@ __published:	// IDE-managed Components
 	TSpeedButton *SpeedButton5;
 	TSpeedButton *SpeedButton1;
 	TSpeedButton *EditProjectSpeedButton;
+	TLabel *Label1;
+	TBalloonHint *BalloonHint1;
+	TMenuItem *N2;
+	TMenuItem *MMHint;
+	TMenuItem *MMIndicator;
+	TMenuItem *MMAutoEval;
 	void __fastcall InputDataStringGridKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall Memo1KeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
@@ -90,6 +96,9 @@ __published:	// IDE-managed Components
 	void __fastcall EditProjectSpeedButtonClick(TObject *Sender);
 	void __fastcall InputDataStringGridSelectCell(TObject *Sender, int ACol, int ARow,
           bool &CanSelect);
+	void __fastcall MMHintClick(TObject *Sender);
+	void __fastcall MMIndicatorClick(TObject *Sender);
+	void __fastcall MMAutoEvalClick(TObject *Sender);
 
 
 private:	// User declarations
