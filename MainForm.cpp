@@ -375,6 +375,9 @@ void TForm1::saveProject()
 //открывает форму параметров проекта
 void TForm1::editProject() {
 	if (projectManager.isProjectOpen()) {
+	//перемещаем текущую активную ячейку в начало, дабы избежать ошибок защиты памяти
+		InputDataStringGrid->Row = fixedRows;
+		InputDataStringGrid->Col = fixedRows;
 		NewProjectForm->ShowModal();
 		showCurrentProject();
 
@@ -622,6 +625,7 @@ void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol
 	Project &currentProject = projectManager.getCurrentProject();
 	const bool isAHP = currentProject.getMethod() == MathMethods::AHP;
 	const bool isValid = isAHP || ARow == 1 ? regex_match(Value.w_str(), floatGridRegex) : regex_match(Value.w_str(), gridRegex);
+	bool valueChanged = false;
 	if (! isValid)
 	{
 		UnicodeString str = InputDataStringGrid->Cells[ACol][ARow];
@@ -641,10 +645,20 @@ void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol
 					InputDataStringGrid->Row = ARow;
 					InputDataStringGrid->Cells[ACol][ARow] = L"";
 				} else {
-					currentProject.getAlternativeEstimates()[ACol - fixedCols].getPriorities()[ARow- fixedRows - 1] = StrToFloat(Value);
+					double &oldValue = currentProject.getAlternativeEstimates()[ACol - fixedCols].getPriorities()[ARow - fixedRows - 1];
+					 double newValue(StrToFloat(Value));
+					 if (oldValue != newValue) {
+						 oldValue = newValue;
+						 valueChanged = true;
+					 }
 				}
 			} else {
-				currentProject.getCriteriaEstimates().getPriorities()[ACol - fixedCols] = StrToFloat(Value);
+				double &oldValue = currentProject.getCriteriaEstimates().getPriorities()[ACol - fixedCols];
+				double newValue(StrToFloat(Value));
+				if (oldValue != newValue) {
+					oldValue = newValue;
+					valueChanged = true;
+                }
 			}
 		}
 	}
@@ -656,7 +670,7 @@ void __fastcall TForm1::InputDataStringGridSetEditText(TObject *Sender, int ACol
 
 	projectManager.setIsCurrentProjectSaved(false);
 
-	if (isDataValid(false)) {
+	if (valueChanged && isDataValid(false)) {
 		if (UIManager::getInstance().getAutoEval()) {
 			evalProject(false);
 		} else {
